@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 mongoose.connect(process.env.DATABASE, 
-    { useNewUrlParser: true, useUnifiedTopology: true  },
+    { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
     if (err) {
         console.log(err);
@@ -31,9 +31,9 @@ app.use("/api", userRoutes);
 
 
 
-// app.get('/', (req, res) => {
-//     res.json("Hello Amazon");
-// });
+app.get('/', (req, res) => {
+    res.json("Hello Amazon");
+});
 
 // app.post('/', (req, res) => {
 //     console.log(req.body.name);

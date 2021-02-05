@@ -82,7 +82,7 @@ router.post("/auth/login", async (req, res) => {
   try {
     let foundUser = await User.findOne({ phone: req.body.phone });
     console.log("phone: req.body.phone");
-    console.log(req.body.phone);
+    console.log(req);
     if (!foundUser) {
       res.status(405).json({
         success: false,

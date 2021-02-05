@@ -83,34 +83,41 @@ router.post("/auth/login", async (req, res) => {
     var form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
         // fields fields fields
-        console.log(fields);
+        if (err) { next(err); }
+        else {
+          console.log(fields);
+          console.log('---------------');
+          console.log(files);
+          res.redirect(req.url);
+        }
     });
-    let foundUser = await User.findOne({ phone: req.body.phone });
-    console.log("phone: req.body.phone");
-    console.log(req);
-    if (!foundUser) {
-      res.status(405).json({
-        success: false,
-        message: "Authentication failed, User not found"
-      });
-    } else {
-      if (foundUser.comparePassword(req.body.password)) {
-        let token = jwt.sign(foundUser.toJSON(), process.env.SECRET, {
-          expiresIn: 604800 // 1 week
-        });
 
-        res.json({ success: true, token: token });
-      } else {
-        console.log("phone");
-        console.log(req.body.phone);
-        console.log("password");
-        console.log(req.body.password);
-        res.status(403).json({
-          success: false,
-          message: "Authentication failed, Wrong password!"
-        });
-      }
-    }
+    // let foundUser = await User.findOne({ phone: req.body.phone });
+    // console.log("phone: req.body.phone");
+    // console.log(req);
+    // if (!foundUser) {
+    //   res.status(405).json({
+    //     success: false,
+    //     message: "Authentication failed, User not found"
+    //   });
+    // } else {
+    //   if (foundUser.comparePassword(req.body.password)) {
+    //     let token = jwt.sign(foundUser.toJSON(), process.env.SECRET, {
+    //       expiresIn: 604800 // 1 week
+    //     });
+
+    //     res.json({ success: true, token: token });
+    //   } else {
+    //     console.log("phone");
+    //     console.log(req.body.phone);
+    //     console.log("password");
+    //     console.log(req.body.password);
+    //     res.status(403).json({
+    //       success: false,
+    //       message: "Authentication failed, Wrong password!"
+    //     });
+    //   }
+    // }
   } catch (err) {
     res.status(500).json({
       success: false,

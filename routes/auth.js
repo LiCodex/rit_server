@@ -80,17 +80,17 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 /* Login Route */
 router.post("/auth/login", async (req, res, next) => {
   try {
-    
-    req.form.complete(function(err, fields, files) {
-        // fields fields fields
-        if (err) { next(err); }
-        else {
-          console.log(fields);
-          console.log('---------------');
-          console.log(files);
-          res.redirect(req.url);
-        }
-    });
+    console.log(req.form);
+    // req.form.complete(function(err, fields, files) {
+    //     // fields fields fields
+    //     if (err) { next(err); }
+    //     else {
+    //       console.log(fields);
+    //       console.log('---------------');
+    //       console.log(files);
+    //       res.redirect(req.url);
+    //     }
+    // });
 
     // let foundUser = await User.findOne({ phone: req.body.phone });
     // console.log("phone: req.body.phone");

@@ -119,6 +119,7 @@ router.post("/auth/login", async (req, res, next) => {
     //   }
     // }
   } catch (err) {
+    console.log(err.message);
     res.status(500).json({
       success: false,
       message: err.message

@@ -80,6 +80,11 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 /* Login Route */
 router.post("/auth/login", async (req, res) => {
   try {
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        // fields fields fields
+        console.log(fields);
+    });
     let foundUser = await User.findOne({ phone: req.body.phone });
     console.log("phone: req.body.phone");
     console.log(req);

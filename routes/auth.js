@@ -81,8 +81,10 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 router.post("/auth/login", async (req, res) => {
   try {
     let foundUser = await User.findOne({ phone: req.body.phone });
+    console.log("phone: req.body.phone");
+    console.log(req.body.phone);
     if (!foundUser) {
-      res.status(403).json({
+      res.status(405).json({
         success: false,
         message: "Authentication failed, User not found"
       });

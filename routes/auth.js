@@ -94,6 +94,10 @@ router.post("/auth/login", async (req, res) => {
 
         res.json({ success: true, token: token });
       } else {
+        console.log("phone");
+        console.log(req.body.phone);
+        console.log("password");
+        console.log(req.body.password);
         res.status(403).json({
           success: false,
           message: "Authentication failed, Wrong password!"

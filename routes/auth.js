@@ -78,9 +78,9 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 });
 
 /* Login Route */
-router.post("/auth/login", async (req, res, next) => {
+router.post("/auth/login", async (req, res) => {
   try {
-    console.log(req.form);
+    console.log(req);
     // req.form.complete(function(err, fields, files) {
     //     // fields fields fields
     //     if (err) { next(err); }

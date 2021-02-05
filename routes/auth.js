@@ -80,46 +80,33 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 /* Login Route */
 router.post("/auth/login", async (req, res) => {
   try {
+    let foundUser = await User.findOne({ phone: req.body.phone });
+    console.log("phone: req.body.phone");
     console.log(req);
-    // req.form.complete(function(err, fields, files) {
-    //     // fields fields fields
-    //     if (err) { next(err); }
-    //     else {
-    //       console.log(fields);
-    //       console.log('---------------');
-    //       console.log(files);
-    //       res.redirect(req.url);
-    //     }
-    // });
+    if (!foundUser) {
+      res.status(405).json({
+        success: false,
+        message: "Authentication failed, User not found"
+      });
+    } else {
+      if (foundUser.comparePassword(req.body.password)) {
+        let token = jwt.sign(foundUser.toJSON(), process.env.SECRET, {
+          expiresIn: 604800 // 1 week
+        });
 
-    // let foundUser = await User.findOne({ phone: req.body.phone });
-    // console.log("phone: req.body.phone");
-    // console.log(req);
-    // if (!foundUser) {
-    //   res.status(405).json({
-    //     success: false,
-    //     message: "Authentication failed, User not found"
-    //   });
-    // } else {
-    //   if (foundUser.comparePassword(req.body.password)) {
-    //     let token = jwt.sign(foundUser.toJSON(), process.env.SECRET, {
-    //       expiresIn: 604800 // 1 week
-    //     });
-
-    //     res.json({ success: true, token: token });
-    //   } else {
-    //     console.log("phone");
-    //     console.log(req.body.phone);
-    //     console.log("password");
-    //     console.log(req.body.password);
-    //     res.status(403).json({
-    //       success: false,
-    //       message: "Authentication failed, Wrong password!"
-    //     });
-    //   }
-    // }
+        res.json({ success: true, token: token });
+      } else {
+        console.log("phone");
+        console.log(req.body.phone);
+        console.log("password");
+        console.log(req.body.password);
+        res.status(403).json({
+          success: false,
+          message: "Authentication failed, Wrong password!"
+        });
+      }
+    }
   } catch (err) {
-    console.log(err.message);
     res.status(500).json({
       success: false,
       message: err.message

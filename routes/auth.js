@@ -78,10 +78,10 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 });
 
 /* Login Route */
-router.post("/auth/login", async (req, res) => {
+router.post("/auth/login", async (req, res, next) => {
   try {
-    var form = new multiparty.Form();
-    form.parse(req, function(err, fields, files) {
+    
+    req.form.complete(function(err, fields, files) {
         // fields fields fields
         if (err) { next(err); }
         else {

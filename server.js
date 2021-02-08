@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
 const User = require('./models/user');
 
 dotenv.config();
@@ -28,14 +27,14 @@ app.use(bodyParser.urlencoded( { extended: false } ));
 
 const productRoutes = require('./routes/product');
 const userRoutes = require("./routes/auth");
-app.use('/api', productRoutes);
-app.use("/api", userRoutes);
+const heartBeatRoutes = require('./routes/heart_beat');
+app.use('/', productRoutes);
+app.use('/', userRoutes);
+app.use('/', heartBeatRoutes);
 
-
-
-app.get('/', (req, res) => {
-    res.json("Hello Amazon");
-});
+// app.get('/', (req, res) => {
+//     res.json("Hello Amazon");
+// });
 
 // app.post('/', (req, res) => {
 //     console.log(req.body.name);

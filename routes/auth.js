@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 /* Signup Route */
 router.post("/auth/signup", async (req, res) => {
   if (!req.body.phone || !req.body.password) {
+    console.log(req.body);
     res.json({ success: false, message: "Please enter phone or password" });
   } else {
     try {
@@ -141,6 +142,35 @@ router.post("/auth/messaging_code", async (req, res) => {
       success: false,
       message: err.message
     });
+  }
+});
+
+/* Signup Route */
+router.post("/auth/forgetpassword", async (req, res) => {
+  if (!req.body.phone || !req.body.password) {
+    res.json({ success: false, message: "Please enter phone or password" });
+  } else {
+    try {
+      let newUser = new User();
+      //newUser.name = req.body.name;
+      newUser.phone = req.body.phone;
+      newUser.password = req.body.password;
+      await newUser.save();
+      let token = jwt.sign(newUser.toJSON(), process.env.SECRET, {
+        expiresIn: 604800 // 1 week
+      });
+
+      res.json({
+        success: true,
+        token: token,
+        message: "Successfully created a new user"
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
   }
 });
 

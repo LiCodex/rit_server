@@ -143,19 +143,18 @@ router.post("/auth/forgetpassword", async (req, res) => {
     res.json({ success: false, message: "Please enter phone or password" });
   } else {
     try {
-      let newUser = new User();
+      var query = {'phone': req.body.phone};
+      var update = { $set: { password: req.body.password }};
+      var options = {};
+      User.updateOne(query, update, options);
+      
+      //let newUser = new User();
       //newUser.name = req.body.name;
-      newUser.phone = req.body.phone;
-      newUser.password = req.body.password;
-      await newUser.save();
-      let token = jwt.sign(newUser.toJSON(), process.env.SECRET, {
-        expiresIn: 604800 // 1 week
-      });
+      //await newUser.save();
 
       res.json({
         success: true,
-        token: token,
-        message: "Successfully created a new user"
+        message: "Successfully updated password"
       });
     } catch (err) {
       res.status(500).json({

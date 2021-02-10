@@ -120,24 +120,19 @@ router.post("/auth/messaging_code", async (req, res) => {
   const accountSid = process.env.accountSid;
   const authToken = process.env.authToken;
   try {
-    let foundUser = await User.findOne({ phone: req.body.phone });
+    //let foundUser = await User.findOne({ phone: req.body.phone });
     console.log(foundUser);
-    if (!foundUser) {
-      res.status(403).json({
-        success: false,
-        message: "Authentication failed, User not found"
-      });
-    } else {
-      const client = require('twilio')(accountSid, authToken);
-      client.messages.create({
-        body: '888668',
-        to: '+1' + req.body.phone,  // Text this number
-        from: '+14012373657' // From a valid Twilio number
+    
+    const client = require('twilio')(accountSid, authToken);
+    client.messages.create({
+      body: '888668',
+      to: '+1' + req.body.phone,  // Text this number
+      from: '+14012373657' // From a valid Twilio number
     }).then((message) => console.log(message.sid));
       
     res.json({ success: true });
-    }
-  } catch (err) {
+  }
+  catch (err) {
     res.status(500).json({
       success: false,
       message: err.message

@@ -120,9 +120,6 @@ router.post("/auth/messaging_code", async (req, res) => {
   const accountSid = process.env.accountSid;
   const authToken = process.env.authToken;
   try {
-    //let foundUser = await User.findOne({ phone: req.body.phone });
-    console.log(foundUser);
-    
     const client = require('twilio')(accountSid, authToken);
     client.messages.create({
       body: '888668',

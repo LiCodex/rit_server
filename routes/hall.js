@@ -31,7 +31,8 @@ router.post("/hall/create_room", async (req, res) => {
 //add filter information
 router.get("/hall/rooms", async (req, res) => {
     try {
-        if (req.body.blind_type != null) {
+        console.log(req);
+        if (req.params.blind_type != null) {
             var rooms = await Room.find({ blind_type: req.body.blind_type });
         } else {
             var rooms = await Room.find();

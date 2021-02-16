@@ -13,6 +13,7 @@ router.post("/hall/create_room", async (req, res) => {
             newRoom.players = req.body.players;
             newRoom.room_status = req.body.room_status;
             newRoom.starting_time = Date.now();
+            newRoom.blind_type = req.body.blind_type;
             await newRoom.save();
   
             res.json({

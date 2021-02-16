@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Room = require("../models/room");
+const url = require('url');
 
 router.post("/hall/create_room", async (req, res) => {
     if (!req.body.stake || !req.body.players) {
@@ -32,8 +33,9 @@ router.post("/hall/create_room", async (req, res) => {
 router.get("/hall/rooms", async (req, res) => {
     try {
         console.log(req);
-        if (req.params.blind_type != null) {
-            var rooms = await Room.find({ blind_type: req.body.blind_type });
+        const queryObject = url.parse(req.url,true).query;
+        if (queryObject.blind_type != null) {
+            var rooms = await Room.find({ blind_type: queryObject.blind_type });
         } else {
             var rooms = await Room.find();
         }

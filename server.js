@@ -28,9 +28,11 @@ app.use(bodyParser.urlencoded( { extended: false } ));
 const productRoutes = require('./routes/product');
 const userRoutes = require("./routes/auth");
 const heartBeatRoutes = require('./routes/heart_beat');
+const hallRoutes = require('./routes/hall');
 app.use('/', productRoutes);
 app.use('/', userRoutes);
 app.use('/', heartBeatRoutes);
+app.use('/', hallRoutes);
 
 // app.get('/', (req, res) => {
 //     res.json("Hello Amazon");

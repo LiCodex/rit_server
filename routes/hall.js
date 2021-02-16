@@ -8,9 +8,10 @@ router.post("/hall/create_room", async (req, res) => {
     } else {
       try {
         let newRoom = new Room();
-        //newUser.name = req.body.name;
-        newRoom.stake= req.body.stake;
+        newRoom.name = req.body.name;
+        newRoom.stake = req.body.stake;
         newRoom.players = req.body.players;
+        newRoom.room_status = req.body.room_status;
         newRoom.starting_time = Date.now();
         await newRoom.save();
   

@@ -32,16 +32,17 @@ router.post("/hall/create_room", async (req, res) => {
 //add filter information
 router.get("/hall/rooms", async (req, res) => {
     try {
-        console.log(req);
         const queryObject = url.parse(req.url,true).query;
         if (queryObject.blind_type != null) {
             var rooms = await Room.find({ blind_type: queryObject.blind_type });
         } else {
             var rooms = await Room.find();
         }
+        var active_tables = rooms.filter(room => room.players < 8).length;
         res.json({
             success: true,
             rooms: rooms,
+            active_tables: active_tables,
             message: "Successfully returned rooms"
         });
     } catch (err) {

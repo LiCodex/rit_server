@@ -6,10 +6,11 @@ const RoomSchema = new Schema({
     owner: { type: Schema.Types.ObjectId, ref: 'Owner' },
     stake: String,
     players: String,
-    type: String,
+    room_type: Number,
     room_status: Number,
     starting_time: Date,
-    end_time: Date  
+    end_time: Date,
+    blind_type: String  
 });
 
 module.exports = mongoose.model('room', RoomSchema);

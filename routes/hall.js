@@ -27,7 +27,7 @@ router.post("/hall/create_room", async (req, res) => {
         }
     }
 });
-
+//add filter information
 router.get("/hall/rooms", async (req, res) => {
     try {
         let rooms = await Room.find();

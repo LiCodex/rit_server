@@ -42,7 +42,7 @@ router.get("/hall/rooms", async (req, res) => {
         res.json({
             success: true,
             rooms: rooms,
-            message: "Successfully created a new room"
+            message: "Successfully returned rooms"
         });
     } catch (err) {
         res.status(500).json({

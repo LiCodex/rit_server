@@ -143,6 +143,7 @@ router.post("/auth/forgetpassword", async (req, res) => {
     res.json({ success: false, message: "Please enter phone or password" });
   } else {
     try {
+      // if cannot find the user return error
       var query = {'phone': req.body.phone};
       var update = { $set: { password: req.body.password }};
       var options = {};

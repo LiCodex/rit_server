@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Room = require("../models/room");
 
 router.post("/hall/create_room", async (req, res) => {
     if (!req.body.stake || !req.body.players) {

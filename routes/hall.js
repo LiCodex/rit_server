@@ -75,7 +75,7 @@ router.get("/hall/rooms/:id", async (req, res) => {
 //
 router.put("/hall/rooms/:id", async (req, res) => {
   try {
-    let room = await Room.findOneAndUpdate(
+    let room = await Room.updateOne(
       { _id: req.params.id },
       {
         $set: {

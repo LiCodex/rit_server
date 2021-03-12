@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Room = require("../models/room");
+const ObjectID = require('mongodb').ObjectID;
 const url = require('url');
 
 router.post("/hall/create_room", async (req, res) => {
@@ -55,8 +56,9 @@ router.get("/hall/rooms", async (req, res) => {
 
 router.get("/hall/rooms/:id", async (req, res) => {
   console.log(req.params.id);
+  var o_id = new ObjectID(req.params.id);
   try {
-    let room = await Room.findOne({ _id: req.params.id });
+    let room = await Room.findOne({ _id: o_id });
 
     console.log(room);
     res.json({

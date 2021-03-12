@@ -11,14 +11,14 @@ const RoomSchema = new Schema({
     starting_time: Date,
     end_time: Date,
     blind_type: String,
-    seat_status: [Number],
+    seat_status: String,
     button_position: Number,
     next_button_position: Number,
     player_bank: String,
     player_name: String,
     player_avatar: String,
     table_chips: String,
-    remaining_time: String  
+    remaining_time: String
 });
 
 module.exports = mongoose.model('room', RoomSchema);

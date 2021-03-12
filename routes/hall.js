@@ -16,7 +16,7 @@ router.post("/hall/create_room", async (req, res) => {
             newRoom.starting_time = Date.now();
             newRoom.blind_type = req.body.blind_type;
             await newRoom.save();
-  
+
             res.json({
                 success: true,
                 message: "Successfully created a new room"
@@ -53,6 +53,54 @@ router.get("/hall/rooms", async (req, res) => {
     }
 });
 
+router.get("/hall/rooms/:id", async (req, res) => {
+  try {
+    let room = await Room.findOne({ _id: req.params.id });
+
+    console.log(room);
+    res.json({
+      success: true,
+      room: room
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
+
+router.put("/hall/rooms/:id", async (req, res) => {
+  try {
+    let room = await Room.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          seats_status: req.body.seats_status,
+          button_position: req.body.button_position,
+          next_button_position: req.body.next_button_position,
+          player_bank: req.body.player_bank,
+          table_chips: req.body.table_chips,
+          player_name: req.body.player_name,
+          player_avatar: req.body.player_avatar,
+          player_remaining_time: req.body.player_remaining_time
+        }
+      },
+      { upsert: true }
+    );
+
+    res.json({
+      success: true,
+      room: room
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
 
 // router.get("/auth/user", verifyToken, async (req, res) => {
 //     try {

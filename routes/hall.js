@@ -77,9 +77,10 @@ router.get("/hall/rooms/:id", async (req, res) => {
 //
 router.put("/hall/rooms/:id", async (req, res) => {
   console.log(req.params.id);
+  var o_id = new ObjectID(req.params.id);
   try {
     let room = await Room.updateOne(
-      { _id: req.params.id },
+      { _id: o_id },
       {
         $set: {
           seats_status: req.body.seats_status,

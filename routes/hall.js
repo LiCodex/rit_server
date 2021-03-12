@@ -74,6 +74,7 @@ router.get("/hall/rooms/:id", async (req, res) => {
 // seats_status 0, 1
 //
 router.put("/hall/rooms/:id", async (req, res) => {
+  console.log(req.params.id);
   try {
     let room = await Room.updateOne(
       { _id: req.params.id },

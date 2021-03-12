@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 /* Signup Route */
 router.post("/auth/signup", async (req, res) => {
   if (!req.body.phone || !req.body.password) {
+    console.log(req.body);
     res.json({ success: false, message: "Please enter phone or password" });
   } else {
     try {
@@ -81,8 +82,10 @@ router.put("/auth/user", verifyToken, async (req, res) => {
 router.post("/auth/login", async (req, res) => {
   try {
     let foundUser = await User.findOne({ phone: req.body.phone });
+    console.log("phone: req.body.phone");
+    console.log(req);
     if (!foundUser) {
-      res.status(403).json({
+      res.status(405).json({
         success: false,
         message: "Authentication failed, User not found"
       });
@@ -94,6 +97,10 @@ router.post("/auth/login", async (req, res) => {
 
         res.json({ success: true, token: token });
       } else {
+        console.log("phone");
+        console.log(req.body.phone);
+        console.log("password");
+        console.log(req.body.password);
         res.status(403).json({
           success: false,
           message: "Authentication failed, Wrong password!"
@@ -113,28 +120,49 @@ router.post("/auth/messaging_code", async (req, res) => {
   const accountSid = process.env.accountSid;
   const authToken = process.env.authToken;
   try {
-    let foundUser = await User.findOne({ phone: req.body.phone });
-    console.log(foundUser);
-    if (!foundUser) {
-      res.status(403).json({
-        success: false,
-        message: "Authentication failed, User not found"
-      });
-    } else {
-      const client = require('twilio')(accountSid, authToken);
-      client.messages.create({
-        body: '888668',
-        to: '+1' + req.body.phone,  // Text this number
-        from: '+14012373657' // From a valid Twilio number
+    const client = require('twilio')(accountSid, authToken);
+    client.messages.create({
+      body: '888668',
+      to: '+1' + req.body.phone,  // Text this number
+      from: '+14012373657' // From a valid Twilio number
     }).then((message) => console.log(message.sid));
       
     res.json({ success: true });
-    }
-  } catch (err) {
+  }
+  catch (err) {
     res.status(500).json({
       success: false,
       message: err.message
     });
+  }
+});
+
+/* Signup Route */
+router.post("/auth/forgetpassword", async (req, res) => {
+  if (!req.body.phone || !req.body.password) {
+    res.json({ success: false, message: "Please enter phone or password" });
+  } else {
+    try {
+      // if cannot find the user return error
+      var query = {'phone': req.body.phone};
+      var update = { $set: { password: req.body.password }};
+      var options = {};
+      User.updateOne(query, update, options);
+      
+      //let newUser = new User();
+      //newUser.name = req.body.name;
+      //await newUser.save();
+
+      res.json({
+        success: true,
+        message: "Successfully updated password"
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
   }
 });
 

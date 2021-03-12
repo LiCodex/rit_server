@@ -3,12 +3,13 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
+const cors = require('cors');
 const User = require('./models/user');
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 mongoose.connect(process.env.DATABASE, 
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -26,14 +27,16 @@ app.use(bodyParser.urlencoded( { extended: false } ));
 
 const productRoutes = require('./routes/product');
 const userRoutes = require("./routes/auth");
-app.use('/api', productRoutes);
-app.use("/api", userRoutes);
+const heartBeatRoutes = require('./routes/heart_beat');
+const hallRoutes = require('./routes/hall');
+app.use('/', productRoutes);
+app.use('/', userRoutes);
+app.use('/', heartBeatRoutes);
+app.use('/', hallRoutes);
 
-
-
-app.get('/', (req, res) => {
-    res.json("Hello Amazon");
-});
+// app.get('/', (req, res) => {
+//     res.json("Hello Amazon");
+// });
 
 // app.post('/', (req, res) => {
 //     console.log(req.body.name);

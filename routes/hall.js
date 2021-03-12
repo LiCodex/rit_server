@@ -54,6 +54,7 @@ router.get("/hall/rooms", async (req, res) => {
 });
 
 router.get("/hall/rooms/:id", async (req, res) => {
+  console.log(req.params.id);
   try {
     let room = await Room.findOne({ _id: req.params.id });
 
@@ -70,7 +71,8 @@ router.get("/hall/rooms/:id", async (req, res) => {
   }
 });
 
-
+// seats_status 0, 1
+//
 router.put("/hall/rooms/:id", async (req, res) => {
   try {
     let room = await Room.findOneAndUpdate(
@@ -86,8 +88,7 @@ router.put("/hall/rooms/:id", async (req, res) => {
           player_avatar: req.body.player_avatar,
           player_remaining_time: req.body.player_remaining_time
         }
-      },
-      { upsert: true }
+      }
     );
 
     res.json({

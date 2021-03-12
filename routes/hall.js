@@ -3,7 +3,7 @@ const Room = require("../models/room");
 const ObjectID = require('mongodb').ObjectID;
 const url = require('url');
 
-router.post("/hall/create_room", async (req, res) => {
+  router.post("/hall/create_room", async (req, res) => {
     if (!req.body.stake || !req.body.players) {
         console.log(req.body);
         res.json({ success: false, message: "Please enter stake or player" });

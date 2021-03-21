@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const User = require('./models/user');
+const WebSocket = require('ws');
+
 
 dotenv.config();
 
@@ -60,4 +62,14 @@ app.listen(3000, err => {
     } else {
         console.log("listening on port", 3000);
     }
+});
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
 });

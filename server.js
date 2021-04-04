@@ -47,7 +47,7 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log(message);
     console.log(typeof message);
-    console.log(message == "hello");
+    console.log(message == "\"hello\"");
     if (message == "hello") {
       console.log('123');
 

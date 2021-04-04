@@ -42,12 +42,12 @@ const wss = new WebSocket.Server({ server:server });
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
-  setTimeout(function () {
-  }, 10000);
-  console.log('Two seconds later, showing sleep in a loop...');
+  // setTimeout(function () {
+  // }, 10000);
+  // console.log('Two seconds later, showing sleep in a loop...');
 
-  var cmd = {"c":"index","m":"console","data":{}}
-  ws.send(cmd);
+  // var cmd = {"c":"index","m":"console","data":{}}
+  // ws.send(cmd);
 
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);

@@ -47,7 +47,7 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
     if (message == "hello") {
-      console.log('Two seconds later, showing sleep in a loop...');
+      console.log('123');
 
       var cmd = {"c":"index","m":"console","data":{}}
       ws.send(cmd);
@@ -55,6 +55,12 @@ wss.on('connection', function connection(ws) {
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(message);
+        if (message == "hello") {
+          console.log('Two seconds later, showing sleep in a loop...');
+
+          var cmd = {"c":"index","m":"console","data":{}}
+          client.send(cmd);
+        }
       }
     });
 

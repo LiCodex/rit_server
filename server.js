@@ -42,7 +42,8 @@ const wss = new WebSocket.Server({ server:server });
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
-  await sleep(10000);
+  setTimeout(function () {
+  }, 10000);
   console.log('Two seconds later, showing sleep in a loop...');
 
   var cmd = {"c":"index","m":"console","data":{}}

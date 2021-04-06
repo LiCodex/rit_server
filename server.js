@@ -51,7 +51,7 @@ wss.on('connection', function connection(ws) {
     if (message == "\"hello\"") {
       console.log('123');
 
-      var cmd = JSON.stringify({"c":"index","m":"console","data":{}})
+      var cmd = JSON.stringify({"c":"index","m":"console","data":{"result": [123, "test"]}})
       ws.send(cmd);
     }
     wss.clients.forEach(function each(client) {

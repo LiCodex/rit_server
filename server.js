@@ -49,6 +49,11 @@ wss.on('connection', function connection(ws) {
     console.log(JSON.stringify(message));
     console.log(typeof message);
     console.log(message == "\"hello\"");
+    var cmd = JSON.parse(message);
+    var func = cmd["c"] + "_" + cmd["m"];
+    players = center[func];
+    console.log(players);
+
     if (message == "\"hello\"") {
       console.log('123');
 

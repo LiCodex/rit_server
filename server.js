@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const User = require('./models/user');
-const center = require('./server/center');
+const center = require('./server/center.js');
 
 dotenv.config();
 
@@ -51,7 +51,7 @@ wss.on('connection', function connection(ws) {
     console.log(message == "\"hello\"");
     var cmd = JSON.parse(message);
     var func = cmd["c"] + "_" + cmd["m"];
-    players = center[func];
+    players = center[func]('');
     console.log(players);
 
     if (message == "\"hello\"") {

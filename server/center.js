@@ -1,4 +1,11 @@
-exports.room_join = function(message) {   
+var RedisClustr = require('redis-clustr');
+var RedisClient = require('redis');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+exports.room_join = function(message) {
+    console.log(message);   
     var players = []; 
     var player1 = {'uid': 1, 'chair_id': 0, 'username': 'test1', 'coin': 100 };
     players.push(player1);

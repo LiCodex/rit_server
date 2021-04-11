@@ -53,7 +53,7 @@ wss.on('connection', function connection(ws) {
     var func = cmd["c"] + "_" + cmd["m"];
     players = center[func]('');
     console.log(players);
-    ws.send({c: cmd["c"], m: cmd["m"], data:JSON.stringify(players)});
+    ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {players}}));
     if (message == "\"hello\"") {
       console.log('123');
 

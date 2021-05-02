@@ -40,10 +40,11 @@ exports.room_join = function(room_key) {
     // var player8 = {'uid': 8, 'chair_id': 7, 'username': 'test8', 'coin': 1221 };    
     // players.push(player8);
     var o_id = new ObjectID(room_key);
+    console.log(o_id);
     try {
-        let room = await Room.findOne({ _id: o_id });
+        let rooms = await Room.findOne({ _id: o_id });
     } catch (err) {
-        let room = {};
+        let rooms = {};
     }
     return rooms;
 }

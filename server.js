@@ -41,6 +41,9 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ server:server });
 
+var rooms = {};
+var total_rooms = 0;
+
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
 
@@ -88,3 +91,8 @@ app.listen(3000, err => {
         console.log("listening on port", 3000);
     }
 });
+
+
+function load_room_info() {
+  
+}

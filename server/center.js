@@ -20,7 +20,8 @@ function check_start() {
 }
 
 exports.room_join = function(room_key) {
-    console.log(message);
+    console.log(room_key);
+    room = {};
     // Room.find(ObjectId(room_key));  
     // var players = []; 
     // var player1 = {'uid': 1, 'chair_id': 0, 'username': 'test1', 'coin': 100 };
@@ -39,14 +40,14 @@ exports.room_join = function(room_key) {
     // players.push(player7);
     // var player8 = {'uid': 8, 'chair_id': 7, 'username': 'test8', 'coin': 1221 };    
     // players.push(player8);
-    var o_id = new ObjectID(room_key);
-    console.log(o_id);
-    try {
-        let rooms = await Room.findOne({ _id: o_id });
-    } catch (err) {
-        let rooms = {};
-    }
-    return rooms;
+    // var o_id = new ObjectID(room_key);
+    // console.log(o_id);
+    // try {
+    //     let rooms = await Room.findOne({ _id: o_id });
+    // } catch (err) {
+    //     let rooms = {};
+    // }
+    return room;
 }
 
 // exports.room_dismiss = function(message) {

@@ -100,7 +100,7 @@ app.listen(3000, err => {
 });
 
 
-async function load_room_info() {
+async function load_room_info(rooms) {
   var rs = await Room.find();
   console.log("rs");
   console.log(rs);

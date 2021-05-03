@@ -109,7 +109,7 @@ async function load_room_info() {
     //total_rooms++;
     console.log("room.players");
     console.log(room._id);
-    rooms[room._id] = {"players": room.players, "status": room.room_status, "stake": room.stake, "name": room.name, "blind_type": room.blind_type, "starting_time": room.starting_time}
+    //rooms[room._id] = {"players": room.players, "status": room.room_status, "stake": room.stake, "name": room.name, "blind_type": room.blind_type, "starting_time": room.starting_time}
   }
   console.log("rs1");
   console.log(rooms);

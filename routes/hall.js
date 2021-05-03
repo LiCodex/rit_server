@@ -22,7 +22,7 @@ const url = require('url');
             newRoom.player_bank = req.body.player_bank;
             newRoom.table_chips = req.body.table_chips;
             newRoom.player_name = req.body.player_name;
-            newRoom.player_avatar = req.body.player_avatar;
+            newRoom.players_count = req.body.players_count;
             newRoom.player_remaining_time = req.body.player_remaining_time;
             await newRoom.save();
 

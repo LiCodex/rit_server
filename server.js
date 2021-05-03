@@ -105,11 +105,11 @@ async function load_room_info() {
   var rs = await Room.find();
   console.log("rs");
   console.log(rs);
-  for (var room in rs) {
+  for (var i in rs) {
     //total_rooms++;
     console.log("room.players");
-    console.log(room);
-    //rooms[room._id] = {"players": room.players, "status": room.room_status, "stake": room.stake, "name": room.name, "blind_type": room.blind_type, "starting_time": room.starting_time}
+    console.log(rs[i]);
+    rooms[rs[i]._id] = {"players": rs[i].players, "status": rs[i].room_status, "stake": rs[i].stake, "name": rs[i].name, "blind_type": rs[i].blind_type, "starting_time": room.starting_time}
   }
   console.log("rs1");
   console.log(rooms);

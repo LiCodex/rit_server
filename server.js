@@ -100,8 +100,8 @@ app.listen(3000, err => {
 });
 
 
-function load_room_info() {
-  var rs = User.find();
+async function load_room_info() {
+  var rs = await Room.find();
   console.log("rs");
   console.log(rs);
   for (var room in rs) {

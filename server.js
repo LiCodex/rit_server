@@ -103,7 +103,8 @@ app.listen(3000, err => {
 async function load_room_info() {
   var rooms = {};
   var rs = await Room.find();
-  
+  console.log("rs");
+  console.log(rs);
   for (var room in rs) {
     //total_rooms++;
     console.log("room.players");

@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const User = require('./models/user');
 const center = require('./server/center.js');
+const Room = require("./models/room");
 
 dotenv.config();
 

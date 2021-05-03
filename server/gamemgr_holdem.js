@@ -323,7 +323,7 @@ function gameover() {
             player.send(context);
         }
     }
-    var = check
+    //var = check
 }
 function game_start() {
     this.state = 'playing';

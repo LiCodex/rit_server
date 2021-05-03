@@ -5,7 +5,7 @@ const RoomSchema = new Schema({
     name: String,
     owner: { type: Schema.Types.ObjectId, ref: 'Owner' },
     stake: String,
-    players: Number,
+    players: [Object],
     room_type: Number,
     room_status: Number,
     starting_time: Date,
@@ -14,9 +14,7 @@ const RoomSchema = new Schema({
     seat_status: String,
     button_position: Number,
     next_button_position: Number,
-    player_bank: String,
-    player_name: String,
-    player_avatar: String,
+    player_count: Number,
     table_chips: String,
     remaining_time: String
 });

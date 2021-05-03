@@ -96,10 +96,10 @@ app.listen(3000, err => {
 
 
 function load_room_info() {
-  var rooms = await Room.find();
+  var rooms = Room.find();
   for (var room in rooms) {
     total_rooms++;
     rooms[room.id] = {"players": room.players, "status": room.room_status, "stake": room.stake, "name": room.name, "blind_type": room.blind_type, "starting_time": room.starting_time}
-    
+
   }
 }

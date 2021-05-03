@@ -101,7 +101,7 @@ app.listen(3000, err => {
 
 
 function load_room_info() {
-  var rs = Room.find();
+  var rs = User.find();
   console.log("rs");
   console.log(rs);
   for (var room in rs) {

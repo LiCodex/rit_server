@@ -42,14 +42,14 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ server:server });
 
-var rooms = {};
-var total_rooms = 0;
+// var rooms = {};
+// var total_rooms = 0;
 
-load_room_info();
+rooms = load_room_info();
 console.log("rooms");
 console.log(rooms);
-console.log("total_rooms");
-console.log(total_rooms);
+// console.log("total_rooms");
+// console.log(total_rooms);
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
@@ -108,4 +108,5 @@ async function load_room_info(rooms) {
     total_rooms++;
     rooms[room.id] = {"players": room.players, "status": room.room_status, "stake": room.stake, "name": room.name, "blind_type": room.blind_type, "starting_time": room.starting_time}
   }
+  return rooms;
 }

@@ -47,7 +47,9 @@ router.get("/hall/rooms", async (req, res) => {
         } else {
             var rooms = await Room.find();
         }
-        var active_tables = rooms.filter(room => room.players < 8).length;
+        console.log("rooms");
+        console.log(rooms);
+        var active_tables = rooms.filter(room => room.players_count < 8).length;
         res.json({
             success: true,
             rooms: rooms,

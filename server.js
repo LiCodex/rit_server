@@ -46,6 +46,10 @@ var rooms = {};
 var total_rooms = 0;
 
 load_room_info();
+console.log("rooms");
+console.log(rooms);
+console.log("total_rooms");
+console.log(total_rooms);
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');

@@ -14,7 +14,7 @@ const RoomSchema = new Schema({
     seat_status: String,
     button_position: Number,
     next_button_position: Number,
-    player_count: Number,
+    players_count: Number,
     table_chips: String,
     remaining_time: String
 });

@@ -1,4 +1,4 @@
-var db = require('../utils/db');
+//var db = require('../utils/db');
 
 var rooms = {};
 var creating_rooms = {};
@@ -14,7 +14,7 @@ function generate_room_id() {
     return room_id;
 };
 
-exports.createRoom = function() {
+exports.createRoom = function(creator, room_conf, gems, ip, port, ) {
 
 };  
 

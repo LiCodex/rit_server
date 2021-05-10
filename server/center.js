@@ -19,37 +19,118 @@ function check_start() {
     }
 }
 
-exports.room_join = function(room_key) {
-    console.log(room_key);
-    room = {};
-    // Room.find(ObjectId(room_key));  
-    // var players = []; 
-    // var player1 = {'uid': 1, 'chair_id': 0, 'username': 'test1', 'coin': 100 };
-    // players.push(player1);
-    // var player2 = {'uid': 2, 'chair_id': 1, 'username': 'test2', 'coin': 121 };
-    // players.push(player2);
-    // var player3 = {'uid': 3, 'chair_id': 2, 'username': 'test3', 'coin': 1210 };
-    // players.push(player3);
-    // var player4 = {'uid': 4, 'chair_id': 3, 'username': 'test4', 'coin': 1000 };
-    // players.push(player4);
-    // var player5 = {'uid': 5, 'chair_id': 4, 'username': 'test5', 'coin': 133 };
-    // players.push(player5);
-    // var player6 = {'uid': 6, 'chair_id': 5, 'username': 'test6', 'coin': 11 };
-    // players.push(player6);
-    // var player7 = {'uid': 7, 'chair_id': 6, 'username': 'test7', 'coin': 1336 };
-    // players.push(player7);
-    // var player8 = {'uid': 8, 'chair_id': 7, 'username': 'test8', 'coin': 1221 };    
-    // players.push(player8);
-    // var o_id = new ObjectID(room_key);
-    // console.log(o_id);
-    // try {
-    //     let rooms = await Room.findOne({ _id: o_id });
-    // } catch (err) {
-    //     let rooms = {};
-    // }
-    return room;
+exports.room_join = function(message) {
+    var rooms = load_room_info();
+    // console.log(room_key);
+    var uid = message.uid;
+    var existing_chair_id = get_chair_id_by_uid(uid);
+    var session_id = message.session_id;
+    var room_id = message.room_id;
+    var info = message.data.info;
+
+    if (existing_chair_id != null) {
+        var player = get_player_by_chair_id(existing_chair_id);
+        player.update_info(message.data.info);
+        player.update_session_id(session_id);
+        update_session(uid, existing_chair_id, session_id);
+    } else {
+        var chair_id = rnd_chair();
+        var cash_needed = 0;
+        if (chair_id < chair_count) {
+            var user = users[user_id];
+            cash_needed = config.max_coin;
+            var res = user.bring_cash_to_table(cash_needed);
+            if (res.ok == 'ok') {
+                uid_room_map[uid] = room_id;
+                room = rooms[room_id];
+                room.add_player(1);
+            }
+
+        }
+
+        var player = Player.new(room_id, uid, chair_id, session_id, info);
+        player.cash = coin_needed;
+        player.room = rooms[room_id];
+        players[chair_id] = player;
+    
+        var response = {};
+        response.m = message.m;
+        response.c = message.c;
+        var data = {};
+        data.room_id = room_id;
+        data.room_type = 'holdem';
+        response.data = data;
+        return response;
+        // player.send(response);
+        // notify_update(chair_id);
+        // check_start();
+    }
 }
 
+async function load_room_info() {
+    var rooms = {};
+    var rs = await Room.find();
+    console.log("rs");
+    console.log(rs);
+    for (var i in rs) {
+      //total_rooms++;
+      console.log("room.players");
+      console.log(rs[i]);
+      rooms[rs[i]._id] = {"players": rs[i].players, "status": rs[i].room_status, "stake": rs[i].stake, "name": rs[i].name, "blind_type": rs[i].blind_type, "starting_time": rs[i].starting_time}
+    }
+    console.log("rs1");
+    console.log(rooms);
+    return rooms;
+  }
+
+function check_start() {
+    if (state != 'none') {
+        return;
+    }
+
+    var count = 0;
+    for (var i = 0; i < chair_count; i++) {
+        var player = players[i];
+        if (player != null && player.cash > 0) {
+            count++;
+        }
+    }
+
+    if (count >= 2) {
+        if (round == 0) {
+            delay_bet();
+        }
+        time_state = 'start';
+    }
+}
+
+function game_start(room) {
+    room.state = 'playing';
+    room.play_state = 'start';
+
+    if (room.round == 0) {
+        room.create_time = Date.now();
+    }
+
+    room.round++;
+
+    var player_count = 0;
+    for (var i = 0; i < room.chair_count; i++) {
+        var player = room.players[i];
+        if (player != null && player.cash > 0) {
+            player.state = 'playing';
+            player.set_user_state('default');
+            player_count++;
+        }
+    }
+
+    if (room.button_position == -1) {
+        room.button_position = rnd_button();
+        room.players[room.button_position].btn = true; 
+    } else {
+        room.button_position = get_next(room.button_position);
+    }
+}
 // exports.room_dismiss = function(message) {
 //     var room_id = room_key_to_room_id[message.data.key];
 //     if (room_id == null) {

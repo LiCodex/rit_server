@@ -37,8 +37,8 @@ exports.index_login = function(message) {
     var token = message.jwt;
     console.log(token);
     var decoded = jwt.decode(token);
-    console.log(decoded.header);
-    console.log(decoded.payload);
+    console.log(decoded);
+    //console.log(decoded.payload);
     var response = {};
     //response.uid = decoded.payload._id;
     return response;

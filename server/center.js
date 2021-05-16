@@ -23,7 +23,16 @@ function get_chair_id_by_uid(uid) {
 
 };
 
-exports.room_index_login = function(message) {
+exports.room_check = function(message) {
+    var uid = message.uid;
+    var chair_id = get_chair_id_by_uid(uid);
+
+    if (chair_id != null) {
+
+    }
+};
+
+exports.index_login = function(message) {
     var token = message.jwt;
     var decoded = jwt.decode(token);
     console.log(decoded.header);

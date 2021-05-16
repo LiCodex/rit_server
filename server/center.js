@@ -40,7 +40,8 @@ exports.index_login = function(message) {
     console.log(decoded);
     //console.log(decoded.payload);
     var response = {};
-    //response.uid = decoded.payload._id;
+    response.uid = decoded._id;
+    response.room_id = "";
     return response;
 }
 

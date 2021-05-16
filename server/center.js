@@ -17,6 +17,20 @@ function check_start() {
     if (state != "none") {
 
     }
+};
+
+function get_chair_id_by_uid(uid) {
+
+};
+
+exports.room_index_login = function(message) {
+    var token = message.jwt;
+    var decoded = jwt.decode(token);
+    console.log(decoded.header);
+    console.log(decoded.payload);
+    var response = {};
+    response.uid = decoded.payload._id;
+    return response;
 }
 
 exports.room_join = function(message) {
@@ -163,7 +177,7 @@ function get_context(chair_id, room_id) {
     context.c = 'room';
 
     var data = {};
-    data.my_chair_id = chair_id;
+    data.chair_id = chair_id;
     data.current = current;
     data.timer = timer;
     data.ctx_seq = ctx_seq;
@@ -194,8 +208,8 @@ exports.room_load_context = function(message) {
     }
 };
 
-exports.update_user = function(message) {
-
+exports.room_update_user = function(message) {
+    
 };
 
 exports.room_rejoin = function(message) {
@@ -210,11 +224,13 @@ exports.room_rejoin = function(message) {
     }
 };  
 
-exports.check_rejoin = function() {
-
+exports.room_check_rejoin = function(message) {
+    var data = {}
+    data.res = false;
+    return data;
 };
 
-exports.add_time = function(message) {
+exports.room_add_time = function(message) {
     var uid = message.uid;
     var chair_id = message.chair_id;
     if (chair_id == null || chair_id > chair_count) {
@@ -273,7 +289,7 @@ exports.update_dealer_position = function() {
     dealer = active_players.get(dealer_position);
 };
 
-exports.user_show_hands = function(message) {
+exports.room_user_showhands = function(message) {
     var uid = message.uid;
     var show_status = message.data.show_status;
     var chair_id = message.chair_id;
@@ -296,17 +312,18 @@ exports.user_show_hands = function(message) {
     data.show_status = player.show_status;
     response.data = data;
 
-    if (!player.offline()) {
-        player.send(response);
-    }
-    return;
+    return response;
+    // if (!player.offline()) {
+    //     player.send(response);
+    // }
+    // return;
 };
 
 // exports.winner_show_hands = function () {
 
 // };
 
-exports.other_player_action = function() {
+exports.room_other_player_action = function() {
 
 };
 
@@ -315,10 +332,14 @@ exports.pot_win_money = function() {
 };
 
 
-exports.bet_money = function() {
+exports.room_bet_money = function() {
 
 };
 
 exports.game_over = function () {
 
 };
+
+function room_player_raise(message) {
+
+}

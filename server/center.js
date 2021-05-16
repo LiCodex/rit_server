@@ -1,6 +1,7 @@
 // var RedisClustr = require('redis-clustr');
 // var RedisClient = require('redis');
 const dotenv = require('dotenv');
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 

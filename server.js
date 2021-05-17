@@ -63,8 +63,10 @@ wss.on('connection', function connection(ws) {
     var func = cmd["c"] + "_" + cmd["m"];
     try {
       res = center[func](cmd["data"]);
-      //console.log(players);
-      ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
+      if (res != null) {
+        //console.log(players);
+        ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
+      }
     } catch (error) {
       console.log(error);
     }

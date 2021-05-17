@@ -21,7 +21,7 @@ function check_start() {
 };
 
 function get_chair_id_by_uid(uid) {
-
+    return null;
 };
 
 exports.room_check = function(message) {
@@ -42,7 +42,8 @@ exports.index_login = function(message) {
     var response = {};
     response.uid = decoded._id;
     response.room_id = "";
-    return response;
+    return null;
+    //return response;
 }
 
 exports.room_join = function(message) {
@@ -50,43 +51,43 @@ exports.room_join = function(message) {
     // console.log(room_key);
     var uid = message.uid;
     var existing_chair_id = get_chair_id_by_uid(uid);
-    var session_id = message.session_id;
-    var room_id = message.room_id;
-    var info = message.data.info;
+    // var session_id = message.session_id;
+    // var room_id = message.room_id;
+    //var info = message.data.info;
 
     if (existing_chair_id != null) {
-        var player = get_player_by_chair_id(existing_chair_id);
-        player.update_info(message.data.info);
-        player.update_session_id(session_id);
-        update_session(uid, existing_chair_id, session_id);
+        // var player = get_player_by_chair_id(existing_chair_id);
+        // player.update_info(message.data.info);
+        // player.update_session_id(session_id);
+        // update_session(uid, existing_chair_id, session_id);
     } else {
-        var chair_id = rnd_chair();
-        var cash_needed = 0;
-        if (chair_id < chair_count) {
-            var user = users[user_id];
-            cash_needed = config.max_coin;
-            var res = user.bring_cash_to_table(cash_needed);
-            if (res.ok == 'ok') {
-                uid_room_map[uid] = room_id;
-                room = rooms[room_id];
-                room.add_player(1);
-            }
+        // var chair_id = rnd_chair();
+        // var cash_needed = 0;
+        // if (chair_id < chair_count) {
+        //     var user = users[user_id];
+        //     cash_needed = config.max_coin;
+        //     var res = user.bring_cash_to_table(cash_needed);
+        //     if (res.ok == 'ok') {
+        //         uid_room_map[uid] = room_id;
+        //         room = rooms[room_id];
+        //         room.add_player(1);
+        //     }
 
-        }
+        // }
 
-        var player = Player.new(room_id, uid, chair_id, session_id, info);
-        player.cash = coin_needed;
-        player.room = rooms[room_id];
-        players[chair_id] = player;
+        // var player = Player.new(room_id, uid, chair_id, session_id, info);
+        // player.cash = coin_needed;
+        // player.room = rooms[room_id];
+        // players[chair_id] = player;
     
-        var response = {};
-        response.m = message.m;
-        response.c = message.c;
-        var data = {};
-        data.room_id = room_id;
-        data.room_type = 'holdem';
-        response.data = data;
-        return response;
+        // var response = {};
+        // response.m = message.m;
+        // response.c = message.c;
+        // var data = {};
+        // data.room_id = room_id;
+        // data.room_type = 'holdem';
+        // response.data = data;
+        // return response;
         // player.send(response);
         // notify_update(chair_id);
         // check_start();

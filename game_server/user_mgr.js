@@ -38,8 +38,6 @@ exports.send_message = function(user_id, event, msg_data) {
     if (socket == null) {
         return;
     }
-
-
 };
 
 exports.clear_room = function(room_id) {

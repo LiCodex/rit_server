@@ -42,8 +42,8 @@ exports.index_login = function(message) {
     var response = {};
     response.uid = decoded._id;
     response.room_id = "";
-    return null;
-    //return response;
+    //return null;
+    return response;
 }
 
 exports.room_join = function(message) {
@@ -93,6 +93,10 @@ exports.room_join = function(message) {
         // check_start();
     }
 }
+
+exports.room_sit = function(message) {
+    var 
+};
 
 async function load_room_info() {
     var rooms = {};

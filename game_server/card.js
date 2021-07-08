@@ -42,4 +42,4 @@ class Card {
 }
 
 
-export Card
+module.exports = Card

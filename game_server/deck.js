@@ -53,4 +53,4 @@ class Deck {
     }
 }
 
-export Deck
+module.exports = Deck

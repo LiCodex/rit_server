@@ -44,7 +44,7 @@ const Deck = class{
             throw 'No cards in the deck';
         }
 
-        dealt_cards = [];
+        var dealt_cards = [];
         for (var i = 0; i < no_of_cards; i++) {
             dealt_cards.push(cards[this.next_card_index++]);
         }

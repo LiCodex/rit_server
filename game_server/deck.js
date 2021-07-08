@@ -1,4 +1,4 @@
-const card = require('./card');
+const Card = require('./card.js');
 
 const Deck = class{
     static NO_OF_CARDS = 52;
@@ -8,9 +8,9 @@ const Deck = class{
     constructor() {
         this.cards = [];
         var index = 0;
-        for (var suite = card.Card.NO_OF_SUITES - 1; suite >= 0; suite--) {
-            for (var rank = card.Card.NO_OF_RANKS - 1; rank >= 0; rank--) {
-                cards[index++] = new card.Card(suite, rank);
+        for (var suite = Card.NO_OF_SUITES - 1; suite >= 0; suite--) {
+            for (var rank = Card.NO_OF_RANKS - 1; rank >= 0; rank--) {
+                cards[index++] = new Card(suite, rank);
             }
         }
     }

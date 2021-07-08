@@ -1,6 +1,6 @@
 const card = require('./card');
 
-export class Deck {
+class Deck {
     static NO_OF_CARDS = 52;
     cards;
     next_card_index = 0;
@@ -39,7 +39,7 @@ export class Deck {
     deal(no_of_cards){
         if (no_of_cards < 1) {
             throw 'no_of_cards < 1';
-        } 
+        }
         if (next_card_index + no_of_cards >= NO_OF_CARDS) {
             throw 'No cards in the deck';
         }

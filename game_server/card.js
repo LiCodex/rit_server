@@ -1,4 +1,4 @@
-export class Card {
+class Card {
     static NO_OF_RANKS = 13;
     static NO_OF_SUITES = 4;
 

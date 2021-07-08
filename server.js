@@ -7,6 +7,7 @@ const cors = require('cors');
 const User = require('./models/user.js');
 const center = require('./server/center.js');
 const Room = require("./models/room.js");
+const room_mgr = require('./game_server/room_mgr');
 
 dotenv.config();
 
@@ -42,18 +43,17 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ server:server });
 
-// var rooms = {};
-// var total_rooms = 0;
-
-rooms = load_room_info();
-console.log("rooms");
-console.log(rooms);
-// console.log("total_rooms");
-// console.log(total_rooms);
-
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
 
+  ws.on('ready', function(data){
+    var user_id = ws.user_id;
+    if(user_id == null){
+      return;
+    }
+    ws.gameMgr.setReady(user_id);
+    userMgr.broacast_in_room('user_ready_push',{user_id: user_id, ready: true}, user_id, true);
+  });
 
   ws.on('message', function incoming(message) {
     console.log(JSON.stringify(message));
@@ -62,33 +62,13 @@ wss.on('connection', function connection(ws) {
     var cmd = JSON.parse(message);
     var func = cmd["c"] + "_" + cmd["m"];
     try {
-      res = center[func](cmd["data"]);
+      res = room_mgr[func](cmd["data"]);
       if (res != null) {
-        //console.log(players);
         ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
       }
     } catch (error) {
       console.log(error);
     }
-    
-    
-    // if (message == "\"hello\"") {
-    //   console.log('123');
-
-    //   var cmd = JSON.stringify({"c":"index","m":"console","data":{"result": [123, "test"]}})
-    //   ws.send(cmd);
-    // }
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-        // if (message == "\"hello\"") {
-        //   console.log('Two seconds later, showing sleep in a loop...');
-
-        //   var cmd = {"c":"index","m":"console","data":{}}
-        //   client.send(cmd);
-        // }
-      }
-    });
 
   });
 });
@@ -100,20 +80,3 @@ app.listen(3000, err => {
         console.log("listening on port", 3000);
     }
 });
-
-
-async function load_room_info() {
-  var rooms = {};
-  var rs = await Room.find();
-  console.log("rs");
-  console.log(rs);
-  for (var i in rs) {
-    //total_rooms++;
-    console.log("room.players");
-    console.log(rs[i]);
-    rooms[rs[i]._id] = {"players": rs[i].players, "status": rs[i].room_status, "stake": rs[i].stake, "name": rs[i].name, "blind_type": rs[i].blind_type, "starting_time": rs[i].starting_time}
-  }
-  console.log("rs1");
-  console.log(rooms);
-  return rooms;
-}

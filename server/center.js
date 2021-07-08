@@ -79,7 +79,7 @@ exports.room_join = function(message) {
         // player.cash = coin_needed;
         // player.room = rooms[room_id];
         // players[chair_id] = player;
-    
+
         // var response = {};
         // response.m = message.m;
         // response.c = message.c;
@@ -94,8 +94,12 @@ exports.room_join = function(message) {
     }
 }
 
+
+
 exports.room_sit = function(message) {
-    var 
+    var uid = message.uid;
+    var amount = message.amount;
+
 };
 
 async function load_room_info() {
@@ -157,7 +161,7 @@ function game_start(room) {
 
     if (room.button_position == -1) {
         room.button_position = rnd_button();
-        room.players[room.button_position].btn = true; 
+        room.players[room.button_position].btn = true;
     } else {
         room.button_position = get_next(room.button_position);
     }
@@ -168,7 +172,7 @@ function game_start(room) {
 //         return
 //     }
 
-//     delete()    
+//     delete()
 // }
 
 function start() {
@@ -184,7 +188,7 @@ function reset_game() {
     actor_position = -1;
     game_over = false;
     for (var player in players) {
-        
+
     }
 };
 
@@ -226,7 +230,7 @@ exports.room_load_context = function(message) {
 };
 
 exports.room_update_user = function(message) {
-    
+
 };
 
 exports.room_rejoin = function(message) {
@@ -239,7 +243,7 @@ exports.room_rejoin = function(message) {
 
 
     }
-};  
+};
 
 exports.room_check_rejoin = function(message) {
     var data = {}
@@ -252,7 +256,7 @@ exports.room_add_time = function(message) {
     var chair_id = message.chair_id;
     if (chair_id == null || chair_id > chair_count) {
         throw 'invalid chair id';
-    } 
+    }
 
     var player = players[chair_id];
     if (player == null || player.has_cards) {

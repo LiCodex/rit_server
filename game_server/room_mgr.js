@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
-
-var rooms = {};
+const Deck = require('./deck.js');
+var rooms = {"test": {"deck": []}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -14,9 +14,79 @@ function generate_room_id() {
     return room_id;
 };
 
+
+exports.room_sit = function(message) {
+    var uid = message.uid;
+    var amount = message.amount;
+
+};
+
+exports.room_deal_hole_cards = function(message) {
+    var uid = message.uid;
+    var deck = new Deck();
+    // var room = rooms[]
+    deck.shuffle();
+    rooms["test"].deck = deck;
+
+    var hole_cards = [];
+    hole_cards.push(rooms["test"].deck.deal());
+    hole_cards.push(rooms["test"].deck.deal());
+    rooms["test"].fake_hole_cards_status = [true, true, true, true, true, true, true, true];
+    //save to db
+    return { "hole_cards": hole_cards, "player_hole_cards_status": fake_hole_cards_status }
+
+};
+
+exports.room_deal_flop_cards = function(message) {
+    var uid = message.uid;
+    var room_id = message.room_id;
+    var room = rooms["test"];
+
+    var flop = [];
+    flop.push(room.deck.deal());
+    flop.push(room.deck.deal());
+    flop.push(room.deck.deal());
+    rooms["test"]["flop"] = flop
+    // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
+    return { "flop": room["test"]["flop"] }
+
+};
+
+exports.room_deal_turn_cards = function(message) {
+    var uid = message.uid;
+    var room_id = message.room_id;
+    var room = rooms["test"];
+
+    var turn = [];
+    turn.push(room.deck.deal());
+
+    room["turn"] = turn;
+    // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
+    return { "turn": room["turn"] }
+
+};
+
+exports.room_deal_river_cards = function(message) {
+    var uid = message.uid;
+    var room_id = message.room_id;
+    var room = rooms["test"];
+
+    var river = [];
+    river.push(room.deck.deal());
+
+    room["river"] = river;
+    // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
+    return { "river": room["river"] }
+
+};
+
+exports.room_reserve_sit = function(message) {
+
+}
+
 exports.createRoom = function(creator, room_conf, gems, ip, port, ) {
 
-};  
+};
 
 exports.destroy = function(room_id){
 	var room_info = rooms[room_id];
@@ -31,7 +101,7 @@ exports.destroy = function(room_id){
 			db.set_room_id_of_user(user_id, null);
 		}
 	}
-	
+
 	delete rooms[room_id];
 	total_rooms--;
 	db.delete_room(room_id);
@@ -53,8 +123,11 @@ exports.is_creator = function(room_id, admin_id) {
     return room_info.conf.creator == admin_id;
 };
 
+export.
+
 exports.enter_room = function(room_id, user_id, user_name, callback) {
-    var 
+    var room = rooms[room_id];
+
 };
 
 exports.set_ready = function(user_id, value) {
@@ -74,7 +147,7 @@ exports.set_ready = function(user_id, value) {
     }
 
     var seat = room.seats[seat_index];
-    seat.ready = value; 
+    seat.ready = value;
 };
 
 exports.is_ready = function(user_id) {
@@ -138,4 +211,3 @@ exports.exit_room = function(user_id) {
         exports.destroy(room_id);
     }
 };
-

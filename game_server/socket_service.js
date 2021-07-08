@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ server:server });
 
-exports.start = function(conf, mgr) {
+exports.start = function(conf) {
     wss.on('connection', function connection(ws) {
         console.log('A new client Connected!');
         ws.on('login', function(data) {
@@ -41,26 +41,7 @@ exports.start = function(conf, mgr) {
             } catch (error) {
             console.log(error);
             }
-          
-          
-          // if (message == "\"hello\"") {
-          //   console.log('123');
-      
-          //   var cmd = JSON.stringify({"c":"index","m":"console","data":{"result": [123, "test"]}})
-          //   ws.send(cmd);
-          // }
-            wss.clients.forEach(function each(client) {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(message);
-                // if (message == "\"hello\"") {
-                //   console.log('Two seconds later, showing sleep in a loop...');
-        
-                //   var cmd = {"c":"index","m":"console","data":{}}
-                //   client.send(cmd);
-                // }
-            }
-            });
-      
+
         });
       });
 }

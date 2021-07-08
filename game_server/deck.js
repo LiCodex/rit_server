@@ -52,3 +52,5 @@ class Deck {
         return dealt_cards;
     }
 }
+
+export Deck

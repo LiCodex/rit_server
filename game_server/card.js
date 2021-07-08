@@ -40,3 +40,6 @@ class Card {
 
 
 }
+
+
+export Card

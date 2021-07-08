@@ -123,7 +123,6 @@ exports.is_creator = function(room_id, admin_id) {
     return room_info.conf.creator == admin_id;
 };
 
-export.
 
 exports.enter_room = function(room_id, user_id, user_name, callback) {
     var room = rooms[room_id];

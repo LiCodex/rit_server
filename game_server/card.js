@@ -28,10 +28,10 @@ const Card = class {
     suite;
 
     constructor(rank ,suite) {
-        if (rank < 0 || rank > NO_OF_RANKS + 1) {
+        if (rank < 0 || rank > Card.NO_OF_RANKS + 1) {
             throw "invalid rank";
         }
-        if (suite < 0 || suite > NO_OF_SUITES - 1) {
+        if (suite < 0 || suite > Card.NO_OF_SUITES - 1) {
             throw "invalid suite";
         }
         this.rank = rank;

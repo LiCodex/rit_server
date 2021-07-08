@@ -48,7 +48,7 @@ exports.room_deal_flop_cards = function(message) {
     cards.push(room.deck.deal());
     room.flop = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": room.flop }
+    return { "cards": cards }
 
 };
 
@@ -62,7 +62,7 @@ exports.room_deal_turn_card = function(message) {
 
     room.turn = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": room.turn }
+    return { "cards": cards }
 
 };
 
@@ -76,7 +76,7 @@ exports.room_deal_river_card = function(message) {
 
     room.river = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": room.river }
+    return { "cards": cards }
 
 };
 

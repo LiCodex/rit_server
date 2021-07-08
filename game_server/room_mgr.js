@@ -52,7 +52,7 @@ exports.room_deal_flop_cards = function(message) {
 
 };
 
-exports.room_deal_turn_cards = function(message) {
+exports.room_deal_turn_card = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
     var room = rooms["test"];
@@ -66,7 +66,7 @@ exports.room_deal_turn_cards = function(message) {
 
 };
 
-exports.room_deal_river_cards = function(message) {
+exports.room_deal_river_card = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
     var room = rooms["test"];

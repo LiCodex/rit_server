@@ -1,6 +1,6 @@
 const card = require('./card');
 
-class Deck {
+const Deck = class{
     static NO_OF_CARDS = 52;
     cards;
     next_card_index = 0;

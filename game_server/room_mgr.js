@@ -23,7 +23,7 @@ exports.room_sit = function(message) {
 
 exports.room_deal_hole_cards = function(message) {
     var uid = message.uid;
-    var deck = new exports.Deck();
+    var deck = new Deck();
     // var room = rooms[]
     deck.shuffle();
     rooms["test"].deck = deck;

@@ -10,14 +10,14 @@ const Deck = class{
         var index = 0;
         for (var suite = Card.NO_OF_SUITES - 1; suite >= 0; suite--) {
             for (var rank = Card.NO_OF_RANKS - 1; rank >= 0; rank--) {
-                this.cards[index++] = new Card(suite, rank);
+                this.cards[index++] = new Card(rank, suite);
             }
         }
     }
 
     shuffle() {
-        for (var old_index = 0; old_index < NO_OF_CARDS; old_index++) {
-            var new_index = getRandomInt(NO_OF_CARDS);
+        for (var old_index = 0; old_index < Deck.NO_OF_CARDS; old_index++) {
+            var new_index = getRandomInt(Deck.NO_OF_CARDS);
             tmp_card = this.card[old_index];
             this.card[old_index] = card[new_index];
             this.card[new_index] = tmp_card;
@@ -30,7 +30,7 @@ const Deck = class{
     }
 
     deal() {
-        if (this.next_card_index + 1 > NO_OF_CARDS) {
+        if (this.next_card_index + 1 > Deck.NO_OF_CARDS) {
             throw 'no cards left in the deck';
         }
         return this.cards[this.next_card_index++];
@@ -40,7 +40,7 @@ const Deck = class{
         if (no_of_cards < 1) {
             throw 'no_of_cards < 1';
         }
-        if (this.next_card_index + no_of_cards >= NO_OF_CARDS) {
+        if (this.next_card_index + no_of_cards >= Deck.NO_OF_CARDS) {
             throw 'No cards in the deck';
         }
 

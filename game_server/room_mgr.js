@@ -42,13 +42,13 @@ exports.room_deal_flop_cards = function(message) {
     var room_id = message.room_id;
     var room = rooms["test"];
 
-    var flop = [];
-    flop.push(room.deck.deal());
-    flop.push(room.deck.deal());
-    flop.push(room.deck.deal());
-    rooms["test"]["flop"] = flop
+    var cards = [];
+    cards.push(room.deck.deal());
+    cards.push(room.deck.deal());
+    cards.push(room.deck.deal());
+    room.flop = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "flop": room["test"]["flop"] }
+    return { "cards": room.flop }
 
 };
 
@@ -57,12 +57,12 @@ exports.room_deal_turn_card = function(message) {
     var room_id = message.room_id;
     var room = rooms["test"];
 
-    var turn = [];
-    turn.push(room.deck.deal());
+    var cards = [];
+    cards.push(room.deck.deal());
 
-    room["turn"] = turn;
+    room.turn = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "turn": room["turn"] }
+    return { "cards": room.turn }
 
 };
 
@@ -71,12 +71,12 @@ exports.room_deal_river_card = function(message) {
     var room_id = message.room_id;
     var room = rooms["test"];
 
-    var river = [];
-    river.push(room.deck.deal());
+    var cards = [];
+    cards.push(room.deck.deal());
 
-    room["river"] = river;
+    room.river = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "river": room["river"] }
+    return { "cards": room.river }
 
 };
 

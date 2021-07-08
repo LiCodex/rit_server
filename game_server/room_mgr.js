@@ -50,6 +50,8 @@ exports.room_deal_flop_cards = function(message) {
     cards.push(room["deck"].deal());
     cards.push(room["deck"].deal());
     room["flop"] = cards;
+    console.log("flop");
+    console.log(room["flop"]);
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
     return { "cards": cards }
 

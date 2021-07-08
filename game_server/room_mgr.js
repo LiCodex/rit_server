@@ -36,7 +36,7 @@ exports.room_deal_hole_cards = function(message) {
     console.log(hole_cards);
     rooms["test"]["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
     //save to db
-    return { "hole_cards": hole_cards, "player_hole_cards_status": fake_hole_cards_status }
+    return { "hole_cards": hole_cards, "player_hole_cards_status": rooms["test"]["fake_hole_cards_status"] }
 
 };
 

@@ -18,9 +18,9 @@ const Deck = class{
     shuffle() {
         for (var old_index = 0; old_index < Deck.NO_OF_CARDS; old_index++) {
             var new_index = this.getRandomInt(Deck.NO_OF_CARDS);
-            tmp_card = this.card[old_index];
-            this.card[old_index] = card[new_index];
-            this.card[new_index] = tmp_card;
+            tmp_card = this.cards[old_index];
+            this.cards[old_index] = card[new_index];
+            this.cards[new_index] = tmp_card;
         }
         this.next_card_index = 0;
     }

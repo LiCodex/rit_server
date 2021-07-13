@@ -46,7 +46,10 @@ exports.room_deal_flop_cards = function(message) {
     var room = rooms["test"];
 
     var cards = [];
-    cards.push(room["deck"].deal());
+    //cards.push(room["deck"].deal());
+    res = room["deck"].deal();
+    console.log("res");
+    console.log(res);
     cards.push(room["deck"].deal());
     cards.push(room["deck"].deal());
     room["flop"] = cards;

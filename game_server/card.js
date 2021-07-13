@@ -39,7 +39,7 @@ const Card = class {
     }
 
     toString() {
-      res = (this.suite + 1).toString() + (this.rank + 2).toString();
+      return (this.suite + 1).toString() + (this.rank + 2).toString();
     }
 
 

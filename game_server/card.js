@@ -39,7 +39,11 @@ const Card = class {
     }
 
     toString() {
-      return (this.suite + 1).toString() + (this.rank + 2).toString();
+      if (this.rank < 10) {
+        return (this.suite + 1).toString() + "0" + (this.rank + 2).toString();
+      } else {
+        return (this.suite + 1).toString() + (this.rank + 2).toString();
+      }
     }
 
 

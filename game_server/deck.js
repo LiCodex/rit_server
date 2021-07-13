@@ -13,6 +13,8 @@ const Deck = class{
                 this.cards[index++] = new Card(rank, suite);
             }
         }
+        console.log("this.cards");
+        console.log(this.cards);
     }
 
     shuffle() {

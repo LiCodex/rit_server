@@ -21,7 +21,7 @@ const Card = class {
     static CLUB = 1;
     static DIAMOND = 0;
 
-    RANK_SYMBOLS = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
+    RANK_SYMBOLS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"];
     SUITE_SYMBOLS = ["d", "c", "h", "s"];
 
     rank;
@@ -36,6 +36,10 @@ const Card = class {
         }
         this.rank = rank;
         this.suite = suite;
+    }
+
+    toString() {
+      res = (this.suite + 1).toString() + (this.rank + 2).toString();
     }
 
 

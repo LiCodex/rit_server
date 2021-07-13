@@ -30,8 +30,8 @@ exports.room_deal_hole_cards = function(message) {
     console.log("deck");
     console.log(deck)
     var hole_cards = [];
-    hole_cards.push(rooms["test"]["deck"].deal());
-    hole_cards.push(rooms["test"]["deck"].deal());
+    hole_cards.push(rooms["test"]["deck"].deal().toString());
+    hole_cards.push(rooms["test"]["deck"].deal().toString());
     console.log("hole cards");
     console.log(hole_cards);
     rooms["test"]["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
@@ -46,15 +46,11 @@ exports.room_deal_flop_cards = function(message) {
     var room = rooms["test"];
 
     var cards = [];
-    //cards.push(room["deck"].deal());
-    res = room["deck"].deal();
-    console.log("res");
-    console.log(res);
-    cards.push(room["deck"].deal());
-    cards.push(room["deck"].deal());
+    cards.push(room["deck"].deal().toString());
+    cards.push(room["deck"].deal().toString());
+    cards.push(room["deck"].deal().toString());
     room["flop"] = cards;
-    console.log("flop");
-    console.log(room["flop"]);
+
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
     return { "cards": cards }
 
@@ -66,7 +62,7 @@ exports.room_deal_turn_card = function(message) {
     var room = rooms["test"];
 
     var cards = [];
-    cards.push(room["deck"].deal());
+    cards.push(room["deck"].deal().toString());
 
     room.turn = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
@@ -80,7 +76,7 @@ exports.room_deal_river_card = function(message) {
     var room = rooms["test"];
 
     var cards = [];
-    cards.push(room["deck"].deal());
+    cards.push(room["deck"].deal().toString());
 
     room.river = cards;
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];

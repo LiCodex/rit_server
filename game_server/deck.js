@@ -35,8 +35,6 @@ const Deck = class{
         if (this.next_card_index + 1 > Deck.NO_OF_CARDS) {
             throw 'no cards left in the deck';
         }
-        console.log("this.next_card_index");
-        console.log(this.next_card_index);
         return this.cards[this.next_card_index++];
     }
 
@@ -54,7 +52,7 @@ const Deck = class{
     //     }
     //
     //     return dealt_cards;
-    // } 
+    // }
 
     getRandomInt(max) {
         return Math.floor(Math.random() * max);

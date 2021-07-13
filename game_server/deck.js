@@ -54,7 +54,7 @@ const Deck = class{
     //     }
     //
     //     return dealt_cards;
-    // }
+    // } 
 
     getRandomInt(max) {
         return Math.floor(Math.random() * max);

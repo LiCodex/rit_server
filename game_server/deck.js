@@ -35,24 +35,26 @@ const Deck = class{
         if (this.next_card_index + 1 > Deck.NO_OF_CARDS) {
             throw 'no cards left in the deck';
         }
+        console.log("this.next_card_index");
+        console.log(this.next_card_index);
         return this.cards[this.next_card_index++];
     }
 
-    deal(no_of_cards){
-        if (no_of_cards < 1) {
-            throw 'no_of_cards < 1';
-        }
-        if (this.next_card_index + no_of_cards >= Deck.NO_OF_CARDS) {
-            throw 'No cards in the deck';
-        }
-
-        var dealt_cards = [];
-        for (var i = 0; i < no_of_cards; i++) {
-            dealt_cards.push(cards[this.next_card_index++]);
-        }
-
-        return dealt_cards;
-    }
+    // deal(no_of_cards){
+    //     if (no_of_cards < 1) {
+    //         throw 'no_of_cards < 1';
+    //     }
+    //     if (this.next_card_index + no_of_cards >= Deck.NO_OF_CARDS) {
+    //         throw 'No cards in the deck';
+    //     }
+    //
+    //     var dealt_cards = [];
+    //     for (var i = 0; i < no_of_cards; i++) {
+    //         dealt_cards.push(cards[this.next_card_index++]);
+    //     }
+    //
+    //     return dealt_cards;
+    // }
 
     getRandomInt(max) {
         return Math.floor(Math.random() * max);

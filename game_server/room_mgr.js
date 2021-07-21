@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": []}};
+var rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -20,6 +20,24 @@ exports.room_sit = function(message) {
     var amount = message.amount;
 
 };
+
+
+exports.room_refresh = function() {
+  rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+  return { success: true }
+};
+
+exports.room_add_chips = function(message) {
+    var uid = message.uid;
+    var room_id = message.room_id;
+    var amount = message.amount;
+    var room = rooms["test"];
+    var seat_id = message.seat_id;
+
+    return { status: true }
+
+};
+
 
 exports.room_deal_hole_cards = function(message) {
     var uid = message.uid;

@@ -43,9 +43,10 @@ exports.room_action_buy_in = function(message) {
       console.log("not enough money");
       console.log(player);
       console.log(player["money_in_the_bank"]);
-      player["money_on_the_table"] += player["money_in_the_bank"];
-      player["money_in_the_bank"] -= player["money_in_the_bank"];
-      return { success: true, added_amount: player["money_in_the_bank"], message: "do not have enough money" }
+      money_to_add = player["money_in_the_bank"]
+      player["money_on_the_table"] += money_to_add;
+      player["money_in_the_bank"] -= money_to_add;
+      return { success: true, added_amount: money_to_add, message: "do not have enough money" }
     } else {
       player["money_on_the_table"] += amount;
       player["money_in_the_bank"] -= amount;

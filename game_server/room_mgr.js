@@ -30,20 +30,23 @@ exports.room_refresh = function() {
 exports.room_action_buy_in = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
-    var amount = message.amount;
+    var amount = message.chips;
     var room = rooms["test"];
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id);
-    if (player["money_in_the_bank"] < amount) {
+    if (amount == undefined) {
+      return { success: false, added_amount: 0, message: "amount not provided"}
+    }
+    else if (player["money_in_the_bank"] < amount) {
       console.log("not enough money");
       console.log(amount);
-      return { success: false, added_amount: 0 }
+      return { success: false, added_amount: 0, message: "do not have enough money" }
     } else {
       player["money_on_the_table"] += amount;
       player["money_in_the_bank"] -= amount;
       console.log("has enough money");
       console.log(amount);
-      return { success: true, added_amount: amount }
+      return { success: true, added_amount: amount, message: "success" }
     }
 };
 

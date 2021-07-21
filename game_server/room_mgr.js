@@ -27,15 +27,18 @@ exports.room_refresh = function() {
   return { success: true }
 };
 
-exports.room_add_chips = function(message) {
+exports.room_action_buy_in = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
     var amount = message.amount;
     var room = rooms["test"];
     var seat_id = message.seat_id;
-
-    return { status: true }
-
+    var player = room["players"].filter(player => player["seat_id"] == seat_id);
+    if (player["money_in_the_bank"] < amount) {
+      return { success: false, added_amount: 0 }
+    } else {
+      return { success: true, added_amount: amount }
+    }
 };
 
 

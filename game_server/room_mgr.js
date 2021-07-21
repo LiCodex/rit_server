@@ -35,10 +35,14 @@ exports.room_action_buy_in = function(message) {
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id);
     if (player["money_in_the_bank"] < amount) {
+      console.log("not enough money");
+      console.log(amount);
       return { success: false, added_amount: 0 }
     } else {
       player["money_on_the_table"] += amount;
       player["money_in_the_bank"] -= amount;
+      console.log("has enough money");
+      console.log(amount);
       return { success: true, added_amount: amount }
     }
 };

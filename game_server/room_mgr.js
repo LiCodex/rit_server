@@ -35,7 +35,7 @@ exports.room_action_buy_in = function(message) {
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id);
     console.log("money in the bank")
-    console.log(player["money_in_the_bank"]);
+    console.log(player);
     if (amount == undefined) {
       return { success: false, added_amount: 0, message: "amount not provided"}
     }

@@ -37,6 +37,8 @@ exports.room_action_buy_in = function(message) {
     if (player["money_in_the_bank"] < amount) {
       return { success: false, added_amount: 0 }
     } else {
+      player["money_on_the_table"] += amount;
+      player["money_in_the_bank"] -= amount;
       return { success: true, added_amount: amount }
     }
 };

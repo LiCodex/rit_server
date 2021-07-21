@@ -33,7 +33,7 @@ exports.room_action_buy_in = function(message) {
     var amount = message.chips;
     var room = rooms["test"];
     var seat_id = message.seat_id;
-    var player = room["players"].filter(player => player["seat_id"] == seat_id);
+    var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
     console.log("money in the bank")
     console.log(player);
     if (amount == undefined) {

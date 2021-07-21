@@ -42,6 +42,8 @@ exports.room_action_buy_in = function(message) {
     else if (player["money_in_the_bank"] < amount) {
       console.log("not enough money");
       console.log(amount);
+      player["money_on_the_table"] += player["money_in_the_bank"];
+      player["money_in_the_bank"] -= player["money_in_the_bank"];
       return { success: true, added_amount: player["money_in_the_bank"], message: "do not have enough money" }
     } else {
       player["money_on_the_table"] += amount;

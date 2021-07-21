@@ -34,6 +34,8 @@ exports.room_action_buy_in = function(message) {
     var room = rooms["test"];
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id);
+    console.log("money in the bank")
+    console.log(player["money_in_the_bank"]);
     if (amount == undefined) {
       return { success: false, added_amount: 0, message: "amount not provided"}
     }
@@ -48,6 +50,11 @@ exports.room_action_buy_in = function(message) {
       console.log(amount);
       return { success: true, added_amount: amount, message: "success" }
     }
+};
+
+exports.room_call = function() {
+  rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+  return { success: true }
 };
 
 

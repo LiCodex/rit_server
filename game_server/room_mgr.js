@@ -136,19 +136,20 @@ exports.room_call = function(message) {
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = 0;
+  data["bet_amount"] = message.amount;
   data["action"] = "call";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
   room["actions"][chair_id] = [];
 
-  return { success: true }
+  return { success: true, data: data }
 };
 
 exports.room_raise = function(message) {
   var uid = message.uid;
   var chair_id = message.chair_id;
+  var amount = message.amount;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (chair_id == undefined) {
@@ -173,14 +174,14 @@ exports.room_raise = function(message) {
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = 0;
+  data["bet_amount"] = message.amount;
   data["action"] = "raise";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
   room["actions"][chair_id] = [];
 
-  return { success: true }
+  return { success: true, data: data }
 };
 
 exports.room_all_in = function(message) {
@@ -217,7 +218,7 @@ exports.room_all_in = function(message) {
 
   room["actions"][chair_id] = [];
 
-  return { success: true }
+  return { success: true, data: data }
 };
 
 

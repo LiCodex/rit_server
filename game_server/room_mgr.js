@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+var rooms = {"test": {"deck": [], "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -15,6 +15,22 @@ function generate_room_id() {
 };
 
 
+function check_start(room) {
+  if (room.state != null) {
+    return { message: "Cannot start" }
+  }
+  var active_players = 0;
+  for (var player in room.players) {
+    if (player.game_state != "sit_out" && player.money_on_the_table > 0) {
+      active_players++;
+    }
+  }
+  if (active_players > 2) {
+    room.time_state = 'start';
+  }
+}
+
+
 exports.room_sit = function(message) {
     var uid = message.uid;
     var amount = message.amount;
@@ -23,7 +39,7 @@ exports.room_sit = function(message) {
 
 
 exports.room_refresh = function() {
-  rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+  var rooms = {"test": {"deck": [], "round": 0, "players": [{"game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
   return { success: true }
 };
 
@@ -34,15 +50,15 @@ exports.room_action_buy_in = function(message) {
     var room = rooms["test"];
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-    console.log("money in the bank")
-    console.log(player);
+    // console.log("money in the bank")
+    // console.log(player);
     if (amount == undefined) {
       return { success: false, added_amount: 0, message: "amount not provided"}
     }
     else if (player["money_in_the_bank"] < amount) {
-      console.log("not enough money");
-      console.log(player);
-      console.log(player["money_in_the_bank"]);
+      // console.log("not enough money");
+      // console.log(player);
+      // console.log(player["money_in_the_bank"]);
       money_to_add = player["money_in_the_bank"]
       player["money_on_the_table"] += money_to_add;
       player["money_in_the_bank"] -= money_to_add;
@@ -50,14 +66,157 @@ exports.room_action_buy_in = function(message) {
     } else {
       player["money_on_the_table"] += amount;
       player["money_in_the_bank"] -= amount;
-      console.log("has enough money");
-      console.log(amount);
+      // console.log("has enough money");
+      // console.log(amount);
       return { success: true, added_amount: amount, message: "success" }
     }
 };
 
-exports.room_call = function() {
-  rooms = {"test": {"deck": [], "players": [{"seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+exports.room_fold = function(message) {
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var room = rooms["test"];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
+  }
+  if (chair_id != room["current_action_player"]) {
+    return { success: false, message: "not current action player" }
+  }
+
+  if (player["state"] == "fold") {
+    return { success: false, message: "the player has folded the cards" }
+  }
+
+  player["action_count"] += 1;
+  player["last_action_timestamp"] = Date.now();
+  room["last_action_timestamp"] = Date.now();
+  data["hand_state"] = "fold";
+
+  var response = {}
+  response["m"] = 'fold';
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  data["betting_history"] = room["betting_history"];
+  data["bet_amount"] = 0;
+  data["action"] = "fold";
+  response["data"] = data;
+  //broadcast_to_online_user(response);
+
+  room["actions"][chair_id] = [];
+
+  return { success: true }
+};
+
+exports.room_call = function(message) {
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var room = rooms["test"];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
+  }
+  if (chair_id != room["current_action_player"]) {
+    return { success: false, message: "not current action player" }
+  }
+
+  if (player["state"] == "call") {
+    return { success: false, message: "the player has folded the cards" }
+  }
+
+  player["action_count"] += 1;
+  player["last_action_timestamp"] = Date.now();
+  room["last_action_timestamp"] = Date.now();
+  data["hand_state"] = "fold";
+
+  var response = {}
+  response["m"] = 'call';
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  data["betting_history"] = room["betting_history"];
+  data["bet_amount"] = 0;
+  data["action"] = "call";
+  response["data"] = data;
+  //broadcast_to_online_user(response);
+
+  room["actions"][chair_id] = [];
+
+  return { success: true }
+};
+
+exports.room_raise = function(message) {
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var room = rooms["test"];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
+  }
+  if (chair_id != room["current_action_player"]) {
+    return { success: false, message: "not current action player" }
+  }
+
+  if (player["state"] == "raise") {
+    return { success: false, message: "the player has folded the cards" }
+  }
+
+  player["action_count"] += 1;
+  player["last_action_timestamp"] = Date.now();
+  room["last_action_timestamp"] = Date.now();
+  data["hand_state"] = "raise";
+
+  var response = {}
+  response["m"] = 'raise';
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  data["betting_history"] = room["betting_history"];
+  data["bet_amount"] = 0;
+  data["action"] = "raise";
+  response["data"] = data;
+  //broadcast_to_online_user(response);
+
+  room["actions"][chair_id] = [];
+
+  return { success: true }
+};
+
+exports.room_all_in = function(message) {
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var room = rooms["test"];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
+  }
+  if (chair_id != room["current_action_player"]) {
+    return { success: false, message: "not current action player" }
+  }
+
+  if (player["state"] == "fold") {
+    return { success: false, message: "the player has folded the cards" }
+  }
+
+  player["action_count"] += 1;
+  player["last_action_timestamp"] = Date.now();
+  room["last_action_timestamp"] = Date.now();
+  data["hand_state"] = "all_in";
+
+  var response = {}
+  response["m"] = 'all_in';
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  data["betting_history"] = room["betting_history"];
+  data["bet_amount"] = 0;
+  data["action"] = "all_in";
+  response["data"] = data;
+  //broadcast_to_online_user(response);
+
+  room["actions"][chair_id] = [];
+
   return { success: true }
 };
 

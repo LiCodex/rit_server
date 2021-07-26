@@ -113,6 +113,7 @@ exports.room_fold = function(message) {
 exports.room_call = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
+  var bet_amount = message.bet_amount;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (seat_id == undefined) {
@@ -138,7 +139,7 @@ exports.room_call = function(message) {
   var data = {};
   data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = message.amount;
+  data["bet_amount"] = message.bet_amount;
   data["action"] = "call";
   response["data"] = data;
   //broadcast_to_online_user(response);
@@ -151,7 +152,7 @@ exports.room_call = function(message) {
 exports.room_raise = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
-  var amount = message.chips;
+  var bet_amount = message.bet_amount;
   var room = rooms["test"];
   // console.log("players");
   // console.log();
@@ -183,7 +184,7 @@ exports.room_raise = function(message) {
   var data = {};
   data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = message.chips;
+  data["bet_amount"] = message.bet_amount;
   data["action"] = "raise";
   response["data"] = data;
   //broadcast_to_online_user(response);
@@ -197,6 +198,7 @@ exports.room_raise = function(message) {
 exports.room_all_in = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
+  var bet_amount = message.bet_amount;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (seat_id == undefined) {
@@ -222,7 +224,7 @@ exports.room_all_in = function(message) {
   var data = {};
   data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = 0;
+  data["bet_amount"] = bet_amount;
   data["action"] = "all_in";
   response["data"] = data;
   //broadcast_to_online_user(response);

@@ -80,6 +80,7 @@ exports.room_fold = function(message) {
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
   }
+  seat_id = parseInt(seat_id);
   if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
@@ -117,6 +118,7 @@ exports.room_call = function(message) {
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
   }
+  seat_id = parseInt(seat_id);
   if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
@@ -161,6 +163,7 @@ exports.room_raise = function(message) {
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
   }
+  seat_id = parseInt(seat_id);
   if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
@@ -198,6 +201,7 @@ exports.room_all_in = function(message) {
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
   }
+  seat_id = parseInt(seat_id);
   if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }

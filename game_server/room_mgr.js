@@ -74,7 +74,7 @@ exports.room_action_buy_in = function(message) {
 
 exports.room_fold = function(message) {
   var uid = message.uid;
-  var chair_id = message.chair_id;
+  var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (chair_id == undefined) {
@@ -111,7 +111,7 @@ exports.room_fold = function(message) {
 
 exports.room_call = function(message) {
   var uid = message.uid;
-  var chair_id = message.chair_id;
+  var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (chair_id == undefined) {
@@ -148,14 +148,14 @@ exports.room_call = function(message) {
 
 exports.room_raise = function(message) {
   var uid = message.uid;
-  var chair_id = message.chair_id;
+  var seat_id = message.seat_id;
   var amount = message.amount;
   var room = rooms["test"];
   // console.log("players");
   // console.log();
   console.log("players");
   console.log(room["players"]);
-  var player = room["players"].filter(player => player.seat_id == seat_id)[0];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   console.log("player");
   console.log(player);
   if (chair_id == undefined) {
@@ -192,7 +192,7 @@ exports.room_raise = function(message) {
 
 exports.room_all_in = function(message) {
   var uid = message.uid;
-  var chair_id = message.chair_id;
+  var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (chair_id == undefined) {

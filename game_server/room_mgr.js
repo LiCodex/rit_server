@@ -77,10 +77,10 @@ exports.room_fold = function(message) {
   var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  if (seat_id == undefined) {
+    return { success: false, message: "seat_id not found" }
   }
-  if (chair_id != room["current_action_player"]) {
+  if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -97,14 +97,14 @@ exports.room_fold = function(message) {
   response["m"] = 'fold';
   response["c"] = "room";
   var data = {};
-  data["chair_id"] = chair_id;
+  data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = 0;
   data["action"] = "fold";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][chair_id] = [];
+  room["actions"][seat_id] = [];
 
   return { success: true }
 };
@@ -114,10 +114,10 @@ exports.room_call = function(message) {
   var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  if (seat_id == undefined) {
+    return { success: false, message: "seat_id not found" }
   }
-  if (chair_id != room["current_action_player"]) {
+  if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -134,14 +134,14 @@ exports.room_call = function(message) {
   response["m"] = 'call';
   response["c"] = "room";
   var data = {};
-  data["chair_id"] = chair_id;
+  data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = message.amount;
   data["action"] = "call";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][chair_id] = [];
+  room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };
@@ -158,10 +158,10 @@ exports.room_raise = function(message) {
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   console.log("player");
   console.log(player);
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  if (seat_id == undefined) {
+    return { success: false, message: "seat_id not found" }
   }
-  if (chair_id != room["current_action_player"]) {
+  if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -178,14 +178,14 @@ exports.room_raise = function(message) {
   response["m"] = 'raise';
   response["c"] = "room";
   var data = {};
-  data["chair_id"] = chair_id;
+  data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = message.amount;
   data["action"] = "raise";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][chair_id] = [];
+  room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };
@@ -195,10 +195,10 @@ exports.room_all_in = function(message) {
   var seat_id = message.seat_id;
   var room = rooms["test"];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  if (seat_id == undefined) {
+    return { success: false, message: "seat_id not found" }
   }
-  if (chair_id != room["current_action_player"]) {
+  if (seat_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -215,14 +215,14 @@ exports.room_all_in = function(message) {
   response["m"] = 'all_in';
   response["c"] = "room";
   var data = {};
-  data["chair_id"] = chair_id;
+  data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = 0;
   data["action"] = "all_in";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][chair_id] = [];
+  room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };

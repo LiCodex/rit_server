@@ -151,6 +151,10 @@ exports.room_raise = function(message) {
   var chair_id = message.chair_id;
   var amount = message.amount;
   var room = rooms["test"];
+  // console.log("players");
+  // console.log();
+  console.log("players");
+  console.log(room["players"]);
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (chair_id == undefined) {
     return { success: false, message: "chair_id not found" }

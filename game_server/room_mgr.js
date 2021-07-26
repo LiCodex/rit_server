@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": [], "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+var rooms = {"test": {"deck": [], "current_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -39,7 +39,7 @@ exports.room_sit = function(message) {
 
 
 exports.room_refresh = function() {
-  var rooms = {"test": {"deck": [], "round": 0, "players": [{"game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, {"game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+  var rooms = {"test": {"deck": [], "current_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
   return { success: true }
 };
 

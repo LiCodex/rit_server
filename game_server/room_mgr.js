@@ -91,7 +91,7 @@ exports.room_fold = function(message) {
   player["action_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
-  data["hand_state"] = "fold";
+  player["hand_state"] = "fold";
 
   var response = {}
   response["m"] = 'fold';
@@ -128,7 +128,7 @@ exports.room_call = function(message) {
   player["action_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
-  data["hand_state"] = "fold";
+  player["hand_state"] = "fold";
 
   var response = {}
   response["m"] = 'call';
@@ -172,7 +172,7 @@ exports.room_raise = function(message) {
   player["action_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
-  data["hand_state"] = "raise";
+  player["hand_state"] = "raise";
 
   var response = {}
   response["m"] = 'raise';
@@ -209,7 +209,7 @@ exports.room_all_in = function(message) {
   player["action_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
-  data["hand_state"] = "all_in";
+  player["hand_state"] = "all_in";
 
   var response = {}
   response["m"] = 'all_in';

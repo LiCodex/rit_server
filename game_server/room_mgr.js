@@ -189,7 +189,8 @@ exports.room_raise = function(message) {
   //broadcast_to_online_user(response);
 
   //room["actions"][seat_id] = [];
-
+  console.log("data");
+  console.log(data);
   return { success: true, data: data }
 };
 

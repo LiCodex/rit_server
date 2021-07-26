@@ -151,7 +151,7 @@ exports.room_call = function(message) {
 exports.room_raise = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
-  var amount = message.amount;
+  var amount = message.chips;
   var room = rooms["test"];
   // console.log("players");
   // console.log();
@@ -183,7 +183,7 @@ exports.room_raise = function(message) {
   var data = {};
   data["seat_id"] = seat_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = message.amount;
+  data["bet_amount"] = message.chips;
   data["action"] = "raise";
   response["data"] = data;
   //broadcast_to_online_user(response);

@@ -105,7 +105,7 @@ exports.room_fold = function(message) {
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][seat_id] = [];
+  //room["actions"][seat_id] = [];
 
   return { success: true }
 };
@@ -143,7 +143,7 @@ exports.room_call = function(message) {
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][seat_id] = [];
+  //room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };
@@ -188,7 +188,7 @@ exports.room_raise = function(message) {
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][seat_id] = [];
+  //room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };
@@ -226,7 +226,7 @@ exports.room_all_in = function(message) {
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  room["actions"][seat_id] = [];
+  //room["actions"][seat_id] = [];
 
   return { success: true, data: data }
 };

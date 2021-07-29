@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": [], "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+var rooms = {"test": {"deck": [], "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "bid_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -15,6 +15,16 @@ function generate_room_id() {
 };
 
 
+function active_player_count(players) {
+  var res = 0;
+  for (var i = 0; i < player.length; i++) {
+    if ((players[i]["game_state"] == "playing" || players[i]["game_state"] == "waiting") && players[i]["money_on_the_table"] > 0) {
+      res++;
+    }
+  }
+  return res;
+}
+
 function check_start(room) {
   if (room.state != null) {
     return { message: "Cannot start" }
@@ -25,11 +35,35 @@ function check_start(room) {
       active_players++;
     }
   }
-  if (active_players > 2) {
+  if (active_players >= 2) {
     room.time_state = 'start';
   }
+
+  // if (room["button"] == undefined) {
+  //
+  // }
 }
 
+
+exports.room_add_time = function(message) {
+  var room = rooms["test"];
+  var chair_id = message.chair_id;
+  var player = room["players"][chair_id];
+  if (player["hand_state"] == "fold") {
+    return { success: false, message: "the player has folded the hole cards, cannot add time" }
+  }
+  if (room["current_action_player"] != chair_id) {
+    return { success: false, message: "not current player" }
+  }
+
+  if (player["money_in_the_bank"] < room["small_blind"]) {
+    return { success: false, message: "do not have enough in the bank" }
+  }
+
+  room["XZTIMER"] += 15;
+  room["current_player_timer"] = room["XZTIMER"] - (Date.now() - room["last_action_timestamp"]);
+  return { success: true, message: "15 seconds have been added" }
+}
 
 exports.room_sit = function(message) {
     var uid = message.uid;
@@ -42,6 +76,36 @@ exports.room_refresh = function() {
   var rooms = {"test": {"deck": [], "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
   return { success: true }
 };
+
+exports.room_testing = function() {
+  return { room: room }
+};
+
+exports.room_game_start = function(message) {
+  var room = rooms["test"];
+  room["state"] = "playing";
+  room["play_state"] = "start";
+
+  if (room["round"] == 0) {
+    room["started_at"] = Date.now();
+  }
+
+  room["round"]++;
+  //room.save();
+  if (room["button"] == undefined) {
+    button = rnd_button();
+    room["button"] = button;
+    room["players"][button] = true;
+  } else {
+    room["button"] = get_next(room["button"]);
+  }
+
+  if (room["button"] != undefined) {
+    if() {}
+  }
+
+};
+
 
 exports.room_action_buy_in = function(message) {
     var uid = message.uid;

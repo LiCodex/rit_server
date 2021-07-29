@@ -101,7 +101,7 @@ exports.room_game_start = function(message) {
   }
 
   if (room["button"] != undefined) {
-    if() {}
+    // if() {}
   }
 
 };

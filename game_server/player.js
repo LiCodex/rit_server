@@ -14,6 +14,10 @@ const Player = class {
   }
 
 
+  send() {
+    
+  }
+
 
 }
 

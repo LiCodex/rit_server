@@ -1,6 +1,6 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": [], "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "bid_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+var rooms = {"test": {"deck": [], "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "bid_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -39,9 +39,6 @@ function check_start(room) {
     room.time_state = 'start';
   }
 
-  // if (room["button"] == undefined) {
-  //
-  // }
 }
 
 
@@ -66,9 +63,44 @@ exports.room_add_time = function(message) {
 }
 
 exports.room_sit = function(message) {
-    var uid = message.uid;
-    var amount = message.amount;
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var amount = message.amount;
 
+  if (chair_id > room["test"]["chair_count"]) {
+    return { success: false, message: "the chair_id exceeds room chair_count" }
+  }
+
+  var players = room["test"]["players"];
+  player = players[chair_id];
+  if (player != undefined) {
+    return { success: false, message: "there is already a player on the seat" }
+  }
+  //needs to read from the db
+  player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": 0, "money_in_the_bank": 3000}
+  res = bank_to_table(player, amount);
+  if (res == false) {
+    return { success: false, message: "there is not enough money in the bank" }
+  }
+  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
+  room["player_count"]++;
+  //player["game_state"] = "waiting";
+  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
+  // need to inform all the players about it
+  // for ()
+  return { success: true }
+  //check_start(room);
+};
+
+function bank_to_table(player, amount) {
+  // var res = false;
+  if (player["money_in_the_bank"] < amount) {
+    return false;
+  } else {
+    player["money_in_the_bank"] -= amount;
+    player["money_on_the_table"] += amount;
+    return true;
+  }
 };
 
 

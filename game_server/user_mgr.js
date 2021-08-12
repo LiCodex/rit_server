@@ -82,7 +82,8 @@ exports.broadcast_in_room = function(event, data, sender, including_sender) {
 
         var socket = user_list[rs.user_id];
         if (socket != null) {
-            socket.emit(event, data);   
+            socket.send(JSON.stringify({c: event["c"], m: event["m"], data: {data}}));
+            // socket.emit(event, data);
         }
     }
 };

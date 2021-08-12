@@ -52,7 +52,7 @@ wss.on('connection', function connection(ws) {
       return;
     }
     ws.gameMgr.setReady(user_id);
-    userMgr.broacast_in_room('user_ready_push',{user_id: user_id, ready: true}, user_id, true);
+    user_mgr.broacast_in_room('user_ready_push',{user_id: user_id, ready: true}, user_id, true);
   });
 
   ws.on('message', function incoming(message) {

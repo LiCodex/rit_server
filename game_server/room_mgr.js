@@ -1,6 +1,7 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
-var rooms = {"test": {"deck": [], "seat_count": 8, "player_count": 2, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "bid_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+const Room = require('../models/room');
+var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -91,7 +92,7 @@ exports.room_sit = function(message) {
   //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
   // need to inform all the players about it
   // for ()
-  return { success: true }
+  return { success: true, player: room["players"] }
   //check_start(room);
 };
 

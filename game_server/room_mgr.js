@@ -96,7 +96,48 @@ exports.room_sit = function(message) {
   //check_start(room);
 };
 
+
+exports.room_standup = function(message) {
+  var uid = message.uid;
+  var seat_id = message.chair_id;
+  var room = rooms["test"];
+  // var amount = message.amount;
+
+  if (seat_id > room["seat_count"]) {
+    return { success: false, message: "the chair_id exceeds room chair_count" }
+  }
+
+  // var players = rooms["test"]["players"];
+  // player = players[chair_id];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (player == undefined) {
+    return { success: false, message: "no player is on the seat" }
+  }
+  //needs to read from the db
+  //room["players"].push(player);
+  room["players"] = room["players"].filter(player => !(player["seat_id"] == seat_id));
+  room["player_count"]--;
+  //table to bank
+  //player["game_state"] = "waiting";
+  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
+  // need to inform all the players about it
+  // for ()
+  return { success: true, player: room["players"] }
+  //check_start(room);
+};
+
 function bank_to_table(player, amount) {
+  // var res = false;
+  if (player["money_in_the_bank"] < amount) {
+    return false;
+  } else {
+    player["money_in_the_bank"] -= amount;
+    player["money_on_the_table"] += amount;
+    return true;
+  }
+};
+
+function table_to_bank(player, amount) {
   // var res = false;
   if (player["money_in_the_bank"] < amount) {
     return false;

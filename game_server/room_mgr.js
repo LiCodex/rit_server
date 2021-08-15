@@ -188,7 +188,6 @@ exports.room_game_start = function(message) {
   }
 
   room["round"]++;
-  //room.save();
   if (room["button"] == undefined) {
     button = rnd_button();
     room["button"] = button;
@@ -198,7 +197,6 @@ exports.room_game_start = function(message) {
   }
 
   if (room["button"] != undefined) {
-    // if() {}
   }
 
 };
@@ -217,9 +215,6 @@ exports.room_action_buy_in = function(message) {
       return { success: false, added_amount: 0, message: "amount not provided"}
     }
     else if (player["money_in_the_bank"] < amount) {
-      // console.log("not enough money");
-      // console.log(player);
-      // console.log(player["money_in_the_bank"]);
       money_to_add = player["money_in_the_bank"]
       player["money_on_the_table"] += money_to_add;
       player["money_in_the_bank"] -= money_to_add;

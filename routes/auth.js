@@ -96,7 +96,7 @@ router.post("/auth/login", async (req, res) => {
           expiresIn: 604800 // 1 week
         });
 
-        res.json({ success: true, token: token });
+        res.json({ success: true, token: token, uid: foundUser._id });
       } else {
         console.log("phone");
         console.log(req.body.phone);

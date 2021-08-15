@@ -134,14 +134,11 @@ exports.room_standup = function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
   var room = rooms["test"];
-  // var amount = message.amount;
 
   if (seat_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  // var players = rooms["test"]["players"];
-  // player = players[chair_id];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (player == undefined) {
     return { success: false, message: "no player is on the seat" }

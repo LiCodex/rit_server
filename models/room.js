@@ -17,8 +17,8 @@ const RoomSchema = new Schema({
     last_action_timestamp: Date,
     small_blind: Number,
     big_blind: Number,
-    current_action_player: Number,
-    player: [Player]
+    current_action_player: Number
+    // player: [Player]
 });
 
 module.exports = mongoose.model('room', RoomSchema);

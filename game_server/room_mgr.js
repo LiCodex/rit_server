@@ -1,7 +1,7 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
 const Room = require('../models/room');
-var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "603c37145623f8e6add8109e", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "603c3abf5623f8e6add8109f", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}};
+var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -170,7 +170,7 @@ function table_to_bank(player, amount) {
 
 
 exports.room_refresh = function() {
-  var rooms = {"test": {"deck": [], "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+  var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}};
   return { success: true }
 };
 

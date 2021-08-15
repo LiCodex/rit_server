@@ -97,36 +97,26 @@ exports.room_sit = function(message) {
 };
 
 exports.room_buy_in = function(message) {
-  //var uid = message.uid;
+  var uid = message.uid;
   var seat_id = message.chair_id;
   var room = rooms["test"];
-  // var amount = message.amount;
+  var amount = message.amount;
 
   if (seat_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  // var players = rooms["test"]["players"];
-  // player = players[chair_id];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (player != undefined) {
-    return { success: false, message: "there is already a player on the seat" }
+  user = User.findOne({ _id: uid });
+  if (amount > user.coins) {
+    return { success: false, message: "the amount requested exceeds user own" }
   }
-  //needs to read from the db
-  player = {"hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
-  room["players"].push(player);
-  // res = bank_to_table(player, amount);
-  // if (res == false) {
-  //   return { success: false, message: "there is not enough money in the bank" }
-  // }
-  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
-  room["player_count"]++;
-  //player["game_state"] = "waiting";
-  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
-  // need to inform all the players about it
-  // for ()
+
+  user.coins -= amount;
+  user.save();
+  room["players"]["seat_id"]["money_on_the_table"] += amount;
+
   return { success: true, player: room["players"] }
-  //check_start(room);
 };
 
 
@@ -145,16 +135,15 @@ exports.room_standup = function(message) {
   }
   //needs to read from the db
   if (player["money_on_the_table"] > 0) {
-    user = User.findOne({ _id: message.uid });
+    user = User.findOne({ _id: uid });
     user.coins += player["money_on_the_table"];
     user.save();
   }
-  
-  room["players"] = room["players"].filter(player => !(player["seat_id"] == seat_id));
+
+  room["players"] = room["players"].filter(player => (player["seat_id"] != seat_id));
   room["player_count"]--;
   //table to bank
   return { success: true, player: room["players"] }
-  //check_start(room);
 };
 
 function bank_to_table(player, amount) {

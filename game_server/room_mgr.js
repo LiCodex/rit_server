@@ -145,11 +145,11 @@ exports.room_standup = function(message) {
   }
   //needs to read from the db
   if (player["money_on_the_table"] > 0) {
-    user = await User.findOne({ _id: message.uid });
+    user = User.findOne({ _id: message.uid });
     user.coins += player["money_on_the_table"];
     user.save();
   }
-  //room["players"].push(player);
+  
   room["players"] = room["players"].filter(player => !(player["seat_id"] == seat_id));
   room["player_count"]--;
   //table to bank

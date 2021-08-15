@@ -1,7 +1,7 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
 const Room = require('../models/room');
-var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 1000, "money_in_the_bank": 3000}, { "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 1000, "money_in_the_bank": 1000}]}};
+var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "603c37145623f8e6add8109e", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "603c3abf5623f8e6add8109f", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100]}};
 var creating_rooms = {};
 
 var user_location = {};
@@ -96,6 +96,39 @@ exports.room_sit = function(message) {
   //check_start(room);
 };
 
+exports.room_buy_in = function(message) {
+  //var uid = message.uid;
+  var seat_id = message.chair_id;
+  var room = rooms["test"];
+  // var amount = message.amount;
+
+  if (seat_id > room["seat_count"]) {
+    return { success: false, message: "the chair_id exceeds room chair_count" }
+  }
+
+  // var players = rooms["test"]["players"];
+  // player = players[chair_id];
+  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  if (player != undefined) {
+    return { success: false, message: "there is already a player on the seat" }
+  }
+  //needs to read from the db
+  player = {"hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
+  room["players"].push(player);
+  // res = bank_to_table(player, amount);
+  // if (res == false) {
+  //   return { success: false, message: "there is not enough money in the bank" }
+  // }
+  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
+  room["player_count"]++;
+  //player["game_state"] = "waiting";
+  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
+  // need to inform all the players about it
+  // for ()
+  return { success: true, player: room["players"] }
+  //check_start(room);
+};
+
 
 exports.room_standup = function(message) {
   var uid = message.uid;
@@ -114,14 +147,15 @@ exports.room_standup = function(message) {
     return { success: false, message: "no player is on the seat" }
   }
   //needs to read from the db
+  if (player["money_on_the_table"] > 0) {
+    user = await User.findOne({ _id: message.uid });
+    user.coins += player["money_on_the_table"];
+    user.save();
+  }
   //room["players"].push(player);
   room["players"] = room["players"].filter(player => !(player["seat_id"] == seat_id));
   room["player_count"]--;
   //table to bank
-  //player["game_state"] = "waiting";
-  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
-  // need to inform all the players about it
-  // for ()
   return { success: true, player: room["players"] }
   //check_start(room);
 };

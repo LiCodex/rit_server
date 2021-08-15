@@ -15,6 +15,7 @@ router.post("/auth/signup", async (req, res) => {
       //newUser.name = req.body.name;
       newUser.phone = req.body.phone;
       newUser.password = req.body.password;
+      newUser.coins = req.body.coins;
       await newUser.save();
       let token = jwt.sign(newUser.toJSON(), process.env.SECRET, {
         expiresIn: 604800 // 1 week
@@ -126,7 +127,7 @@ router.post("/auth/messaging_code", async (req, res) => {
       to: '+1' + req.body.phone,  // Text this number
       from: '+14012373657' // From a valid Twilio number
     }).then((message) => console.log(message.sid));
-      
+
     res.json({ success: true });
   }
   catch (err) {
@@ -148,7 +149,7 @@ router.post("/auth/forgetpassword", async (req, res) => {
       var update = { $set: { password: req.body.password }};
       var options = {};
       User.updateOne(query, update, options);
-      
+
       //let newUser = new User();
       //newUser.name = req.body.name;
       //await newUser.save();

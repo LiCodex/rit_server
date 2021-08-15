@@ -4,7 +4,12 @@ const bcrypt = require("bcrypt-nodejs");
 
 const UserSchema = new Schema({
   phone: { type: String, unique: true, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  coins: { type: Number, required: true, default: 0 },
+  owner: { type: Schema.Types.ObjectId, ref: 'Owner' },
+  room: { type: Schema.Types.ObjectId, ref: 'Room' },
+  name: String,
+  area_code: Number
 });
 
 UserSchema.pre("save", function(next) {

@@ -60,6 +60,8 @@ wss.on('connection', function connection(ws) {
     console.log(typeof message);
     console.log(message == "\"hello\"");
     var cmd = JSON.parse(message);
+    console.log("c+m");
+    console.log(cmd["c"] + "_" + cmd["m"]);
     var func = cmd["c"] + "_" + cmd["m"];
     try {
       res = room_mgr[func](cmd["data"]);

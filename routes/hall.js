@@ -49,7 +49,7 @@ router.get("/hall/rooms", async (req, res) => {
         }
         console.log("rooms");
         console.log(rooms);
-        var active_tables = rooms.filter(room => room.players_count < 8).length;
+        var active_tables = rooms.length;
         res.json({
             success: true,
             rooms: rooms,

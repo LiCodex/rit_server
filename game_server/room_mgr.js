@@ -121,16 +121,11 @@ exports.room_buy_in = function(message) {
 
 exports.room_standup = function(message) {
   var uid = message.uid;
-  var seat_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
 
-  if (seat_id > room["seat_count"]) {
-    return { success: false, message: "the chair_id exceeds room chair_count" }
-  }
-
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  var player = room["players"].filter(player => player["uid"] == uid)[0];
   if (player == undefined) {
-    return { success: false, message: "no player is on the seat" }
+    return { success: false, message: "user is not on the table" }
   }
   //needs to read from the db
   if (player["money_on_the_table"] > 0) {
@@ -139,7 +134,7 @@ exports.room_standup = function(message) {
     user.save();
   }
 
-  room["players"] = room["players"].filter(player => (player["seat_id"] != seat_id));
+  room["players"] = room["players"].filter(player => (player["uid"] != uid));
   room["player_count"]--;
   //table to bank
   return { success: true, player: room["players"] }

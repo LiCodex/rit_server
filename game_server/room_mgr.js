@@ -1,7 +1,7 @@
 //var db = require('../utils/db');
 const Deck = require('./deck.js');
 const Room = require('../models/room');
-var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}};
+var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}];
 var creating_rooms = {};
 
 var user_location = {};
@@ -66,15 +66,13 @@ exports.room_add_time = function(message) {
 exports.room_sit = function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   // var amount = message.amount;
 
   if (seat_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  // var players = rooms["test"]["players"];
-  // player = players[chair_id];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (player != undefined) {
     return { success: false, message: "there is already a player on the seat" }
@@ -99,7 +97,7 @@ exports.room_sit = function(message) {
 exports.room_buy_in = function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   var amount = message.amount;
 
   if (seat_id > room["seat_count"]) {
@@ -123,7 +121,7 @@ exports.room_buy_in = function(message) {
 exports.room_standup = function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
 
   if (seat_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
@@ -170,7 +168,7 @@ function table_to_bank(player, amount) {
 
 
 exports.room_refresh = function() {
-  var rooms = {"test": {"deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}};
+  var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "player_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}];
   return { success: true }
 };
 
@@ -179,7 +177,7 @@ exports.room_testing = function() {
 };
 
 exports.room_game_start = function(message) {
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   room["state"] = "playing";
   room["play_state"] = "start";
 
@@ -206,7 +204,7 @@ exports.room_action_buy_in = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
     var amount = message.chips;
-    var room = rooms["test"];
+    var room = rooms.filter(room => room["name"] == "test")[0];
     var seat_id = message.seat_id;
     var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
     // console.log("money in the bank")
@@ -231,7 +229,7 @@ exports.room_action_buy_in = function(message) {
 exports.room_fold = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
@@ -270,7 +268,7 @@ exports.room_call = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
   var bet_amount = message.bet_amount;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
@@ -309,9 +307,7 @@ exports.room_raise = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
   var bet_amount = message.bet_amount;
-  var room = rooms["test"];
-  // console.log("players");
-  // console.log();
+  var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("players");
   console.log(room["players"]);
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
@@ -355,7 +351,7 @@ exports.room_all_in = function(message) {
   var uid = message.uid;
   var seat_id = message.seat_id;
   var bet_amount = message.bet_amount;
-  var room = rooms["test"];
+  var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
   if (seat_id == undefined) {
     return { success: false, message: "seat_id not found" }
@@ -396,24 +392,25 @@ exports.room_deal_hole_cards = function(message) {
     var deck = new Deck();
     // var room = rooms[]
     deck.shuffle();
-    rooms["test"]["deck"] = deck;
+    var room = rooms.filter(room => room["name"] == "test")[0];
+    room["deck"] = deck;
     console.log("deck");
     console.log(deck)
     var hole_cards = [];
-    hole_cards.push(rooms["test"]["deck"].deal().toString());
-    hole_cards.push(rooms["test"]["deck"].deal().toString());
+    hole_cards.push(room["deck"].deal().toString());
+    hole_cards.push(room["deck"].deal().toString());
     console.log("hole cards");
     console.log(hole_cards);
-    rooms["test"]["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
+    room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
     //save to db
-    return { "hole_cards": hole_cards, "player_hole_cards_status": rooms["test"]["fake_hole_cards_status"] }
+    return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
 
 };
 
 exports.room_deal_flop_cards = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
-    var room = rooms["test"];
+    var room = rooms.filter(room => room["name"] == "test")[0];
 
     var cards = [];
     cards.push(room["deck"].deal().toString());
@@ -429,7 +426,7 @@ exports.room_deal_flop_cards = function(message) {
 exports.room_deal_turn_card = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
-    var room = rooms["test"];
+    var room = rooms.filter(room => room["name"] == "test")[0];
 
     var cards = [];
     cards.push(room["deck"].deal().toString());
@@ -443,7 +440,7 @@ exports.room_deal_turn_card = function(message) {
 exports.room_deal_river_card = function(message) {
     var uid = message.uid;
     var room_id = message.room_id;
-    var room = rooms["test"];
+    var room = rooms.filter(room => room["name"] == "test")[0];
 
     var cards = [];
     cards.push(room["deck"].deal().toString());

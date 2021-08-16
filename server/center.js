@@ -33,18 +33,7 @@ exports.room_check = function(message) {
     }
 };
 
-exports.index_login = function(message) {
-    var token = message.jwt;
-    console.log(token);
-    var decoded = jwt.decode(token);
-    console.log(decoded);
-    //console.log(decoded.payload);
-    var response = {};
-    response.uid = decoded._id;
-    response.room_id = "";
-    //return null;
-    return response;
-}
+
 
 exports.room_join = function(message) {
     var rooms = load_room_info();

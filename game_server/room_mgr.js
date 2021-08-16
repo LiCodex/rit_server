@@ -176,6 +176,19 @@ exports.room_testing = function() {
   return { room: room }
 };
 
+exports.index_login = function(message) {
+    var token = message.jwt;
+    console.log(token);
+    var decoded = jwt.decode(token);
+    console.log(decoded);
+    //console.log(decoded.payload);
+    var response = {};
+    response.uid = decoded._id;
+    response.room_id = "";
+    //return null;
+    return response;
+};
+
 exports.room_game_start = function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["state"] = "playing";

@@ -36,9 +36,9 @@ exports.room_check = function(message) {
 
 
 exports.room_join = function(message) {
-    var rooms = load_room_info();
+    // var rooms = load_room_info();
     // console.log(room_key);
-    var uid = message.uid;
+    // var uid = message.uid;
     var existing_chair_id = get_chair_id_by_uid(uid);
     // var session_id = message.session_id;
     // var room_id = message.room_id;

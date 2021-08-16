@@ -41,7 +41,13 @@ function check_start(room) {
     room.time_state = 'start';
   }
 
-}
+};
+
+exports.room_join = function(message) {
+    var room_id = message.room_id;
+    var room = rooms.filter(room => room["_id"] == room_id)[0];
+    return { success: true, players: room["players"] }
+};
 
 
 exports.room_add_time = function(message) {

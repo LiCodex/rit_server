@@ -88,7 +88,7 @@ exports.room_sit = function(message) {
     return { success: false, message: "there is already a player on the seat" }
   }
   //needs to read from the db
-  player = {"hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
+  player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
   room["players"].push(player);
   // res = bank_to_table(player, amount);
   // if (res == false) {

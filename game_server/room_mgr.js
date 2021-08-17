@@ -44,7 +44,8 @@ function check_start(room) {
 };
 
 exports.room_join = function(message) {
-    var room_id = message.data.key;
+    console.log(message);
+    var room_id = message.key;
     console.log("room_id");
     console.log(room_id);
     var room = rooms.filter(room => room["_id"] == room_id)[0];

@@ -107,7 +107,7 @@ exports.hall_user_profile = async function(message) {
     return { success: false, message: "user cannot be found" }
   } else {
     console.log("user");
-    console.log(user);
+    console.log(user.coins);
     return { success: true, coins: user.coins }
   }
 };

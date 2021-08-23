@@ -98,10 +98,12 @@ exports.room_sit = function(message) {
 
 exports.hall_user_profile = function(message) {
   var uid = message.uid;
-  user = User.findOne({ _id: uid });
+  var user = User.findOne({ _id: uid });
+  //let foundUser = await User.findOne({ _id: req.decoded._id });
   if (user == undefined) {
     return { success: false, message: "user cannot be found" }
   } else {
+    console.log("user");
     console.log(user);
     return { success: true, user: user }
   }

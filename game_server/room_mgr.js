@@ -49,6 +49,9 @@ exports.room_join = function(message) {
     var room_id = message.key;
     var user_id = message.user_id;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
+    let db_room = Room.findOne({ _id: room_id });
+    db_room.players_count = room["player_count"] + 1;
+    db_room.save();
     return { success: true, players: room["players"] }
 };
 

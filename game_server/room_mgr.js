@@ -47,9 +47,7 @@ exports.room_join = function(message) {
     console.log(message);
     var room_id = message.key;
     var user_id = message.user_id;
-    // var user_on_table_already = false;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
-    // if ()
     return { success: true, players: room["players"] }
 };
 
@@ -93,14 +91,8 @@ exports.room_sit = function(message) {
   //needs to read from the db
   player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
   room["players"].push(player);
-  // res = bank_to_table(player, amount);
-  // if (res == false) {
-  //   return { success: false, message: "there is not enough money in the bank" }
-  // }
-  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
   room["player_count"]++;
   return { success: true, player: room["players"] }
-  //check_start(room);
 };
 
 exports.hall_user_profile = function(message) {
@@ -109,6 +101,7 @@ exports.hall_user_profile = function(message) {
   if (user == undefined) {
     return { success: false, message: "user cannot be found" }
   } else {
+    console.log(user);
     return { success: true, user: user }
   }
 };

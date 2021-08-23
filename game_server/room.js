@@ -1,5 +1,3 @@
-// const Room = require('./room.js');
-
 const Room = class{
   id;
   name;

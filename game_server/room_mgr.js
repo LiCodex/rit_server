@@ -46,12 +46,16 @@ function check_start(room) {
 exports.room_join = function(message) {
     console.log(message);
     var room_id = message.key;
-    console.log("room_id");
-    console.log(room_id);
+    var user_id = message.user_id;
+    // var user_on_table_already = false;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
+    // if ()
     return { success: true, players: room["players"] }
 };
 
+exports.room_quit = function(message) {
+  var room = rooms["test"];
+};
 
 exports.room_add_time = function(message) {
   var room = rooms["test"];
@@ -77,7 +81,6 @@ exports.room_sit = function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  // var amount = message.amount;
 
   if (seat_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
@@ -96,12 +99,18 @@ exports.room_sit = function(message) {
   // }
   //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
   room["player_count"]++;
-  //player["game_state"] = "waiting";
-  //player = {"hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": amount, "money_in_the_bank": 3000}
-  // need to inform all the players about it
-  // for ()
   return { success: true, player: room["players"] }
   //check_start(room);
+};
+
+exports.hall_user_profile = function(message) {
+  var uid = message.uid;
+  user = User.findOne({ _id: uid });
+  if (user == undefined) {
+    return { success: false, message: "user cannot be found" }
+  } else {
+    return { success: true, user: user }
+  }
 };
 
 exports.room_buy_in = function(message) {

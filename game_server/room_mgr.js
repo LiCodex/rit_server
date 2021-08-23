@@ -108,7 +108,7 @@ exports.hall_user_profile = async function(message) {
   } else {
     console.log("user");
     console.log(user);
-    return { success: true, user: user }
+    return { success: true, coins: user.coins }
   }
 };
 

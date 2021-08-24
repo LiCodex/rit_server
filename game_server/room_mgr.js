@@ -49,6 +49,8 @@ exports.room_join = async function(message) {
     var room_id = message.key;
     var user_id = message.user_id;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
+    console.log("room");
+    console.log(room);
     let db_room = await Room.findOne({ _id: room_id });
     console.log("db_room");
     console.log(db_room);

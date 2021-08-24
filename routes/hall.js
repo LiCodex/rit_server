@@ -3,7 +3,7 @@ const Room = require("../models/room");
 const ObjectID = require('mongodb').ObjectID;
 const url = require('url');
 
-  router.post("/hall/create_room", async (req, res) => {
+router.post("/hall/create_room", async (req, res) => {
     if (!req.body.stake || !req.body.players) {
         console.log(req.body);
         res.json({ success: false, message: "Please enter stake or player" });
@@ -81,6 +81,25 @@ router.get("/hall/rooms/:id", async (req, res) => {
       message: err.message
     });
   }
+});
+
+router.put("/hall/room", async (req, res) => {
+    try {
+      var o_id = new ObjectID("608f829787c9b44b2c186f16");
+      Room.findOne({ _id: o_id }, function (err, room) {
+        room.players_count.$inc();
+        room.save();
+      });
+        res.json({
+            success: true,
+            message: "Successfully returned rooms"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
 });
 
 // seats_status 0, 1

@@ -46,38 +46,20 @@ function check_start(room) {
 };
 
 exports.room_join = async function(message) {
-    console.log(message);
     var room_id = message.key;
     var o_id = new ObjectID(room_id);
     var user_id = message.user_id;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
     console.log("room");
     console.log(room);
-    //var db_room = await Room.findOne({ _id: room_id });
 
     room["players_count"] += 1;
-    console.log(room["players_count"]);
-    //db_room.players_count = room["players_count"];
-    // console.log("db room players count");
-    // console.log(db_room.players_count);
-    //await db_room.save();
 
-    let db_room = await Room.findOneAndUpdate(
-      { _id: o_id },
-      {
-        $set: {
-          players_count: room["players_count"]
-        }
-      }, {}, function(err, result) {
-        if (err) {
-          console.log("err");
-          console.log(err);
-        }
-      });
-    console.log("db_room2");
-    console.log(db_room);
-    test = await Room.find();
-    console.log(test);
+    Room.findOne({ _id: o_id }, function (err, room) {
+      room.players_count.$inc();
+      room.save();
+    });
+
     return { success: true, players: room["players"] }
 };
 

@@ -110,12 +110,14 @@ exports.hall_user_profile = function(message) {
   //   console.log(user.coins);
   //   return { success: true, coins: user.coins }
   // }
+  var message;
   res = test();
   res.then(function(val) {
     console.log("val");
     console.log(val);
-    return val;
+    message = val;
   });
+  return message;
 
 };
 

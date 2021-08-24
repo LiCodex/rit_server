@@ -69,11 +69,14 @@ exports.room_join = async function(message) {
           players_count: room["players_count"]
         }
       }, {}, function(err, result) {
-
+        if (err) {
+          console.log("err");
+          console.log(err);
+        }
       });
     console.log("db_room2");
     console.log(db_room);
-    test = Room.find();
+    test = await Room.find();
     console.log(test);
     return { success: true, players: room["players"] }
 };

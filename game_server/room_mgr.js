@@ -66,11 +66,7 @@ exports.room_join = async function(message) {
       {
         players_count: room["players_count"]
       }, function(err, result) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(result);
-        }
+        
       });
     console.log("db_room2");
     console.log(db_room);

@@ -52,6 +52,7 @@ exports.room_join = async function(message) {
     let db_room = await Room.findOne({ _id: room_id });
     console.log("db_room");
     console.log(db_room);
+    console.log(room["player_count"]);
     room["player_count"] += 1
     db_room.players_count = room["player_count"];
     await db_room.save();

@@ -6,7 +6,7 @@ const RoomSchema = new Schema({
     owner: { type: Schema.Types.ObjectId, ref: 'Owner' },
     deck: [String],
     seat_count: Number,
-    player_count: Number,
+    players_count: Number,
     room_status: String,
     starting_time: Date,
     end_time: Date,

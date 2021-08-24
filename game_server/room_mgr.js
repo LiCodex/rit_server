@@ -56,7 +56,7 @@ exports.room_join = async function(message) {
     room["players_count"] += 1;
 
     Room.findOne({ _id: o_id }, function (err, room) {
-      room.players_count.$inc();
+      room.players_count += 1;
       room.save();
     });
 

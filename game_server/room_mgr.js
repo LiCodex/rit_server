@@ -58,7 +58,7 @@ exports.room_join = async function(message) {
     room["players_count"] += 1;
     //db_room.players_count = room["players_count"];
     console.log("db room players count");
-    //console.log(db_room.players_count);
+    console.log(room["players_count"]);
     //await db_room.save();
 
     let db_room = await Room.updateOne(

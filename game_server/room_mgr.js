@@ -99,7 +99,7 @@ exports.room_sit = function(message) {
   return { success: true, player: room["players"] }
 };
 
-exports.hall_user_profile = async function(message) {
+exports.hall_user_profile = function(message) {
   // var uid = message.uid;
   // var user = await User.findOne({ _id: uid });
   // //let foundUser = await User.findOne({ _id: req.decoded._id });

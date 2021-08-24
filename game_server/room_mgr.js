@@ -112,7 +112,7 @@ exports.hall_user_profile = function(message) {
   // }
   var message;
   res = test();
-  res.then(function(val) {
+  Promise.resolve(res).then(function(val) {
     console.log("val");
     console.log(val);
     message = val;

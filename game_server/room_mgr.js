@@ -61,12 +61,14 @@ exports.room_join = async function(message) {
     // console.log(db_room.players_count);
     //await db_room.save();
 
-    let db_room = await Room.updateOne(
+    let db_room = await Room.findOneAndUpdate(
       { _id: o_id },
       {
-        players_count: room["players_count"]
-      }, function(err, result) {
-        
+        $set: {
+          players_count: room["players_count"]
+        }
+      }, {}, function(err, result) {
+
       });
     console.log("db_room2");
     console.log(db_room);

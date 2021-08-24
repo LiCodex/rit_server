@@ -111,10 +111,12 @@ exports.hall_user_profile = function(message) {
   //   return { success: true, coins: user.coins }
   // }
   res = test();
-  res = Promise.resolve(res);
-  console.log("res");
-  console.log(res);
-  return res;
+  res.then(function(val) {
+    console.log("val");
+    console.log(val);
+    return val;
+  });
+
 };
 
 async function test() {

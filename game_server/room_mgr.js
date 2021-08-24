@@ -55,8 +55,10 @@ exports.room_join = async function(message) {
     console.log("db_room");
     console.log(db_room);
     console.log(room["players_count"]);
-    room["players_count"] += 1
+    room["players_count"] += 1;
     db_room.players_count = room["players_count"];
+    console.log("db room players count");
+    console.log(db_room.players_count);
     await db_room.save();
     console.log("db_room2");
     console.log(db_room);

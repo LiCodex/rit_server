@@ -111,7 +111,7 @@ exports.hall_user_profile = function(message) {
   //   return { success: true, coins: user.coins }
   // }
   var message;
-  res = test();
+  res = await test();
   res.then(function(val) {
     console.log("val");
     console.log(val);

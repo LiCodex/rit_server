@@ -51,7 +51,7 @@ exports.room_join = async function(message) {
     var room = rooms.filter(room => room["_id"] == room_id)[0];
     console.log("room");
     console.log(room);
-    let db_room = await Room.findOne({ _id: room_id });
+    var db_room = await Room.findOne({ _id: room_id });
     console.log("db_room");
     console.log(db_room);
     console.log(room["players_count"]);

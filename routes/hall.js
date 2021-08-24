@@ -87,7 +87,7 @@ router.put("/hall/room", async (req, res) => {
     try {
       var o_id = new ObjectID("608f829787c9b44b2c186f16");
       await Room.findOne({ _id: o_id }, function (err, room) {
-        room.players_count.$inc();
+        room.players_count += 1;
         room.save();
       });
         res.json({

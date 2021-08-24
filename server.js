@@ -63,6 +63,8 @@ wss.on('connection', function connection(ws) {
     var func = cmd["c"] + "_" + cmd["m"];
     try {
       res = room_mgr[func](cmd["data"]);
+      console.log("here2");
+      console.log(res);
       if (res != null) {
         ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
         console.log("here1");

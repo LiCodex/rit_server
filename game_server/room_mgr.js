@@ -100,18 +100,8 @@ exports.room_sit = function(message) {
 };
 
 exports.hall_user_profile = async function(message) {
-  // var uid = message.uid;
-  // var user = await User.findOne({ _id: uid });
-  // //let foundUser = await User.findOne({ _id: req.decoded._id });
-  // if (user == undefined) {
-  //   return { success: false, message: "user cannot be found" }
-  // } else {
-  //   console.log("user");
-  //   console.log(user.coins);
-  //   return { success: true, coins: user.coins }
-  // }
   var message;
-  res = test();
+  res = user_coins_helper();
   await Promise.resolve(res).then(function(val) {
     console.log("val");
     console.log(val);
@@ -121,8 +111,16 @@ exports.hall_user_profile = async function(message) {
 
 };
 
-async function test() {
-  return { success: true }
+async function user_coins_helper() {
+  var uid = message.uid;
+  var user = await User.findOne({ _id: uid });
+  if (user == undefined) {
+    return { success: false, message: "user cannot be found" }
+  } else {
+    console.log("user");
+    console.log(user.coins);
+    return { success: true, coins: user.coins }
+  }
 }
 
 exports.room_buy_in = function(message) {

@@ -72,7 +72,6 @@ exports.room_join = async function(message) {
           res.json(result);
         }
       });
-    });
     console.log("db_room2");
     console.log(db_room);
     return { success: true, players: room["players"] }

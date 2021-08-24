@@ -47,6 +47,7 @@ function check_start(room) {
 exports.room_join = async function(message) {
     console.log(message);
     var room_id = message.key;
+    var o_id = new ObjectID(room_id);
     var user_id = message.user_id;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
     console.log("room");
@@ -58,8 +59,9 @@ exports.room_join = async function(message) {
     console.log("db room players count");
     //console.log(db_room.players_count);
     //await db_room.save();
+
     let db_room = await Room.updateOne(
-      { _id: room_id },
+      { _id: o_id },
       {
         $set: {
           players_count: room["players_count"]

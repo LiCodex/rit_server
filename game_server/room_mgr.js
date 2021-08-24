@@ -112,7 +112,7 @@ exports.hall_user_profile = async function(message) {
   // }
   var message;
   res = test();
-  Promise.resolve(res).then(function(val) {
+  await Promise.resolve(res).then(function(val) {
     console.log("val");
     console.log(val);
     message = val;

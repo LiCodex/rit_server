@@ -107,7 +107,7 @@ exports.hall_user_profile = async function(message) {
     console.log(val);
     result = val;
   });
-  return message;
+  return result;
 
 };
 

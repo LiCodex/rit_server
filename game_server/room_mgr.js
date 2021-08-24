@@ -64,7 +64,7 @@ exports.room_join = async function(message) {
         $set: {
           players_count: room["players_count"]
         }
-      }
+      });
     console.log("db_room2");
     console.log(db_room);
     return { success: true, players: room["players"] }

@@ -51,15 +51,20 @@ exports.room_join = async function(message) {
     var room = rooms.filter(room => room["_id"] == room_id)[0];
     console.log("room");
     console.log(room);
-    var db_room = await Room.findOne({ _id: room_id });
-    console.log("db_room");
-    console.log(db_room);
+    //var db_room = await Room.findOne({ _id: room_id });
     console.log(room["players_count"]);
     room["players_count"] += 1;
-    db_room.players_count = room["players_count"];
+    //db_room.players_count = room["players_count"];
     console.log("db room players count");
-    console.log(db_room.players_count);
-    await db_room.save();
+    //console.log(db_room.players_count);
+    //await db_room.save();
+    let db_room = await Room.updateOne(
+      { _id: room_id },
+      {
+        $set: {
+          players_count: room["players_count"]
+        }
+      }
     console.log("db_room2");
     console.log(db_room);
     return { success: true, players: room["players"] }

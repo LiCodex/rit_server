@@ -100,19 +100,18 @@ exports.room_sit = function(message) {
 };
 
 exports.hall_user_profile = async function(message) {
-  var message;
-  res = user_coins_helper();
+  var result;
+  res = user_coins_helper(message.uid);
   await Promise.resolve(res).then(function(val) {
     console.log("val");
     console.log(val);
-    message = val;
+    result = val;
   });
   return message;
 
 };
 
-async function user_coins_helper() {
-  var uid = message.uid;
+async function user_coins_helper(uid) {
   var user = await User.findOne({ _id: uid });
   if (user == undefined) {
     return { success: false, message: "user cannot be found" }

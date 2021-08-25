@@ -69,6 +69,8 @@ exports.room_quit = async function(message) {
   console.log("room players");
   console.log(room["players"]);
   var player = room["players"].filter(player => player["uid"] == uid)[0];
+  console.log("player");
+  console.log(player);
 
   if (player == undefined) {
     Room.findOne({ name: "test" }, function (err, room) {

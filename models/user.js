@@ -9,7 +9,8 @@ const UserSchema = new Schema({
   owner: { type: Schema.Types.ObjectId, ref: 'Owner' },
   room: { type: Schema.Types.ObjectId, ref: 'Room' },
   name: String,
-  area_code: Number
+  area_code: Number,
+  avatar: { type: Number, required: true, default: 1 }
 });
 
 UserSchema.pre("save", function(next) {

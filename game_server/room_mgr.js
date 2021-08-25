@@ -161,9 +161,9 @@ async function user_coins_helper(uid) {
   if (user == undefined) {
     return { success: false, message: "user cannot be found" }
   } else {
-    console.log("user");
-    console.log(user.coins);
-    return { success: true, coins: user.coins }
+    // console.log("user");
+    // console.log(user.coins);
+    return { success: true, coins: user.coins, avatar: user.avatar }
   }
 }
 

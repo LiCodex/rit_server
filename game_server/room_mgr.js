@@ -89,7 +89,7 @@ exports.room_quit = async function(message) {
     room["players"] = room["players"].filter(player => (player["uid"] != uid));
     room["players_count"]--;
     Room.findOne({ name: "test" }, function (err, room) {
-      room.player_count -= 1;
+      room.players_count -= 1;
       room.total_players_count -= 1;
       room.save();
     });

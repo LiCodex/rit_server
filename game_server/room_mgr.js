@@ -46,7 +46,7 @@ function check_start(room) {
 };
 
 exports.room_join = async function(message) {
-    var room_id = message.key;
+    var room_id = message.room_id;
     var o_id = new ObjectID(room_id);
     var user_id = message.user_id;
     var room = rooms.filter(room => room["_id"] == room_id)[0];
@@ -67,7 +67,7 @@ exports.room_quit = async function(message) {
   var room = rooms["test"];
 };
 
-exports.room_add_time = function(message) {
+exports.room_add_time = async function(message) {
   var room = rooms["test"];
   var chair_id = message.chair_id;
   var player = room["players"][chair_id];
@@ -87,7 +87,7 @@ exports.room_add_time = function(message) {
   return { success: true, message: "15 seconds have been added" }
 }
 
-exports.room_sit = function(message) {
+exports.room_sit = async function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
   //var o_id = new ObjectID(room_id);
@@ -170,13 +170,20 @@ exports.room_standup = async function(message) {
   }
   //needs to read from the db
   if (player["money_on_the_table"] > 0) {
-    user = User.findOne({ _id: uid });
-    user.coins += player["money_on_the_table"];
-    await user.save();
+
+    User.findOne({ _id: uid }, function (err, user) {
+      user.coins += player["money_on_the_table"];
+      await user.save();
+    });
   }
 
   room["players"] = room["players"].filter(player => (player["uid"] != uid));
   room["players_count"]--;
+
+  Room.findOne({ name: "test" }, function (err, room) {
+    room.players_count -= 1;
+    room.save();
+  });
   //table to bank
   return { success: true, player: room["players"] }
 };

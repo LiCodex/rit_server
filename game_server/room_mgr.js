@@ -66,7 +66,10 @@ exports.room_join = async function(message) {
 exports.room_quit = async function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var uid = message.uid;
-  var player = room["players"].filter(player => player["_id"] == uid)[0];
+  console.log("room players");
+  console.log(room["players"]);
+  var player = room["players"].filter(player => player["uid"] == uid)[0];
+
   if (player == undefined) {
     Room.findOne({ name: "test" }, function (err, room) {
       room.total_players_count -= 1;

@@ -7,6 +7,7 @@ const RoomSchema = new Schema({
     deck: [String],
     seat_count: Number,
     players_count: Number,
+    total_players_count: Number,
     room_status: String,
     starting_time: Date,
     end_time: Date,

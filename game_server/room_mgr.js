@@ -65,6 +65,32 @@ exports.room_join = async function(message) {
 
 exports.room_quit = async function(message) {
   var room = rooms["test"];
+  var uid = message.uid;
+  var player = room["players"].filter(player => player["_id"] == uid)[0];
+  if (player == undefined) {
+    Room.findOne({ name: "test" }, function (err, room) {
+      room.total_players_count -= 1;
+      room.save();
+    });
+    return { success: true }
+  } else {
+    if (player["money_on_the_table"] > 0) {
+      User.findOne({ _id: uid }, function (err, user) {
+        user.coins += player["money_on_the_table"];
+        user.save();
+      });
+    }
+
+    room["players"] = room["players"].filter(player => (player["uid"] != uid));
+    room["players_count"]--;
+    Room.findOne({ name: "test" }, function (err, room) {
+      room.player_count -= 1;
+      room.total_players_count -= 1;
+      room.save();
+    });
+    return { success: true }
+  }
+
 };
 
 exports.room_add_time = async function(message) {

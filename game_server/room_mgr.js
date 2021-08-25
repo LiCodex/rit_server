@@ -173,7 +173,7 @@ exports.room_standup = async function(message) {
 
     User.findOne({ _id: uid }, function (err, user) {
       user.coins += player["money_on_the_table"];
-      await user.save();
+      user.save();
     });
   }
 

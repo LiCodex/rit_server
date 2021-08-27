@@ -45,6 +45,10 @@ function check_start(room) {
 
 };
 
+function game_start() {
+
+}
+
 exports.room_join = async function(message) {
     var room_id = message.room_id;
     var o_id = new ObjectID(room_id);
@@ -121,7 +125,6 @@ exports.room_add_time = async function(message) {
 exports.room_sit = async function(message) {
   var uid = message.uid;
   var seat_id = message.chair_id;
-  //var o_id = new ObjectID(room_id);
   var room = rooms.filter(room => room["name"] == "test")[0];
 
   if (seat_id > room["seat_count"]) {
@@ -141,7 +144,8 @@ exports.room_sit = async function(message) {
     room.save();
   });
 
-  return { success: true, player: room["players"] }
+  return { success: true, chair_id: chair_id }
+  //check_start();
 };
 
 exports.hall_user_profile = async function(message) {

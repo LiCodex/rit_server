@@ -29,7 +29,7 @@ function active_player_count(players) {
   return res;
 }
 
-function check_start(room) {
+function check_start(room_id) {
   if (room.state != null) {
     return { message: "Cannot start" }
   }
@@ -41,13 +41,37 @@ function check_start(room) {
   }
   if (active_players >= 2) {
     room.time_state = 'start';
+    game_start(room_id);
   }
 
 };
 
-function game_start() {
+function game_start(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  room["state"] = "running";
+  room["round_state"] = "start";
 
-}
+  if (room["round"] == 0) {
+    room["started_at"] = Date.now();
+  }
+  room["round"] += 1;
+
+  //save to db, need to add
+
+  var player_count = 0;
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i].coins > 0 && room["players"][i]) {
+      room["players"][i]["state"] = "playing";
+      player_count += 1;
+    }
+  }
+
+  if (room["button"] == undefined) {
+    room["button"] = rnd_button();
+  } else {
+    room["button"] = get_next(room["button"]);
+  }
+};
 
 exports.room_join = async function(message) {
     var room_id = message.room_id;
@@ -165,8 +189,6 @@ async function user_coins_helper(uid) {
   if (user == undefined) {
     return { success: false, message: "user cannot be found" }
   } else {
-    // console.log("user");
-    // console.log(user.coins);
     return { success: true, coins: user.coins, avatar: user.avatar }
   }
 }
@@ -260,11 +282,9 @@ exports.index_login = function(message) {
     console.log(token);
     var decoded = jwt.decode(token);
     console.log(decoded);
-    //console.log(decoded.payload);
     var response = {};
     response.uid = decoded._id;
     response.room_id = "";
-    //return null;
     return response;
 };
 
@@ -479,23 +499,39 @@ exports.room_all_in = function(message) {
 };
 
 
+function deal_hole_cards(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var deck = new Deck();
+  var hole_cards = [];
+  room["deck"] = deck();
+  deck.shuffle();
+
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i].status != "sit_out") {
+      hole_cards = [];
+      hole_cards.push(room["deck"].deal().toString());
+      hole_cards.push(room["deck"].deal().toString());
+      room["fake_hole_cards_status"][i] = true;
+    }
+  }
+};
+
 exports.room_deal_hole_cards = function(message) {
-    var uid = message.uid;
-    var deck = new Deck();
-    // var room = rooms[]
-    deck.shuffle();
-    var room = rooms.filter(room => room["name"] == "test")[0];
-    room["deck"] = deck;
-    console.log("deck");
-    console.log(deck)
-    var hole_cards = [];
-    hole_cards.push(room["deck"].deal().toString());
-    hole_cards.push(room["deck"].deal().toString());
-    console.log("hole cards");
-    console.log(hole_cards);
-    room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
-    //save to db
-    return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
+  var uid = message.uid;
+  var deck = new Deck();
+  deck.shuffle();
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  room["deck"] = deck;
+  console.log("deck");
+  console.log(deck)
+  var hole_cards = [];
+  hole_cards.push(room["deck"].deal().toString());
+  hole_cards.push(room["deck"].deal().toString());
+  console.log("hole cards");
+  console.log(hole_cards);
+  room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
+  //save to db
+  return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
 
 };
 

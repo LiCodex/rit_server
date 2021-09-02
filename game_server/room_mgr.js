@@ -691,7 +691,7 @@ exports.room_show_hand = async function(message) {
     //   room.save();
     // });
 
-    return { success: true, card1: , card2: }
+    //return { success: true, card1: , card2: }
 };
 
 exports.exit_room = function(user_id) {

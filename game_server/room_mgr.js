@@ -148,19 +148,19 @@ exports.room_add_time = async function(message) {
 
 exports.room_sit = async function(message) {
   var uid = message.uid;
-  var seat_id = message.chair_id;
+  var chair_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
 
-  if (seat_id > room["seat_count"]) {
+  if (chair_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  var player = room["players"].filter(player => player["seat_id"] == chair_id)[0];
   if (player != undefined) {
     return { success: false, message: "there is already a player on the seat" }
   }
   //needs to read from the db
-  player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "seat_id": seat_id, "money_on_the_table": 0 }
+  player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": 0 }
   room["players"].push(player);
   room["players_count"]++;
   Room.findOne({ name: "test" }, function (err, room) {
@@ -169,7 +169,7 @@ exports.room_sit = async function(message) {
   });
 
   return { success: true, chair_id: chair_id }
-  //check_start();
+  check_start(room["_id"]);
 };
 
 exports.hall_user_profile = async function(message) {
@@ -678,6 +678,20 @@ exports.get_user_room = function(user_id) {
 
 exports.get_user_location = function() {
     return user_location;
+};
+
+exports.room_show_hand = async function(message) {
+    var room_id = message.room_id;
+    var o_id = new ObjectID(room_id);
+    var user_id = message.user_id;
+    var room = rooms.filter(room => room["name"] == "test")[0];
+
+    // Room.findOne({ _id: o_id }, function (err, room) {
+    //   room.total_players_count += 1;
+    //   room.save();
+    // });
+
+    return { success: true, card1: , card2: }
 };
 
 exports.exit_room = function(user_id) {

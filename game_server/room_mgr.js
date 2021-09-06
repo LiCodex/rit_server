@@ -343,7 +343,7 @@ function smallblind() {
 
   var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
   player["money_on_the_table"] -= room["small_blind"];
-  room["betting_list"] << { room["smallblind_id"]: room["small_blind"]};
+  room["betting_list"] << { room["current_action_player"]: room["small_blind"]};
 
   var response = {};
   response["m"] = "small_blind";

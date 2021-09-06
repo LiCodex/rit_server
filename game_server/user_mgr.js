@@ -5,6 +5,10 @@ var user_online = 0;
 exports.bind = function(user_id, socket) {
     user_list[user_id] = socket;
     user_online++;
+    console.log("userlist");
+    console.log(user_list);
+    console.log("user_online");
+    console.log(user_online);
 };
 
 exports.del = function(user_id) {
@@ -83,7 +87,6 @@ exports.broadcast_in_room = function(event, data, sender, including_sender) {
         var socket = user_list[rs.user_id];
         if (socket != null) {
             socket.send(JSON.stringify({c: event["c"], m: event["m"], data: {data}}));
-            // socket.emit(event, data);
         }
     }
 };

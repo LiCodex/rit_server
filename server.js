@@ -8,6 +8,7 @@ const User = require('./models/user.js');
 const center = require('./server/center.js');
 const Room = require("./models/room.js");
 const room_mgr = require('./game_server/room_mgr');
+const user_mgr = require('./game_server/user_mgr');
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ const wss = new WebSocket.Server({ server:server });
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
 
-  ws.on('ready', function(data){
+  ws.on('login', function(data){
     var user_id = ws.user_id;
     if(user_id == null){
       return;
@@ -57,15 +58,22 @@ wss.on('connection', function connection(ws) {
 
   ws.on('message', async function incoming(message) {
     console.log(JSON.stringify(message));
-    console.log(typeof message);
-    console.log(message == "\"hello\"");
+    // console.log(typeof message);
+    // console.log(message == "\"hello\"");
     var cmd = JSON.parse(message);
     var func = cmd["c"] + "_" + cmd["m"];
     try {
+      if (func == "index_login") {
+        var token = cmd["data"].jwt;
+        var decoded = jwt.decode(token);
+        var uid = decoded._id;
+        user_mgr.bind(uid, ws);
+        console.log("index_login");
+      }
       res = await room_mgr[func](cmd["data"]);
-      console.log("here2");
-      console.log(res);
-      console.log(func);
+      // console.log("here2");
+      // console.log(res);
+      // console.log(func);
       if (res != null) {
         ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
         console.log("here1");

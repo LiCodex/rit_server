@@ -67,26 +67,16 @@ exports.clear_room = function(room_id) {
 };
 
 exports.broadcast_in_room = function(event, data, sender, including_sender) {
-    var room_id = room_mgr.get_user_room(sender);
-    if (room_id == null) {
-        return;
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  for (var i = 0; i < room["players"].length; i++) {
+    var rs = room["players"][i];
+    if (rs.user_id == sender && including_sender != true) {
+      continue;
     }
 
-    var room_info = room_mgr.get_room(room_id)
-    if (room_info == null) {
-        return;
+    var socket = user_list[rs.user_id];
+    if (socket != null) {
+      socket.send(JSON.stringify({c: event["c"], m: event["m"], data: {data}}));
     }
-
-    for (var i = 0; i < room_info.seats.length; i++) {
-        var rs = room_info.seats[i];
-
-        if (rs.user_id == sender && including_sender != true) {
-            continue;
-        }
-
-        var socket = user_list[rs.user_id];
-        if (socket != null) {
-            socket.send(JSON.stringify({c: event["c"], m: event["m"], data: {data}}));
-        }
-    }
+  }
 };

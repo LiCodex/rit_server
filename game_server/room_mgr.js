@@ -328,7 +328,7 @@ exports.room_game_start = function(message) {
 
   if (room["button"] != undefined) {
   }
-
+  smallblind();
 };
 
 function smallblind() {

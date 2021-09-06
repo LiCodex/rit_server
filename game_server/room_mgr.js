@@ -334,7 +334,7 @@ exports.room_game_start = function(message) {
 function smallblind() {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
-  room["ctx_seq"] += 1;
+  //room["ctx_seq"] += 1;
   room["current_action_player"] = room["smallblind_id"];
 
   if (room["betting_list"] == undefined) {
@@ -343,7 +343,7 @@ function smallblind() {
 
   var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
   player["money_on_the_table"] -= room["small_blind"];
-  room["betting_list"] << { room["current_action_player"]: room["small_blind"]};
+  //room["betting_list"].push({ room["current_action_player"]: room["small_blind"] });
 
   var response = {};
   response["m"] = "small_blind";
@@ -370,7 +370,7 @@ function bigblind() {
 
   var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"]);
   player["money_on_the_table"] -= room["big_blind"];
-  room["betting_list"] << { room["bigblind_id"]: room["big_blind"]};
+  //room["betting_list"] << { room["bigblind_id"]: room["big_blind"]};
 
   var response = {};
   response["m"] = "big_blind";

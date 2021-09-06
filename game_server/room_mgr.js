@@ -4,9 +4,10 @@ const Room = require('../models/room');
 const User = require('../models/user');
 const ObjectID = require('mongodb').ObjectID;
 const jwt = require("jsonwebtoken");
-var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]} ];
+var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
 var creating_rooms = {};
-
+// saves user_id: session_id
+var user_list = {};
 var user_location = {};
 var total_rooms = 0;
 
@@ -155,12 +156,12 @@ exports.room_sit = async function(message) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  var player = room["players"].filter(player => player["seat_id"] == chair_id)[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   if (player != undefined) {
     return { success: false, message: "there is already a player on the seat" }
   }
   //needs to read from the db
-  player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "seat_id": chair_id, "money_on_the_table": 0 }
+  player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "chair_id": chair_id, "money_on_the_table": 0 }
   room["players"].push(player);
   room["players_count"]++;
   Room.findOne({ name: "test" }, function (err, room) {
@@ -195,15 +196,15 @@ async function user_coins_helper(uid) {
 
 exports.room_buy_in = function(message) {
   var uid = message.uid;
-  var seat_id = message.chair_id;
+  var chair_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
   var amount = message.amount;
 
-  if (seat_id > room["seat_count"]) {
+  if (chair_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" }
   }
 
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   user = User.findOne({ _id: uid });
   if (amount > user.coins) {
     return { success: false, message: "the amount requested exceeds user own" }
@@ -211,7 +212,7 @@ exports.room_buy_in = function(message) {
 
   user.coins -= amount;
   user.save();
-  room["players"]["seat_id"]["money_on_the_table"] += amount;
+  room["players"]["chair_id"]["money_on_the_table"] += amount;
 
   return { success: true, player: room["players"] }
 };
@@ -269,7 +270,7 @@ function table_to_bank(player, amount) {
 
 
 exports.room_refresh = function() {
-  var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "seat_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "seat_id": 1, "money_on_the_table": 100}]} ];
+  var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_action_timestamp": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
   return { success: true }
 };
 
@@ -317,8 +318,8 @@ exports.room_action_buy_in = function(message) {
     var room_id = message.room_id;
     var amount = message.chips;
     var room = rooms.filter(room => room["name"] == "test")[0];
-    var seat_id = message.seat_id;
-    var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+    var chair_id = message.chair_id;
+    var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
     // console.log("money in the bank")
     // console.log(player);
     if (amount == undefined) {
@@ -340,14 +341,14 @@ exports.room_action_buy_in = function(message) {
 
 exports.room_fold = function(message) {
   var uid = message.uid;
-  var seat_id = message.seat_id;
+  var chair_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (seat_id == undefined) {
-    return { success: false, message: "seat_id not found" }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
   }
-  seat_id = parseInt(seat_id);
-  if (seat_id != room["current_action_player"]) {
+  chair_id = parseInt(chair_id);
+  if (chair_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -364,29 +365,29 @@ exports.room_fold = function(message) {
   response["m"] = 'fold';
   response["c"] = "room";
   var data = {};
-  data["seat_id"] = seat_id;
+  data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = 0;
   data["action"] = "fold";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  //room["actions"][seat_id] = [];
+  //room["actions"][chair_id] = [];
 
   return { success: true }
 };
 
 exports.room_call = function(message) {
   var uid = message.uid;
-  var seat_id = message.seat_id;
+  var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (seat_id == undefined) {
-    return { success: false, message: "seat_id not found" }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
   }
-  seat_id = parseInt(seat_id);
-  if (seat_id != room["current_action_player"]) {
+  chair_id = parseInt(chair_id);
+  if (chair_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -403,33 +404,33 @@ exports.room_call = function(message) {
   response["m"] = 'call';
   response["c"] = "room";
   var data = {};
-  data["seat_id"] = seat_id;
+  data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = message.bet_amount;
   data["action"] = "call";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  //room["actions"][seat_id] = [];
+  //room["actions"][chair_id] = [];
 
   return { success: true, data: data }
 };
 
 exports.room_raise = function(message) {
   var uid = message.uid;
-  var seat_id = message.seat_id;
+  var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("players");
   console.log(room["players"]);
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   console.log("player");
   console.log(player);
-  if (seat_id == undefined) {
-    return { success: false, message: "seat_id not found" }
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
   }
-  seat_id = parseInt(seat_id);
-  if (seat_id != room["current_action_player"]) {
+  chair_id = parseInt(chair_id);
+  if (chair_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -446,14 +447,14 @@ exports.room_raise = function(message) {
   response["m"] = 'raise';
   response["c"] = "room";
   var data = {};
-  data["seat_id"] = seat_id;
+  data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = message.bet_amount;
   data["action"] = "raise";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  //room["actions"][seat_id] = [];
+  //room["actions"][chair_id] = [];
   console.log("data");
   console.log(data);
   return { success: true, data: data }
@@ -461,15 +462,15 @@ exports.room_raise = function(message) {
 
 exports.room_all_in = function(message) {
   var uid = message.uid;
-  var seat_id = message.seat_id;
+  var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["seat_id"] == seat_id)[0];
-  if (seat_id == undefined) {
-    return { success: false, message: "seat_id not found" }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (chair_id == undefined) {
+    return { success: false, message: "chair_id not found" }
   }
-  seat_id = parseInt(seat_id);
-  if (seat_id != room["current_action_player"]) {
+  chair_id = parseInt(chair_id);
+  if (chair_id != room["current_action_player"]) {
     return { success: false, message: "not current action player" }
   }
 
@@ -486,14 +487,14 @@ exports.room_all_in = function(message) {
   response["m"] = 'all_in';
   response["c"] = "room";
   var data = {};
-  data["seat_id"] = seat_id;
+  data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = bet_amount;
   data["action"] = "all_in";
   response["data"] = data;
   //broadcast_to_online_user(response);
 
-  //room["actions"][seat_id] = [];
+  //room["actions"][chair_id] = [];
 
   return { success: true, data: data }
 };
@@ -694,6 +695,21 @@ exports.room_show_hand = async function(message) {
     //return { success: true, card1: , card2: }
 };
 
+
+exports.room_load_context = async function(message) {
+    var room_id = message.room_id;
+    var o_id = new ObjectID(room_id);
+    var user_id = message.user_id;
+    var room = rooms.filter(room => room["name"] == "test")[0];
+
+    // Room.findOne({ _id: o_id }, function (err, room) {
+    //   room.total_players_count += 1;
+    //   room.save();
+    // });
+
+    return { success: true, room: room }
+};
+
 exports.exit_room = function(user_id) {
     var location = user_location[user_id];
     if (location == null) {
@@ -722,4 +738,24 @@ exports.exit_room = function(user_id) {
     if (num_of_players == 0) {
         exports.destroy(room_id);
     }
+};
+
+function broacast_in_room(event, data, sender, room_id, including_sender) {
+  if(room_id == null){
+      return;
+  }
+
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  for(var i = 0; i < room.players.length; i++){
+    var player = room.players[i];
+
+    //如果不需要发给发送方，则跳过
+    if(rs.user_id == sender && including_sender != true){
+        continue;
+    }
+    var socket = user_list[player.uid];
+    if(socket != null){
+        socket.emit(event,data);
+    }
+  }
 };

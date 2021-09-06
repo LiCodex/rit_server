@@ -1,4 +1,4 @@
-var room_mgr = require('./room_mgr');
+//var room_mgr = require('./room_mgr');
 var user_list = {};
 var user_online = 0;
 
@@ -45,25 +45,25 @@ exports.send_message = function(user_id, event, msg_data) {
 };
 
 exports.clear_room = function(room_id) {
-    if (room_id == null) {
-        return;
-    }
-
-    var room_info = room_mgr.get_room(room_id);
-    if (room_info == null) {
-        return;
-    }
-
-    for (var i = 0; i < room_info.seats.length; i++) {
-        var rs = room_info.seats[i];
-        if (rs.user_id > 0) {
-            var socket = user_list[rs.user_id];
-            if (socket != null) {
-                exports.del(rs.user_id);
-                socket.disconnect();
-            }
-        }
-    }
+    // if (room_id == null) {
+    //     return;
+    // }
+    //
+    // var room_info = room_mgr.get_room(room_id);
+    // if (room_info == null) {
+    //     return;
+    // }
+    //
+    // for (var i = 0; i < room_info.seats.length; i++) {
+    //     var rs = room_info.seats[i];
+    //     if (rs.user_id > 0) {
+    //         var socket = user_list[rs.user_id];
+    //         if (socket != null) {
+    //             exports.del(rs.user_id);
+    //             socket.disconnect();
+    //         }
+    //     }
+    // }
 };
 
 exports.broadcast_in_room = function(event, data, sender, including_sender) {

@@ -394,18 +394,22 @@ exports.room_buy_in = function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var chair_id = message.chair_id;
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  var user = User.findOne({_id: uid});
   if (amount == undefined) {
-    return { success: false, added_amount: 0, message: "amount not provided"}
+    return { success: false, amount: 0, message: "amount not provided"}
   }
-  else if (player["money_in_the_bank"] < amount) {
-    money_to_add = player["money_in_the_bank"]
-    player["money_on_the_table"] += money_to_add;
-    player["money_in_the_bank"] -= money_to_add;
-    return { success: true, added_amount: money_to_add, message: "do not have enough money" }
-  } else {
+  else if (player["money_on_the_table"] + amount > room["max_buy_in"]) {
+    return { success: false, amount: player["money_on_the_table"] , message: "added amount exceeds table max buy in" }
+  } else if(user.coins < amount) {
+    return { success: false, amount: player["money_on_the_table"] , message: "do not have enough money in the bank" }
+  }
+  else {
     player["money_on_the_table"] += amount;
-    player["money_in_the_bank"] -= amount;
-    return { success: true, added_amount: amount, message: "success" }
+    User.findOne({ _id: uid }, function (err, user) {
+      user.coins -= amount;
+      user.save();
+    });
+    return { success: true, amount: player["money_on_the_table"], message: "success" }
   }
 };
 

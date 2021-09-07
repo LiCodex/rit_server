@@ -387,7 +387,7 @@ function bigblind() {
 
 
 
-exports.room_buy_in = function(message) {
+exports.room_buy_in = async function(message) {
   var uid = message.uid;
   var room_id = message.room_id;
   var amount = message.amount;
@@ -413,6 +413,8 @@ exports.room_buy_in = function(message) {
       console.log(total_assets);
       user.save();
     });
+    console.log("total_assets");
+    console.log(total_assets);
 
     // user.coins -= amount;
     // total_assets = user.coins;

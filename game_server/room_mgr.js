@@ -395,7 +395,7 @@ exports.room_buy_in = function(message) {
   var chair_id = message.chair_id;
   var total_assets = 0;
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  //var user = User.findOne({_id: uid});
+  var user = User.findOne({_id: uid});
   if (amount == undefined) {
     return { success: false, amount: 0, message: "amount not provided"}
   }

@@ -395,7 +395,7 @@ exports.room_buy_in = function(message) {
   var chair_id = message.chair_id;
   var total_assets = 0;
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  var user = User.findOne({_id: uid});
+  //var user = User.findOne({_id: uid});
   if (amount == undefined) {
     return { success: false, amount: 0, message: "amount not provided"}
   }
@@ -406,17 +406,17 @@ exports.room_buy_in = function(message) {
   }
   else {
     player["money_on_the_table"] += amount;
-    // User.findOne({ _id: uid }, function (err, user) {
-    //   user.coins -= amount;
-    //   total_assets = user.coins;
-    //   user.save();
-    // });
-    // let room = await Room.findOne({ _id: o_id });
-    user.coins -= amount;
-    total_assets = user.coins;
-    user.save();
-    console.log("total assets");
-    console.log(total_assets);
+    User.findOne({ _id: uid }, function (err, user) {
+      user.coins -= amount;
+      total_assets = user.coins;
+      console.log("total_assets");
+      console.log(total_assets);
+      user.save();
+    });
+
+    // user.coins -= amount;
+    // total_assets = user.coins;
+    // user.save();
     return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
   }
 };

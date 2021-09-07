@@ -406,14 +406,14 @@ exports.room_buy_in = async function(message) {
   }
   else {
     player["money_on_the_table"] += amount;
-    User.findOne({ _id: uid }, function (err, user) {
+    await User.findOne({ _id: uid }, function (err, user) {
       user.coins -= amount;
       total_assets = user.coins;
-      console.log("total_assets");
+      console.log("total_assets1");
       console.log(total_assets);
       user.save();
     });
-    console.log("total_assets");
+    console.log("total_assets2");
     console.log(total_assets);
 
     // user.coins -= amount;

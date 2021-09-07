@@ -412,7 +412,7 @@ exports.room_buy_in = function(message) {
       total_assets = user.coins;
 
     });
-    return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
+    return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
   }
 };
 

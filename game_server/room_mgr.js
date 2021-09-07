@@ -393,6 +393,7 @@ exports.room_buy_in = function(message) {
   var amount = message.amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
   var chair_id = message.chair_id;
+  var total_assets = 0;
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   var user = User.findOne({_id: uid});
   if (amount == undefined) {
@@ -408,8 +409,10 @@ exports.room_buy_in = function(message) {
     User.findOne({ _id: uid }, function (err, user) {
       user.coins -= amount;
       user.save();
-      return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
+      total_assets = user.coins;
+
     });
+    return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
   }
 };
 

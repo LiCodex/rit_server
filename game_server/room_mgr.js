@@ -387,30 +387,26 @@ function bigblind() {
 
 
 
-exports.room_action_buy_in = function(message) {
-    var uid = message.uid;
-    var room_id = message.room_id;
-    var amount = message.chips;
-    var room = rooms.filter(room => room["name"] == "test")[0];
-    var chair_id = message.chair_id;
-    var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-    // console.log("money in the bank")
-    // console.log(player);
-    if (amount == undefined) {
-      return { success: false, added_amount: 0, message: "amount not provided"}
-    }
-    else if (player["money_in_the_bank"] < amount) {
-      money_to_add = player["money_in_the_bank"]
-      player["money_on_the_table"] += money_to_add;
-      player["money_in_the_bank"] -= money_to_add;
-      return { success: true, added_amount: money_to_add, message: "do not have enough money" }
-    } else {
-      player["money_on_the_table"] += amount;
-      player["money_in_the_bank"] -= amount;
-      // console.log("has enough money");
-      // console.log(amount);
-      return { success: true, added_amount: amount, message: "success" }
-    }
+exports.room_buy_in = function(message) {
+  var uid = message.uid;
+  var room_id = message.room_id;
+  var amount = message.amount;
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var chair_id = message.chair_id;
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (amount == undefined) {
+    return { success: false, added_amount: 0, message: "amount not provided"}
+  }
+  else if (player["money_in_the_bank"] < amount) {
+    money_to_add = player["money_in_the_bank"]
+    player["money_on_the_table"] += money_to_add;
+    player["money_in_the_bank"] -= money_to_add;
+    return { success: true, added_amount: money_to_add, message: "do not have enough money" }
+  } else {
+    player["money_on_the_table"] += amount;
+    player["money_in_the_bank"] -= amount;
+    return { success: true, added_amount: amount, message: "success" }
+  }
 };
 
 exports.room_fold = function(message) {
@@ -817,22 +813,32 @@ exports.exit_room = function(user_id) {
     }
 };
 
-function broadcast_in_room(event, data, sender, room_id, including_sender) {
-  if(room_id == null){
-      return;
-  }
+// function broadcast_in_room(event, data, sender, room_id, including_sender) {
+//   if(room_id == null){
+//       return;
+//   }
+//
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   for(var i = 0; i < room.players.length; i++){
+//     var player = room.players[i];
+//
+//     //如果不需要发给发送方，则跳过
+//     if(rs.user_id == sender && including_sender != true){
+//         continue;
+//     }
+//     var socket = user_list[player.uid];
+//     if(socket != null){
+//         socket.emit(event,data);
+//     }
+//   }
+// };
 
+function all_players_fold() {
+  var active_count = 0;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  for(var i = 0; i < room.players.length; i++){
-    var player = room.players[i];
-
-    //如果不需要发给发送方，则跳过
-    if(rs.user_id == sender && including_sender != true){
-        continue;
-    }
-    var socket = user_list[player.uid];
-    if(socket != null){
-        socket.emit(event,data);
-    }
+  for (var i = 0; i < room["players"].length; i++) {
+    active_count++;
   }
+
+  return active_count == 1;
 };

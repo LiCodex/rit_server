@@ -409,7 +409,7 @@ exports.room_buy_in = function(message) {
       user.coins -= amount;
       user.save();
     });
-    return { success: true, amount: player["money_on_the_table"], message: "success" }
+    return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
   }
 };
 

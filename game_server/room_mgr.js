@@ -408,8 +408,8 @@ exports.room_buy_in = function(message) {
     User.findOne({ _id: uid }, function (err, user) {
       user.coins -= amount;
       user.save();
+      return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
     });
-    return { success: true, amount: player["money_on_the_table"], total_assets: user.coins, message: "success" }
   }
 };
 

@@ -406,11 +406,17 @@ exports.room_buy_in = function(message) {
   }
   else {
     player["money_on_the_table"] += amount;
-    User.findOne({ _id: uid }, function (err, user) {
-      user.coins -= amount;
-      total_assets = user.coins;
-      user.save();
-    });
+    // User.findOne({ _id: uid }, function (err, user) {
+    //   user.coins -= amount;
+    //   total_assets = user.coins;
+    //   user.save();
+    // });
+    // let room = await Room.findOne({ _id: o_id });
+    user.coins -= amount;
+    total_assets = user.coins;
+    user.save();
+    console.log("total assets");
+    console.log(total_assets);
     return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
   }
 };

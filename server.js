@@ -9,6 +9,7 @@ const center = require('./server/center.js');
 const Room = require("./models/room.js");
 const room_mgr = require('./game_server/room_mgr');
 const user_mgr = require('./game_server/user_mgr');
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 

@@ -32,9 +32,11 @@ function active_player_count(players) {
 }
 
 async function check_start(room_id) {
-  if (room.state != null) {
-    return { message: "Cannot start" }
-  }
+  // if (room.state != null) {
+  //   return { message: "Cannot start" }
+  // }
+
+  console.log("check start")
   var active_players = 0;
   for (var player in room.players) {
     if (player.game_state != "sit_out" && player.money_on_the_table > 0) {
@@ -49,6 +51,7 @@ async function check_start(room_id) {
 };
 
 function game_start(room_id) {
+  console.log("game start");
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["state"] = "running";
   room["round_state"] = "start";

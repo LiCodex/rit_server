@@ -607,7 +607,7 @@ function deal_hole_cards(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var deck = new Deck();
   var hole_cards = [];
-  room["deck"] = deck();
+  room["deck"] = deck;
   deck.shuffle();
 
   for (var i = 0; i < room["players"].length; i++) {

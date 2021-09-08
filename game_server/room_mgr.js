@@ -235,7 +235,9 @@ exports.room_buy_in = function(message) {
   user.coins -= amount;
   user.save();
   room["players"]["chair_id"]["money_on_the_table"] += amount;
+  console.log("before check start");
   check_start(room["_id"]);
+  console.log("after check start");
   return { success: true, player: room["players"] }
 };
 

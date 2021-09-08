@@ -31,7 +31,7 @@ function active_player_count(players) {
   return res;
 }
 
-function check_start(room_id) {
+async function check_start(room_id) {
   if (room.state != null) {
     return { message: "Cannot start" }
   }
@@ -189,7 +189,7 @@ exports.room_sit = async function(message) {
   });
 
   return { success: true, chair_id: chair_id }
-  check_start(room["_id"]);
+  // check_start(room["_id"]);
 };
 
 exports.hall_user_profile = async function(message) {
@@ -232,7 +232,7 @@ exports.room_buy_in = function(message) {
   user.coins -= amount;
   user.save();
   room["players"]["chair_id"]["money_on_the_table"] += amount;
-
+  check_start(room["_id"]);
   return { success: true, player: room["players"] }
 };
 

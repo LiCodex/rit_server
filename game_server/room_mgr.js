@@ -92,7 +92,7 @@ function game_start(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     // clear actions
   }
-
+  smallblind();
 
 };
 
@@ -335,7 +335,7 @@ exports.room_game_start = function(message) {
   if (room["button"] == undefined) {
     button = rnd_button(room["_id"]);
     room["button"] = button;
-    room["players"][button] = true;
+    room["players"]["button"] = true;
   } else {
     room["button"] = get_next(room["button"]);
   }
@@ -350,6 +350,7 @@ function get_next() {
 };
 
 function smallblind() {
+  console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
   //room["ctx_seq"] += 1;

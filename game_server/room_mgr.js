@@ -616,7 +616,7 @@ function deal_hole_cards(room_id) {
       hole_cards.push(room["deck"].deal().toString());
       hole_cards.push(room["deck"].deal().toString());
       room["players"][i]["hole_cards"] = hole_cards;
-      room["fake_hole_cards_status"][i] = true;
+      //room["fake_hole_cards_status"][i] = true;
     }
   }
   console.log("deal hole cards");

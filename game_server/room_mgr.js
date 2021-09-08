@@ -216,30 +216,30 @@ async function user_coins_helper(uid) {
   }
 }
 
-exports.room_buy_in = function(message) {
-  var uid = message.uid;
-  var chair_id = message.chair_id;
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  var amount = message.amount;
-
-  if (chair_id > room["seat_count"]) {
-    return { success: false, message: "the chair_id exceeds room chair_count" }
-  }
-
-  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  user = User.findOne({ _id: uid });
-  if (amount > user.coins) {
-    return { success: false, message: "the amount requested exceeds user own" }
-  }
-
-  user.coins -= amount;
-  user.save();
-  room["players"]["chair_id"]["money_on_the_table"] += amount;
-  console.log("before check start");
-  check_start(room["_id"]);
-  console.log("after check start");
-  return { success: true, player: room["players"] }
-};
+// exports.room_buy_in = function(message) {
+//   var uid = message.uid;
+//   var chair_id = message.chair_id;
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   var amount = message.amount;
+//
+//   if (chair_id > room["seat_count"]) {
+//     return { success: false, message: "the chair_id exceeds room chair_count" }
+//   }
+//
+//   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+//   user = User.findOne({ _id: uid });
+//   if (amount > user.coins) {
+//     return { success: false, message: "the amount requested exceeds user own" }
+//   }
+//
+//   user.coins -= amount;
+//   user.save();
+//   room["players"]["chair_id"]["money_on_the_table"] += amount;
+//   console.log("before check start");
+//   check_start(room["_id"]);
+//   console.log("after check start");
+//   return { success: true, player: room["players"] }
+// };
 
 
 exports.room_standup = async function(message) {
@@ -422,8 +422,11 @@ exports.room_buy_in = async function(message) {
       console.log(total_assets);
       user.save();
     });
-    console.log("total_assets2");
-    console.log(total_assets);
+    // console.log("total_assets2");
+    // console.log(total_assets);
+    console.log("before check start");
+    check_start(room["_id"]);
+    console.log("after check start");
     return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
   }
 };

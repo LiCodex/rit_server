@@ -44,7 +44,7 @@ async function check_start(room_id) {
     }
   }
   if (active_players >= 2) {
-    room.time_state = 'start';
+    room["time_state"] = 'start';
     game_start(room_id);
   }
 
@@ -66,13 +66,13 @@ function game_start(room_id) {
   var player_count = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i].coins > 0 && room["players"][i]) {
-      room["players"][i]["state"] = "playing";
+      room["players"][i]["game_state"] = "playing";
       player_count += 1;
     }
   }
 
   if (room["button"] == undefined) {
-    room["button"] = rnd_button();
+    room["button"] = rnd_button(room_id);
   } else {
     room["button"] = get_next(room["button"]);
   }
@@ -94,6 +94,15 @@ function game_start(room_id) {
   }
 
 
+};
+
+function rnd_button(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["game_state"] == "playing") {
+      return i+1;
+    }
+  }
 };
 
 exports.room_join = async function(message) {
@@ -324,7 +333,7 @@ exports.room_game_start = function(message) {
 
   room["round"]++;
   if (room["button"] == undefined) {
-    button = rnd_button();
+    button = rnd_button(room["_id"]);
     room["button"] = button;
     room["players"][button] = true;
   } else {
@@ -415,6 +424,7 @@ exports.room_buy_in = async function(message) {
   }
   else {
     player["money_on_the_table"] += amount;
+    player["game_state"] = "playing";
     await User.findOne({ _id: uid }, function (err, user) {
       user.coins -= amount;
       total_assets = user.coins;

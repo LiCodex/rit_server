@@ -331,6 +331,10 @@ exports.room_game_start = function(message) {
   smallblind();
 };
 
+function get_next() {
+
+};
+
 function smallblind() {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
@@ -415,10 +419,6 @@ exports.room_buy_in = async function(message) {
     });
     console.log("total_assets2");
     console.log(total_assets);
-
-    // user.coins -= amount;
-    // total_assets = user.coins;
-    // user.save();
     return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
   }
 };
@@ -596,9 +596,12 @@ function deal_hole_cards(room_id) {
       hole_cards = [];
       hole_cards.push(room["deck"].deal().toString());
       hole_cards.push(room["deck"].deal().toString());
+      room["players"][i]["hole_cards"] = hole_cards;
       room["fake_hole_cards_status"][i] = true;
     }
   }
+  console.log("deal hole cards");
+  console.log(room);
 };
 
 exports.room_deal_hole_cards = function(message) {

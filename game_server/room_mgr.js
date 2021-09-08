@@ -35,11 +35,11 @@ async function check_start(room_id) {
   // if (room.state != null) {
   //   return { message: "Cannot start" }
   // }
-
+  var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("check start")
   var active_players = 0;
-  for (var player in room.players) {
-    if (player.game_state != "sit_out" && player.money_on_the_table > 0) {
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["game_state"] != "sit_out" && room["players"][i]["money_on_the_table"] > 0) {
       active_players++;
     }
   }

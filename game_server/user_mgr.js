@@ -67,7 +67,7 @@ exports.clear_room = function(room_id) {
 };
 
 exports.broadcast_in_room = function(event, data, sender, including_sender) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  // var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
     var rs = room["players"][i];
     if (rs.user_id == sender && including_sender != true) {

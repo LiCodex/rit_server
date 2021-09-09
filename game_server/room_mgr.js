@@ -617,6 +617,13 @@ function deal_hole_cards(room_id) {
       hole_cards.push(room["deck"].deal().toString());
       room["players"][i]["hole_cards"] = hole_cards;
       //room["fake_hole_cards_status"][i] = true;
+      //user_mgr.broadcast_in_room()
+      var uid = room["players"][i]["uid"];
+      var ws = user_mgr.get(uid);
+      var response = {};
+      response["m"] = "room";
+      response["c"] = "deal_hole_cards";
+      ws.send(JSON.stringify(response));
     }
   }
   console.log("deal hole cards");

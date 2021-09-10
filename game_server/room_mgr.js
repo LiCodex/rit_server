@@ -65,7 +65,7 @@ function game_start(room_id) {
 
   var player_count = 0;
   for (var i = 0; i < room["players"].length; i++) {
-    if (room["players"][i].coins > 0) {
+    if (room["players"][i]["money_on_the_table"] > 0) {
       room["players"][i]["game_state"] = "playing";
       player_count += 1;
     }

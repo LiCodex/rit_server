@@ -363,7 +363,7 @@ function smallblind() {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
   //room["ctx_seq"] += 1;
-  room["current_action_player"] = room["smallblind_id"];
+  room["current"] = room["smallblind_id"];
 
   if (room["betting_list"] == undefined) {
     room["betting_list"] = [];
@@ -651,7 +651,7 @@ function game_action() {
   room["current"] = room["smallblind_id"];
   var chair_id = room["smallblind_id"];
   console.log("current chair_id");
-  console.log(room["current"])
+  console.log(room["smallblind_id"]);
   var player_cur = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   player_cur["hand_state"] = "thinking";
   for (var i = 0; i < room["players"].length; i++) {
@@ -687,6 +687,20 @@ function wait_for_action() {
 
 function time_out_fold() {
   console.log("timeout");
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["status"] != "sit_out") {
+      var uid = room["players"][i]["uid"];
+      var ws = user_mgr.get(uid);
+      var response = {};
+      response["m"] = "room";
+      response["c"] = "time_out";
+      var data = {};
+      data["message"] = "15s has passed has to fold";
+      response.data = data;
+      ws.send(JSON.stringify(response));
+    }
+  }
 }
 
 function get_next(chair_id, chair_count) {

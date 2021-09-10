@@ -70,12 +70,17 @@ function game_start(room_id) {
       player_count += 1;
     }
   }
+  console.log("room button 1");
+  console.log(room["button"]);
 
   if (room["button"] == undefined) {
     room["button"] = rnd_button(room_id);
   } else {
     room["button"] = get_next(room["button"]);
   }
+
+  console.log("room button 2");
+  console.log(room["button"]);
 
   if (room["button"] != undefined) {
     if (player_count == 2) {

@@ -76,7 +76,7 @@ function game_start(room_id) {
   if (room["button"] == undefined) {
     room["button"] = rnd_button(room_id);
   } else {
-    room["button"] = get_next(room["button"]);
+    room["button"] = get_next(room, room["button"]);
   }
 
   console.log("room button 2");
@@ -86,7 +86,7 @@ function game_start(room_id) {
     if (player_count == 2) {
       room["smallblind_id"] = room["button"];
     } else {
-      room["smallblind_id"] = get_next(room["button"]);
+      room["smallblind_id"] = get_next(room, room["button"]);
     }
   }
   console.log("room button 3");
@@ -95,7 +95,7 @@ function game_start(room_id) {
 
 
   if (room["smallblind_id"] != undefined) {
-    room["bigblind_id"] == get_next(room["smallblind_id"]);
+    room["bigblind_id"] == get_next(room, room["smallblind_id"]);
   }
 
   for (var i = 0; i < room["players"].length; i++) {
@@ -109,7 +109,7 @@ function rnd_button(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["game_state"] == "playing") {
-      return i+1;
+      return room["players"][i]["chair_id"];
     }
   }
 };
@@ -346,16 +346,12 @@ exports.room_game_start = function(message) {
     room["button"] = button;
     room["players"]["button"] = true;
   } else {
-    room["button"] = get_next(room["button"]);
+    room["button"] = get_next(room, room["button"]);
   }
 
   if (room["button"] != undefined) {
   }
   smallblind();
-};
-
-function get_next() {
-
 };
 
 function smallblind() {
@@ -646,8 +642,6 @@ function game_action() {
   room["ctx_seq"] = (room["ctx_seq"] == undefined) ? 1 : room["ctx_seq"] + 1;
   room["last_action_timestamp"] = Date.now();
 
-  //var chair_id = get_next(room["current"]);
-  //room["current"] = chair_id;
   room["current"] = room["smallblind_id"];
   //var chair_id = room["smallblind_id"];
   console.log("current chair_id");
@@ -703,10 +697,18 @@ function time_out_fold() {
   }
 }
 
-function get_next(chair_id, chair_count) {
-  chair_id = chair_id + 1;
-  chair_id = (chair_id - 1) % chair_count + 1;
-  return chair_id;
+function get_next(room, chair_id) {
+  room_sort(room);
+  var res = 0
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["chair_id"] == chair_id) {
+      res = i;
+      break;
+    }
+  }
+  res += 1;
+  res = (res - 1)%room["players"].length + 1;
+  return res;
 };
 
 exports.room_deal_hole_cards = function(message) {
@@ -929,31 +931,27 @@ exports.exit_room = function(user_id) {
             num_of_players++;
         }
     }
-    db.set_room_id_of_user(user_id, null);
-    if (num_of_players == 0) {
-        exports.destroy(room_id);
-    }
 };
 
-// function broadcast_in_room(event, data, sender, room_id, including_sender) {
-//   if(room_id == null){
-//       return;
-//   }
-//
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   for(var i = 0; i < room.players.length; i++){
-//     var player = room.players[i];
-//
-//     //如果不需要发给发送方，则跳过
-//     if(rs.user_id == sender && including_sender != true){
-//         continue;
-//     }
-//     var socket = user_list[player.uid];
-//     if(socket != null){
-//         socket.emit(event,data);
-//     }
-//   }
-// };
+function game_betting() {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  if (room["state"] == "preflop") {
+
+  } else if (room["state"] == "flop") {
+
+  } else if (room["state"] == "turn") {
+
+  } else if (room["state"] == "river") {
+
+  } else if (room["state"] == "game_result") {
+
+  }
+
+};
+
+function sort_room(room) {
+  room.sort(function(a, b) {return a["chair_id"] - b["chair_id"]});
+};
 
 function all_players_fold() {
   var active_count = 0;

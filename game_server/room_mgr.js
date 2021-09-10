@@ -649,10 +649,10 @@ function game_action() {
   //var chair_id = get_next(room["current"]);
   //room["current"] = chair_id;
   room["current"] = room["smallblind_id"];
-  var chair_id = room["smallblind_id"];
+  //var chair_id = room["smallblind_id"];
   console.log("current chair_id");
-  console.log(room["smallblind_id"]);
-  var player_cur = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  console.log(room);
+  var player_cur = room["players"].filter(player => player["chair_id"] == (room["smallblind_id"]))[0];
   player_cur["hand_state"] = "thinking";
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["status"] != "sit_out") {

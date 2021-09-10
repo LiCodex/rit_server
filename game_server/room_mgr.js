@@ -89,6 +89,10 @@ function game_start(room_id) {
       room["smallblind_id"] = get_next(room["button"]);
     }
   }
+  console.log("room button 3");
+  console.log(player_count);
+  console.log(room["smallblind_id"]);
+
 
   if (room["smallblind_id"] != undefined) {
     room["bigblind_id"] == get_next(room["smallblind_id"]);

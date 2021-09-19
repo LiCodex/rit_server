@@ -749,7 +749,7 @@ exports.room_deal_flop_cards = function(message) {
         var response = {};
         response["m"] = "deal_flop_cards";
         response["c"] = "room";
-        response["flop_cards"] = cards;
+        response["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");
@@ -778,7 +778,7 @@ exports.room_deal_turn_card = function(message) {
         var response = {};
         response["m"] = "deal_turn_card";
         response["c"] = "room";
-        response["turn_card"] = cards;
+        response["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");
@@ -806,7 +806,7 @@ exports.room_deal_river_card = function(message) {
         var response = {};
         response["m"] = "deal_river_card";
         response["c"] = "room";
-        response["river_card"] = cards;
+        response["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");
@@ -1103,17 +1103,29 @@ function delay_betting() {
 
 exports.room_game_betting = async function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  deal_hole_cards(room["_id"]);
+
   //await sleep(5000);
-  setTimeout(function(){ console.log("preflop finished"); }, 5000);
-  await exports.room_deal_flop_cards(room["_id"]);
-  setTimeout(function(){ console.log("flop finished"); }, 5000);
+  setTimeout(function(){
+    deal_hole_cards(room["_id"]);
+    console.log("preflop finished");
+  }, 5000);
+
+  setTimeout(function(){
+    exports.room_deal_flop_cards(room["_id"]);
+    console.log("flop finished");
+  }, 5000);
   //await sleep(5000);
-  await exports.room_deal_turn_card(room["_id"]);
-  setTimeout(function(){ console.log("turn finished"); }, 5000);
+
+  setTimeout(function(){
+    exports.room_deal_turn_card(room["_id"]);
+    console.log("turn finished");
+  }, 5000);
   //await sleep(5000);
-  await exports.room_deal_river_card(room["_id"]);
-  setTimeout(function(){ console.log("river finished"); }, 5000);
+
+  setTimeout(function(){
+    exports.room_deal_river_card(room["_id"]);
+    console.log("river finished");
+  }, 5000);
 };
 
 function flop_action(room_id) {

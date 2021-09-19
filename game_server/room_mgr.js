@@ -622,9 +622,11 @@ function deal_hole_cards(room_id) {
       var uid = room["players"][i]["uid"];
       var ws = user_mgr.get(uid);
       var response = {};
+      var data = {};
       response["m"] = "deal_hole_cards";
       response["c"] = "room";
-      response["hole_cards"] = hole_cards;
+      response["data"] = data;
+      response["data"]["hole_cards"] = hole_cards;
       console.log("before deal hole cards");
       ws.send(JSON.stringify(response));
       console.log("after deal hole cards");
@@ -712,24 +714,24 @@ function get_next(room, chair_id) {
   return res;
 };
 
-exports.room_deal_hole_cards = function(message) {
-  var uid = message.uid;
-  var deck = new Deck();
-  deck.shuffle();
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  room["deck"] = deck;
-  console.log("deck");
-  console.log(deck)
-  var hole_cards = [];
-  hole_cards.push(room["deck"].deal().toString());
-  hole_cards.push(room["deck"].deal().toString());
-  console.log("hole cards");
-  console.log(hole_cards);
-  room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
-  //save to db
-  return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
-
-};
+// exports.room_deal_hole_cards = function(message) {
+//   var uid = message.uid;
+//   var deck = new Deck();
+//   deck.shuffle();
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   room["deck"] = deck;
+//   console.log("deck");
+//   console.log(deck)
+//   var hole_cards = [];
+//   hole_cards.push(room["deck"].deal().toString());
+//   hole_cards.push(room["deck"].deal().toString());
+//   console.log("hole cards");
+//   console.log(hole_cards);
+//   room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
+//   //save to db
+//   return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
+//
+// };
 
 exports.room_deal_flop_cards = function(message) {
     var uid = message.uid;
@@ -747,9 +749,11 @@ exports.room_deal_flop_cards = function(message) {
         var uid = room["players"][i]["uid"];
         var ws = user_mgr.get(uid);
         var response = {};
+        var data = {};
         response["m"] = "deal_flop_cards";
         response["c"] = "room";
-        response["card_array"] = cards;
+        response["data"] = data;
+        response["data"]["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");
@@ -776,9 +780,11 @@ exports.room_deal_turn_card = function(message) {
         var uid = room["players"][i]["uid"];
         var ws = user_mgr.get(uid);
         var response = {};
+        var data = {};
         response["m"] = "deal_turn_card";
         response["c"] = "room";
-        response["card_array"] = cards;
+        response["data"] = data;
+        response["data"]["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");
@@ -804,9 +810,11 @@ exports.room_deal_river_card = function(message) {
         var uid = room["players"][i]["uid"];
         var ws = user_mgr.get(uid);
         var response = {};
+        var data = {};
         response["m"] = "deal_river_card";
         response["c"] = "room";
-        response["card_array"] = cards;
+        response["data"] = data;
+        response["data"]["card_array"] = cards;
         console.log("before deal hole cards");
         ws.send(JSON.stringify(response));
         console.log("after deal hole cards");

@@ -1062,12 +1062,16 @@ function delay_betting() {
 exports.room_game_betting = async function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   deal_hole_cards(room["_id"]);
-  await sleep(5000);
+  //await sleep(5000);
+  setTimeout(function(){ console.log("preflop finished"); }, 5000);
   exports.room_deal_flop_cards(room["_id"]);
-  await sleep(5000);
-  exports.room_deal_turn_card(room_id);
-  await sleep(5000);
-  exports.room_deal_river_card(room_id);
+  setTimeout(function(){ console.log("flop finished"); }, 5000);
+  //await sleep(5000);
+  exports.room_deal_turn_card(room["_id"]);
+  setTimeout(function(){ console.log("turn finished"); }, 5000);
+  //await sleep(5000);
+  exports.room_deal_river_card(room["_id"]);
+  setTimeout(function(){ console.log("river finished"); }, 5000);
 };
 
 function flop_action(room_id) {

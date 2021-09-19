@@ -622,8 +622,8 @@ function deal_hole_cards(room_id) {
       var uid = room["players"][i]["uid"];
       var ws = user_mgr.get(uid);
       var response = {};
-      response["m"] = "room";
-      response["c"] = "deal_hole_cards";
+      response["m"] = "deal_hole_cards";
+      response["c"] = "room";
       console.log("before deal hole cards");
       ws.send(JSON.stringify(response));
       console.log("after deal hole cards");

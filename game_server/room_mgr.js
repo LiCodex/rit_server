@@ -741,9 +741,22 @@ exports.room_deal_flop_cards = function(message) {
     cards.push(room["deck"].deal().toString());
     cards.push(room["deck"].deal().toString());
     room["flop"] = cards;
+    for (var i = 0; i < room["players"].length; i++) {
+      if (room["players"][i]["status"] != "sit_out") {
 
+        var uid = room["players"][i]["uid"];
+        var ws = user_mgr.get(uid);
+        var response = {};
+        response["m"] = "deal_flop_cards";
+        response["c"] = "room";
+        response["flop_cards"] = cards;
+        console.log("before deal hole cards");
+        ws.send(JSON.stringify(response));
+        console.log("after deal hole cards");
+      }
+    }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": cards }
+    //return { "cards": cards }
 
 };
 
@@ -756,9 +769,23 @@ exports.room_deal_turn_card = function(message) {
     var cards = [];
     cards.push(room["deck"].deal().toString());
 
-    room.turn = cards;
+    room["turn"] = cards;
+    for (var i = 0; i < room["players"].length; i++) {
+      if (room["players"][i]["status"] != "sit_out") {
+
+        var uid = room["players"][i]["uid"];
+        var ws = user_mgr.get(uid);
+        var response = {};
+        response["m"] = "deal_turn_card";
+        response["c"] = "room";
+        response["turn_card"] = cards;
+        console.log("before deal hole cards");
+        ws.send(JSON.stringify(response));
+        console.log("after deal hole cards");
+      }
+    }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": cards }
+    //return { "cards": cards }
 
 };
 
@@ -770,9 +797,23 @@ exports.room_deal_river_card = function(message) {
     var cards = [];
     cards.push(room["deck"].deal().toString());
 
-    room.river = cards;
+    room["river"] = cards;
+    for (var i = 0; i < room["players"].length; i++) {
+      if (room["players"][i]["status"] != "sit_out") {
+
+        var uid = room["players"][i]["uid"];
+        var ws = user_mgr.get(uid);
+        var response = {};
+        response["m"] = "deal_river_card";
+        response["c"] = "room";
+        response["river_card"] = cards;
+        console.log("before deal hole cards");
+        ws.send(JSON.stringify(response));
+        console.log("after deal hole cards");
+      }
+    }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    return { "cards": cards }
+    //return { "cards": cards }
 
 };
 

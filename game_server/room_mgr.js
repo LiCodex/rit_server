@@ -33,9 +33,6 @@ function active_player_count(players) {
 }
 
 async function check_start(room_id) {
-  // if (room.state != null) {
-  //   return { message: "Cannot start" }
-  // }
   var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("check start")
   var active_players = 0;
@@ -55,16 +52,6 @@ function delay_action(room_id) {
   console.log("delay action");
   var room = rooms.filter(room => room["name"] == "test")[0];
 
-
-  // room["state"] = "running";
-  // room["round_state"] = "start";
-  //
-  // if (room["round"] == 0) {
-  //   room["started_at"] = Date.now();
-  // }
-  // room["round"] += 1;
-
-  //save to db, need to add
   game_action(room["_id"]);
   setTimeout(function() {
     console.log("in timeout");
@@ -72,46 +59,6 @@ function delay_action(room_id) {
       delay_action(room["_id"]);
     }
   }, 1000);
-  // var player_count = 0;
-  // for (var i = 0; i < room["players"].length; i++) {
-  //   if (room["players"][i]["money_on_the_table"] > 0) {
-  //     room["players"][i]["game_state"] = "playing";
-  //     player_count += 1;
-  //   }
-  // }
-  // console.log("room button 1");
-  // console.log(room["button"]);
-  //
-  // if (room["button"] == undefined) {
-  //   room["button"] = rnd_button(room_id);
-  // } else {
-  //   room["button"] = get_next(room, room["button"]);
-  // }
-  //
-  // console.log("room button 2");
-  // console.log(room["button"]);
-  //
-  // if (room["button"] != undefined) {
-  //   if (player_count == 2) {
-  //     room["smallblind_id"] = room["button"];
-  //   } else {
-  //     room["smallblind_id"] = get_next(room, room["button"]);
-  //   }
-  // }
-  // console.log("room button 3");
-  // console.log(player_count);
-  // console.log(room["smallblind_id"]);
-  //
-  //
-  // if (room["smallblind_id"] != undefined) {
-  //   room["bigblind_id"] == get_next(room, room["smallblind_id"]);
-  // }
-  //
-  // for (var i = 0; i < room["players"].length; i++) {
-  //   // clear actions
-  // }
-  // smallblind();
-
 };
 
 function game_action(room_id) {
@@ -321,7 +268,7 @@ function game_actions(room_id) {
   var current_player = room["players"][chair_id];
   current_player["state"] = "thinking";
   for (var i = 0; i < room["players"].length; i++) {
-
+    console.log("game action");
   }
 };
 
@@ -452,32 +399,8 @@ async function user_coins_helper(uid) {
   } else {
     return { success: true, coins: user.coins, avatar: user.avatar }
   }
-}
+};
 
-// exports.room_buy_in = function(message) {
-//   var uid = message.uid;
-//   var chair_id = message.chair_id;
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   var amount = message.amount;
-//
-//   if (chair_id > room["seat_count"]) {
-//     return { success: false, message: "the chair_id exceeds room chair_count" }
-//   }
-//
-//   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-//   user = User.findOne({ _id: uid });
-//   if (amount > user.coins) {
-//     return { success: false, message: "the amount requested exceeds user own" }
-//   }
-//
-//   user.coins -= amount;
-//   user.save();
-//   room["players"]["chair_id"]["money_on_the_table"] += amount;
-//   console.log("before check start");
-//   check_start(room["_id"]);
-//   console.log("after check start");
-//   return { success: true, player: room["players"] }
-// };
 
 
 exports.room_standup = async function(message) {

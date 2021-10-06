@@ -1220,21 +1220,21 @@ function game_betting(room_id) {
     return;
   }
   if (room["state"] == "preflop") {
-
+    preflop_action();
+    return;
   }
   if (room["state"] == "flop") {
-
+    flop_action();
+    return;
   }
   if (room["state"] == "turn") {
-
+    turn_action();
+    return;
   }
   if (room["state"] == "river") {
-
+    river_action();
+    return;
   }
-  if (room["state"] == "game_result") {
-
-  }
-
 };
 
 function sort_room(room) {
@@ -1347,59 +1347,6 @@ function delay_betting() {
   }, 1000);
 };
 
-// function game_betting() {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   var all_fold = is_all_fold();
-//   if (all_fold && room["hand_state"] != "game_result") {
-//     player_all_fold();
-//   }
-//
-//   if (room["hand_state"] == "start") {
-//     game_start(room["_id"]);
-//   }
-//   // if (room["hand_state"] == "preflop") {
-//   //   preflop_action();
-//   // }
-//   if (room["hand_state"] == "flop") {
-//     flop_action();
-//   }
-//   if (room["hand_state"] == "turn") {
-//     turn_action();
-//   }
-//   if (room["hand_state"] == "river") {
-//     river_action();
-//   }
-//   if (room["hand_state"] == "game_result") {
-//     game_result();
-//   }
-// };
-
-// exports.room_game_betting = async function(message) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//
-//   //await sleep(5000);
-//   setTimeout(function(){
-//     deal_hole_cards(room["_id"]);
-//     console.log("preflop finished");
-//   }, 5000);
-//
-//   setTimeout(function(){
-//     exports.room_deal_flop_cards(room["_id"]);
-//     console.log("flop finished");
-//   }, 5000);
-//   //await sleep(5000);
-//
-//   setTimeout(function(){
-//     exports.room_deal_turn_card(room["_id"]);
-//     console.log("turn finished");
-//   }, 5000);
-//   //await sleep(5000);
-//
-//   setTimeout(function(){
-//     exports.room_deal_river_card(room["_id"]);
-//     console.log("river finished");
-//   }, 5000);
-// };
 
 function preflop_action(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -1420,21 +1367,6 @@ function preflop_action(room_id) {
   }
 
 };
-
-// function preflop_action(room_id) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   if (room["flop_cards_dealt"] == false) {
-//     exports.room_deal_flop_cards(room_id);
-//     return;
-//   }
-//
-//   if (room["last_bet_time"] == undefined) {
-//     return;
-//   }
-//   if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
-//     time_out_fold();
-//   }
-// };
 
 function turn_action(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];

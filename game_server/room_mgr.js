@@ -213,10 +213,13 @@ function game_start(room_id) {
     player["state"] = "smallblind";
     console.log(player["chair_id"], player["state"]);
   }
-
+  console.log("smallblind id");
+  console.log(room["smallblind_id"]);
   if (room["smallblind_id"])
   {
     room["bigblind_id"] = get_next(room["smallblind_id"]);
+    console.log("bigblind id");
+    console.log(room["bigblind_id"]);
     var player = room["players"].filter(player => player["bigblind_id"] == room["bigblind_id"])[0];
     player["state"] = "bigblind";
   }

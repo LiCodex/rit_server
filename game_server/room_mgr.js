@@ -566,10 +566,10 @@ function smallblind() {
   room["current"] = room["smallblind_id"];
 
   if (room["smallblind_id"] != null) {
-    var player = room["players"].filter(player => player["chair_id"] == room[smallblind_id]);
+    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
     player["money_on_the_table"] -= room["small_blind"];
-    room["betting_list"][smallblind_id] = room["betting_list"][smallblind_id] ? room["betting_list"][smallblind_id] : 0;
-    room["betting_list"][smallblind_id] += small_blind;
+    room["betting_list"]["smallblind_id"] = room["betting_list"]["smallblind_id"] ? room["betting_list"]["smallblind_id"] : 0;
+    room["betting_list"]["smallblind_id"] += small_blind;
   }
 
   var response = {};

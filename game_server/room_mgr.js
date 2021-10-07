@@ -576,12 +576,12 @@ function smallblind() {
     }
     var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["smallblind_id"])[0];
     if (elem != null) {
-      elem["betting_amount"] += small_blind;
+      elem["betting_amount"] += room["small_blind"];
     } else {
       var record = {};
       record["chair_id"] = room["smallblind_id"];
       record["betting_amount"] = 0;
-      record["betting_amount"] += small_blind;
+      record["betting_amount"] += room["small_blind"];
       room["betting_list"].push(record);
     }
   }
@@ -617,12 +617,12 @@ function bigblind() {
     }
     var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["bigblind_id"])[0];
     if (elem != null) {
-      elem["betting_amount"] += big_blind;
+      elem["betting_amount"] += room["big_blind"];
     } else {
       var record = {};
       record["chair_id"] = room["bigblind_id"];
       record["betting_amount"] = 0;
-      record["betting_amount"] += big_blind;
+      record["betting_amount"] += room["big_blind"];
       room["betting_list"].push(record);
     }
   }

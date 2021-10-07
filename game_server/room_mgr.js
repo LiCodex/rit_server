@@ -1326,6 +1326,7 @@ function river_action(room_id) {
   }
   if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
     time_out_fold(room_id);
+  }
 };
 
 

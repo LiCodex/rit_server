@@ -106,7 +106,7 @@ function is_all_in(player) {
 
 function has_all_in(players) {
   for (var i = 0; i < players.length; i++) {
-    if (player["state"] == "all_in") {
+    if (players[i]["state"] == "all_in") {
       return true;
     }
   }

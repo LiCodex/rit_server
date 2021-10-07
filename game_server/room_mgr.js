@@ -61,6 +61,21 @@ function delay_action(room_id) {
   }, 1000);
 };
 
+function is_all_fold(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var active_player = room["players"].filter(player => player["state"] != "sit_out");
+  var folded_player = active_player.filter(player => player["state"] == "fold");
+  if (active_player.length - folded_player.length == 1) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+function game_player_all_fold(room_id) {
+  game_result(room_id);
+};
+
 function game_action(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var all_fold = is_all_fold(room_id);
@@ -1130,9 +1145,9 @@ exports.exit_room = function(user_id) {
 
 function game_betting(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var is_all_fold = all_fold(room_id);
+  var all_fold = is_all_fold(room_id);
   // only one player exists and
-  if (is_all_fold == true && room["game_state"] != "game_result") {
+  if (all_fold == true && room["game_state"] != "game_result") {
     game_all_fold();
     return;
   }

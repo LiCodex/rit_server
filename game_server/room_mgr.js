@@ -910,36 +910,17 @@ function get_next(room, chair_id) {
     console.log("sort testing");
     console.log(room["players"][i]["chair_id"]);
   }
-  var res = 0
+  var current_index = 0
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["chair_id"] == chair_id) {
-      res = i;
+      current_index = i;
       break;
     }
   }
-  res += 1;
-  res = (res - 1)%room["players"].length + 1;
-  return res;
+  current_index += 1;
+  current_index = (current_index - 1)%room["players"].length + 1;
+  return room["players"][current_index]["chair_id"];
 };
-
-// exports.room_deal_hole_cards = function(message) {
-//   var uid = message.uid;
-//   var deck = new Deck();
-//   deck.shuffle();
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   room["deck"] = deck;
-//   console.log("deck");
-//   console.log(deck)
-//   var hole_cards = [];
-//   hole_cards.push(room["deck"].deal().toString());
-//   hole_cards.push(room["deck"].deal().toString());
-//   console.log("hole cards");
-//   console.log(hole_cards);
-//   room["fake_hole_cards_status"] = [true, true, true, true, true, true, true, true];
-//   //save to db
-//   return { "hole_cards": hole_cards, "player_hole_cards_status": room["fake_hole_cards_status"] }
-//
-// };
 
 exports.room_deal_flop_cards = function(message) {
     var uid = message.uid;

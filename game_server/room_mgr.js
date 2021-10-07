@@ -208,8 +208,10 @@ function game_start(room_id) {
     } else {
       room["smallblind_id"] = get_next(room["button"]);
     }
-    var player = room["players"].filter(player => player["smallblind_id"] == room["smallblind_id"])[0];
+    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
+    console.log("bug fix chair_id");
     player["state"] = "smallblind";
+    console.log(player["chair_id"], player["state"]);
   }
 
   if (room["smallblind_id"])

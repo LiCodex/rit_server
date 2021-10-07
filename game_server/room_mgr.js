@@ -220,7 +220,7 @@ function game_start(room_id) {
     room["bigblind_id"] = get_next(room, room["smallblind_id"]);
     console.log("bigblind id");
     console.log(room["bigblind_id"]);
-    var player = room["players"].filter(player => player["bigblind_id"] == room["bigblind_id"])[0];
+    var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
     player["state"] = "bigblind";
   }
   console.log("actions");

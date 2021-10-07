@@ -76,6 +76,21 @@ function game_player_all_fold(room_id) {
   game_result(room_id);
 };
 
+function action_declared(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var active_players = room["players"].filter(player => player["state"] != "sit_out" && player["state"] != "fold");
+  for (var i = 0; i < active_players.length; i++) {
+    var declare_list = room["action_declare_list"].filter(elem => elem["chair_id"] == active_players[i]["chair_id"]);
+    var is_declared = declare_list.length == 0 ? false: true;
+    if (is_declared == false) {
+      if (player["state"] != "all_in" && player["state"] != "fold") {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 function game_action(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var all_fold = is_all_fold(room_id);

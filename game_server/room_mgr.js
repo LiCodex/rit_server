@@ -104,17 +104,26 @@ function is_all_in(player) {
   return player["state"] == "all_in"
 };
 
+function has_all_in(players) {
+  for (var i = 0; i < players.length; i++) {
+    if (player["state"] == "all_in") {
+      return true;
+    }
+  }
+  return false;
+};
+
 function game_action(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var all_fold = is_all_fold(room_id);
   if (all_fold && room["hand_state"] == "game_result") {
-    game_player_all_fold();
+    game_player_all_fold(room_id);
   }
 
   var is_action_declared = action_declared();
-  var is_all_in = all_in();
+  var has_player_all_in = has_all_in(room["players"]);
 
-  if (is_action_declared && is_all_in && room["time_state"] == "game_result")
+  if (is_action_declared && has_player_all_in && room["time_state"] == "game_result")
   {
     if (room["hand_state"] == "game_result") {
       return;

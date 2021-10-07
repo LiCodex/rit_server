@@ -78,17 +78,30 @@ function game_player_all_fold(room_id) {
 
 function action_declared(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var active_players = room["players"].filter(player => player["state"] != "sit_out" && player["state"] != "fold");
-  for (var i = 0; i < active_players.length; i++) {
-    var declare_list = room["action_declare_list"].filter(elem => elem["chair_id"] == active_players[i]["chair_id"]);
-    var is_declared = declare_list.length == 0 ? false: true;
+  // var active_players = room["players"].filter(player => player["state"] != "sit_out" && player["state"] != "fold");
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["action_declare_list"] == null) {
+      var is_declared = false;
+    } else {
+      var declare_list = room["action_declare_list"].filter(elem => elem["chair_id"] == room["players"][i]["chair_id"]);
+      var is_declared = declare_list.length == 0 ? false: true;
+    }
+
     if (is_declared == false) {
-      if (player["state"] != "all_in" && player["state"] != "fold") {
+      if (is_active(room["players"][i]) && !is_all_in(room["players"][i])) {
         return false;
       }
     }
   }
   return true;
+};
+
+function is_active(player) {
+  return player["state"] != "fold" && player["state"] != "sit_out" && player["state"] != "buy_in";
+};
+
+function is_all_in(player) {
+  return player["state"] == "all_in"
 };
 
 function game_action(room_id) {

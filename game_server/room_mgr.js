@@ -579,7 +579,7 @@ function smallblind() {
       elem["betting_amount"] += small_blind;
     } else {
       var record = {};
-      record["chair_id"] = smallblind_id;
+      record["chair_id"] = room["smallblind_id"];
       record["betting_amount"] = 0;
       record["betting_amount"] += small_blind;
       room["betting_list"].push(record);
@@ -617,10 +617,10 @@ function bigblind() {
     }
     var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["bigblind_id"])[0];
     if (elem != null) {
-      elem["betting_amount"] += small_blind;
+      elem["betting_amount"] += big_blind;
     } else {
       var record = {};
-      record["chair_id"] = bigblind_id;
+      record["chair_id"] = room["bigblind_id"];
       record["betting_amount"] = 0;
       record["betting_amount"] += big_blind;
       room["betting_list"].push(record);

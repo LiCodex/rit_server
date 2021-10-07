@@ -221,9 +221,12 @@ function game_start(room_id) {
     console.log("bigblind id");
     console.log(room["bigblind_id"]);
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
+    console.log("player");
+    console.log(player);
     player["state"] = "bigblind";
   }
   console.log("actions");
+  console.log(player);
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["actions"] != []) {
       console.log(room["players"][i]["actions"]);

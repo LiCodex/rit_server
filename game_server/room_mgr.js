@@ -921,11 +921,11 @@ function get_next(room, chair_id) {
     }
   }
   current_index += 1;
-  current_index = (current_index - 1)%room["players"].length + 1;
+  current_index = current_index%room["players"].length;
   console.log("current index");
   console.log(current_index);
   console.log(room["players"]);
-  
+
   return room["players"][current_index]["chair_id"];
 };
 

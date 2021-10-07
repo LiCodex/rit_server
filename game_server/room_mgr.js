@@ -563,7 +563,7 @@ function smallblind() {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
   room["ctx_seq"] += 1;
-  room["current"] = room[smallblind_id];
+  room["current"] = room["smallblind_id"];
 
   if (room["smallblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room[smallblind_id]);
@@ -591,13 +591,13 @@ function bigblind() {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "big_blind";
   room["ctx_seq"] += 1;
-  room["current"] = room[bigblind_id];
+  room["current"] = room["bigblind_id"];
 
   if (room["bigblind_id"] != null) {
-    var player = room["players"].filter(player => player["chair_id"] == room[smallblind_id]);
+    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
     player["money_on_the_table"] -= room["small_blind"];
-    room["betting_list"][smallblind_id] = room["betting_list"][smallblind_id] ? room["betting_list"][smallblind_id] : 0;
-    room["betting_list"][smallblind_id] += small_blind;
+    room["betting_list"]["smallblind_id"] = room["betting_list"]["smallblind_id"] ? room["betting_list"]["smallblind_id"] : 0;
+    room["betting_list"]["smallblind_id"] += small_blind;
   }
 
   var response = {};
@@ -611,7 +611,9 @@ function bigblind() {
   //broadcast
   broadcast_in_room(room_id, response);
   broadcast_userupdate(room["current"]);
-  deal_hole_cards();
+  console.log("before deal hole cards");
+  console.log(room);
+  deal_hole_cards(room_id);
 };
 
 

@@ -177,7 +177,6 @@ function delay_game_start(room_id) {
 
 function game_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  //room["game_state"] = "playing";
   room["game_state"] = "playing";
   room["hand_state"] = "start";
 
@@ -238,7 +237,7 @@ function game_start(room_id) {
   response["c"] = "room";
   broadcast_in_room(room_id, response);
 
-  smallblind();
+  smallblind(room_id);
 
 };
 
@@ -555,10 +554,10 @@ exports.room_game_start = function(message) {
 
   if (room["button"] != undefined) {
   }
-  smallblind();
+  smallblind(room_id);
 };
 
-function smallblind() {
+function smallblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "small_blind";
@@ -599,10 +598,10 @@ function smallblind() {
   //broadcast
   broadcast_in_room(room_id, response);
   broadcast_userupdate(room["current"]);
-  bigblind();
+  bigblind(room_id);
 };
 
-function bigblind() {
+function bigblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["hand_state"] = "big_blind";

@@ -229,7 +229,7 @@ function game_start(room_id) {
   console.log(player);
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["actions"] != []) {
-      console.log(room["players"][i]["actions"]);
+      //console.log(room["players"][i]["actions"]);
       room["players"][i]["actions"] = [];
     }
   }
@@ -566,12 +566,17 @@ function smallblind() {
   room["current"] = room["smallblind_id"];
 
   if (room["smallblind_id"] != null) {
-    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
+    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
+    console.log("money on the table was deducted test");
+    console.log(player["money_on_the_table"]);
     player["money_on_the_table"] -= room["small_blind"];
+    console.log(player["money_on_the_table"]);
     room["betting_list"]["smallblind_id"] = room["betting_list"]["smallblind_id"] ? room["betting_list"]["smallblind_id"] : 0;
     room["betting_list"]["smallblind_id"] += small_blind;
   }
-
+  console.log("testing betting list");
+  console.log(room["betting_list"]);
+  console.log(room["current"]);
   var response = {};
   response["m"] = "small_blind";
   response["c"] = "room";
@@ -594,10 +599,10 @@ function bigblind() {
   room["current"] = room["bigblind_id"];
 
   if (room["bigblind_id"] != null) {
-    var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"]);
-    player["money_on_the_table"] -= room["small_blind"];
-    room["betting_list"]["smallblind_id"] = room["betting_list"]["smallblind_id"] ? room["betting_list"]["smallblind_id"] : 0;
-    room["betting_list"]["smallblind_id"] += small_blind;
+    var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
+    player["money_on_the_table"] -= room["big_blind"];
+    room["betting_list"]["bigblind_id"] = room["betting_list"]["bigblind_id"] ? room["betting_list"]["bigblind_id"] : 0;
+    room["betting_list"]["bigblind_id"] += big_blind;
   }
 
   var response = {};

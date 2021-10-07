@@ -198,7 +198,7 @@ function game_start(room_id) {
   if (room["button"] == null) {
     room["button"] = rnd_button();
   } else {
-    room["button"] = get_next(room["button"]);
+    room["button"] = get_next(room, room["button"]);
   }
 
   if (room["button"]) {
@@ -206,7 +206,7 @@ function game_start(room_id) {
     if (player_count == 2) {
       room["smallblind_id"] = room["button"];
     } else {
-      room["smallblind_id"] = get_next(room["button"]);
+      room["smallblind_id"] = get_next(room, room["button"]);
     }
     var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
     console.log("bug fix chair_id");
@@ -320,7 +320,7 @@ function game_actions(room_id) {
   room["last_acted_at"] = Date.now();
   room["timer"] = room["XZTIMER"] - (Date.now() - room["last_acted_at"]);
 
-  var chair_id = get_next(room["current"]);
+  var chair_id = get_next(room, room["current"]);
   room["current"] = chair_id;
 
   var current_player = room["players"][chair_id];
@@ -903,7 +903,11 @@ function time_out_fold() {
 }
 
 function get_next(room, chair_id) {
-  room_sort(room);
+  room = room["players"].sort((player1, player2) => player1["chair_id"] - player2["chair_id"]);
+  for (var i = 0; i < room["players"].length; i++) {
+    console.log(sort testing);
+    console.log(room["players"][i]["chair_id"]);
+  }
   var res = 0
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["chair_id"] == chair_id) {

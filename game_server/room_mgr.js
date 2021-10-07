@@ -571,8 +571,19 @@ function smallblind() {
     console.log(player["money_on_the_table"]);
     player["money_on_the_table"] -= room["small_blind"];
     console.log(player["money_on_the_table"]);
-    room["betting_list"]["smallblind_id"] = room["betting_list"]["smallblind_id"] ? room["betting_list"]["smallblind_id"] : 0;
-    room["betting_list"]["smallblind_id"] += small_blind;
+    if (room["betting_list"] == null) {
+      room["betting_list"] = [];
+    }
+    var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["smallblind_id"])[0];
+    if (elem != null) {
+      elem["betting_amount"] += small_blind;
+    } else {
+      var record = {};
+      record["chair_id"] = smallblind_id;
+      record["betting_amount"] = 0;
+      record["betting_amount"] += small_blind;
+      room["betting_list"].push(record);
+    }
   }
   console.log("testing betting list");
   console.log(room["betting_list"]);
@@ -601,8 +612,19 @@ function bigblind() {
   if (room["bigblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
     player["money_on_the_table"] -= room["big_blind"];
-    room["betting_list"]["bigblind_id"] = room["betting_list"]["bigblind_id"] ? room["betting_list"]["bigblind_id"] : 0;
-    room["betting_list"]["bigblind_id"] += big_blind;
+    if (room["betting_list"] == null) {
+      room["betting_list"] = [];
+    }
+    var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["bigblind_id"])[0];
+    if (elem != null) {
+      elem["betting_amount"] += small_blind;
+    } else {
+      var record = {};
+      record["chair_id"] = bigblind_id;
+      record["betting_amount"] = 0;
+      record["betting_amount"] += big_blind;
+      room["betting_list"].push(record);
+    }
   }
 
   var response = {};

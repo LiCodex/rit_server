@@ -242,14 +242,16 @@ function game_start(room_id) {
 };
 
 function game_preflop(room_id) {
+  console.log("in game preflop");
   var room = rooms.filter(room => room["name"] == "test")[0];
   // if all the rest of the cards need to be dealt without more action
   if (room["deal_rest"] == true) {
     return;
   }
+  console.log(room["last_bet_time"]);
   var is_action_declared = action_declared();
   if (is_action_declared == true) {
-    deal_flop_cards(room_id);
+    exports.room_deal_flop_cards(room_id);
     return;
   }
 

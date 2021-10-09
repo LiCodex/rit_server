@@ -848,12 +848,16 @@ exports.room_check = function(message) {
   data["bet_amount"] = 0;
   data["type"] = "check";
   response["data"] = data;
+  console.log("here1");
   broadcast_in_room(room_id, response);
+  console.log("here2")
   // clean up action for this player
   if (player["actions"] != []) {
     player["actions"] = [];
   }
+  console.log("here3");
   broadcast_userupdate(chair_id);
+  console.log("here4")
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {

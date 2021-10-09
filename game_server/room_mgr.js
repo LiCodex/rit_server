@@ -894,6 +894,8 @@ exports.room_check = function(message) {
 
 function deal_hole_cards(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
+  room["game_state"] = "deal_hole_cards";
+  room["ctx_seq"] = room["ctx_seq"] == null ? 1 : room["ctx_seq"]+1;
   var deck = new Deck();
   var hole_cards = [];
   room["deck"] = deck;
@@ -924,7 +926,7 @@ function deal_hole_cards(room_id) {
   room["game_state"] = "preflop";
   room["time_state"] = "preflop";
   room["action_declare_list"] = [];
-
+  game_action(room["_id"]);
 };
 
 // function wait_for_action() {

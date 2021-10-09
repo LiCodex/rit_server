@@ -314,24 +314,6 @@ function game_flop(room_id) {
   }
 };
 
-function game_actions(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  // reset timer
-  room["XZTIMER"] = 15;
-  room["ctx_seq"] += 1;
-  room["last_acted_at"] = Date.now();
-  room["timer"] = room["XZTIMER"] - (Date.now() - room["last_acted_at"]);
-
-  var chair_id = get_next(room, room["current"]);
-  room["current"] = chair_id;
-
-  var current_player = room["players"][chair_id];
-  current_player["state"] = "thinking";
-  for (var i = 0; i < room["players"].length; i++) {
-    console.log("game action");
-  }
-};
-
 function rnd_button(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
@@ -697,9 +679,9 @@ exports.room_fold = function(message) {
     return { success: false, message: "the player has folded the cards" }
   }
 
-  player["action_count"] += 1;
-  player["last_action_timestamp"] = Date.now();
-  room["last_action_timestamp"] = Date.now();
+  player["declare_count"] += 1;
+  player["last_acted_at"] = Date.now();
+  room["last_acted_at"] = Date.now();
   player["hand_state"] = "fold";
 
   var response = {}
@@ -736,7 +718,7 @@ exports.room_call = function(message) {
     return { success: false, message: "the player has folded the cards" }
   }
 
-  player["action_count"] += 1;
+  player["declare_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
   player["hand_state"] = "fold";
@@ -750,9 +732,6 @@ exports.room_call = function(message) {
   data["bet_amount"] = message.bet_amount;
   data["action"] = "call";
   response["data"] = data;
-  //broadcast_to_online_user(response);
-
-  //room["actions"][chair_id] = [];
 
   return { success: true, data: data }
 };
@@ -779,7 +758,7 @@ exports.room_raise = function(message) {
     return { success: false, message: "the player has folded the cards" }
   }
 
-  player["action_count"] += 1;
+  player["declare_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
   player["hand_state"] = "raise";
@@ -819,7 +798,7 @@ exports.room_all_in = function(message) {
     return { success: false, message: "the player has folded the cards" }
   }
 
-  player["action_count"] += 1;
+  player["declare_count"] += 1;
   player["last_action_timestamp"] = Date.now();
   room["last_action_timestamp"] = Date.now();
   player["hand_state"] = "all_in";
@@ -835,6 +814,51 @@ exports.room_all_in = function(message) {
   response["data"] = data;
 
   return { success: true, data: data }
+};
+
+
+exports.room_check = function(message) {
+  var uid = message.uid;
+  var chair_id = message.chair_id;
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var room_id = room["_id"];
+  if (chair_id == null) {
+    return;
+  }
+  chair_id = parseInt(chair_id);
+  if (chair_id != room["current"]) {
+    return;
+  }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (player["state"] == "fold") {
+    return;
+  }
+
+  player["declare_count"] += 1;
+  player["last_acted_at"] = Date.now();
+  room["last_acted_at"] = Date.now();
+  player["hand_state"] = "check";
+
+  var response = {}
+  response["m"] = "action";
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  data["betting_history"] = room["betting_history"];
+  data["bet_amount"] = 0;
+  data["type"] = "check";
+  response["data"] = data;
+  broadcast_in_room(room_id, response);
+  // clean up action for this player
+  if (player["actions"] != []) {
+    player["actions"] = [];
+  }
+  broadcast_userupdate(chair_id);
+  var action_declared = is_action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!action_declared && != !all_fold) {
+    game_action(room_id);
+  }
 };
 
 
@@ -868,9 +892,7 @@ function deal_hole_cards(room_id) {
   room["game_state"] = "preflop";
   room["time_state"] = "preflop";
   room["action_declare_list"] = [];
-  //game_action();
-  // console.log("deal hole cards");
-  // console.log(room);
+
 };
 
 // function game_action() {

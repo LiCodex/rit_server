@@ -288,7 +288,7 @@ function broadcast_user_update(room_id, chair_id) {
     data["smallblind_id"] = room["smallblind_id"];
     data["bigblind_id"] = room["bigblind_id"];
     data["current"] = room["current"];
-    data[""]
+    //data[""]
   }
 
 };
@@ -545,6 +545,7 @@ function smallblind(room_id) {
   room["hand_state"] = "small_blind";
   room["ctx_seq"] += 1;
   room["current"] = room["smallblind_id"];
+  room["last_bet_time"] = Date.now();
 
   if (room["smallblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
@@ -589,6 +590,7 @@ function bigblind(room_id) {
   room["hand_state"] = "big_blind";
   room["ctx_seq"] += 1;
   room["current"] = room["bigblind_id"];
+  room["last_bet_time"] = Date.now();
 
   if (room["bigblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
@@ -1400,6 +1402,9 @@ function delay_betting() {
 
 
 function preflop_action(room_id) {
+  console.log("in preflop action");
+  console.log("last bet time1");
+  console.log(room["last_bet_time"]);
   var room = rooms.filter(room => room["name"] == "test")[0];
   if (room["deal_rest"]) {
     return;
@@ -1409,7 +1414,8 @@ function preflop_action(room_id) {
     exports.room_deal_flop_cards(room_id);
     return;
   }
-
+  console.log("last bet time2");
+  console.log(room["last_bet_time"]);
   if (room["last_bet_time"] == undefined) {
     return;
   }

@@ -856,7 +856,7 @@ exports.room_check = function(message) {
   broadcast_userupdate(chair_id);
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
-  if (!action_declared && != !all_fold) {
+  if (!action_declared && !all_fold) {
     game_action(room_id);
   }
 };

@@ -665,18 +665,19 @@ exports.room_buy_in = async function(message) {
 exports.room_fold = function(message) {
   var uid = message.uid;
   var chair_id = message.chair_id;
+  var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  var room_id = room["_id"];
+  if (chair_id == null) {
+    return { success: false, message: "chair_id not found" };
   }
   chair_id = parseInt(chair_id);
-  if (chair_id != room["current_action_player"]) {
-    return { success: false, message: "not current action player" }
+  if (chair_id != room["current"]) {
+    return { success: false, message: "not current action player" };
   }
-
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   if (player["state"] == "fold") {
-    return { success: false, message: "the player has folded the cards" }
+    return { success: false, message: "the player has folded the cards" };
   }
 
   player["declare_count"] += 1;
@@ -685,19 +686,24 @@ exports.room_fold = function(message) {
   player["hand_state"] = "fold";
 
   var response = {}
-  response["m"] = 'fold';
+  response["m"] = "action";
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = 0;
-  data["action"] = "fold";
+  data["bet_amount"] = bet_amount;
+  data["type"] = "fold";
   response["data"] = data;
-  //broadcast_to_online_user(response);
-
-  //room["actions"][chair_id] = [];
-
-  return { success: true }
+  broadcast_in_room(room_id, response);
+  if (player["actions"] != []) {
+    player["actions"] = [];
+  }
+  broadcast_userupdate(chair_id);
+  var action_declared = is_action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!action_declared && !all_fold) {
+    game_action(room_id);
+  }
 };
 
 exports.room_call = function(message) {
@@ -705,35 +711,43 @@ exports.room_call = function(message) {
   var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  var room_id = room["_id"];
+  if (chair_id == null) {
+    return { success: false, message: "chair_id not found" };
   }
   chair_id = parseInt(chair_id);
-  if (chair_id != room["current_action_player"]) {
-    return { success: false, message: "not current action player" }
+  if (chair_id != room["current"]) {
+    return { success: false, message: "not current action player" };
   }
-
-  if (player["state"] == "call") {
-    return { success: false, message: "the player has folded the cards" }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (player["state"] == "fold") {
+    return { success: false, message: "the player has folded the cards" };
   }
 
   player["declare_count"] += 1;
-  player["last_action_timestamp"] = Date.now();
-  room["last_action_timestamp"] = Date.now();
-  player["hand_state"] = "fold";
+  player["last_acted_at"] = Date.now();
+  room["last_acted_at"] = Date.now();
+  player["hand_state"] = "call";
 
   var response = {}
-  response["m"] = 'call';
+  response["m"] = "action";
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = message.bet_amount;
-  data["action"] = "call";
+  data["bet_amount"] = bet_amount;
+  data["type"] = "call";
   response["data"] = data;
-
-  return { success: true, data: data }
+  broadcast_in_room(room_id, response);
+  if (player["actions"] != []) {
+    player["actions"] = [];
+  }
+  broadcast_userupdate(chair_id);
+  var action_declared = is_action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!action_declared && !all_fold) {
+    game_action(room_id);
+  }
 };
 
 exports.room_raise = function(message) {
@@ -741,43 +755,43 @@ exports.room_raise = function(message) {
   var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  console.log("players");
-  console.log(room["players"]);
-  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  console.log("player");
-  console.log(player);
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  var room_id = room["_id"];
+  if (chair_id == null) {
+    return { success: false, message: "chair_id not found" };
   }
   chair_id = parseInt(chair_id);
-  if (chair_id != room["current_action_player"]) {
-    return { success: false, message: "not current action player" }
+  if (chair_id != room["current"]) {
+    return { success: false, message: "not current action player" };
   }
-
-  if (player["state"] == "raise") {
-    return { success: false, message: "the player has folded the cards" }
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  if (player["state"] == "fold") {
+    return { success: false, message: "the player has folded the cards" };
   }
 
   player["declare_count"] += 1;
-  player["last_action_timestamp"] = Date.now();
-  room["last_action_timestamp"] = Date.now();
+  player["last_acted_at"] = Date.now();
+  room["last_acted_at"] = Date.now();
   player["hand_state"] = "raise";
 
   var response = {}
-  response["m"] = 'raise';
+  response["m"] = "action";
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
-  data["bet_amount"] = message.bet_amount;
-  data["action"] = "raise";
+  data["bet_amount"] = bet_amount;
+  data["type"] = "raise";
   response["data"] = data;
-  //broadcast_to_online_user(response);
-
-  //room["actions"][chair_id] = [];
-  console.log("data");
-  console.log(data);
-  return { success: true, data: data }
+  broadcast_in_room(room_id, response);
+  if (player["actions"] != []) {
+    player["actions"] = [];
+  }
+  broadcast_userupdate(chair_id);
+  var action_declared = is_action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!action_declared && !all_fold) {
+    game_action(room_id);
+  }
 };
 
 exports.room_all_in = function(message) {
@@ -785,35 +799,43 @@ exports.room_all_in = function(message) {
   var chair_id = message.chair_id;
   var bet_amount = message.bet_amount;
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-  if (chair_id == undefined) {
-    return { success: false, message: "chair_id not found" }
+  var room_id = room["_id"];
+  if (chair_id == null) {
+    return { success: false, message: "chair_id not found" };
   }
   chair_id = parseInt(chair_id);
-  if (chair_id != room["current_action_player"]) {
-    return { success: false, message: "not current action player" }
+  if (chair_id != room["current"]) {
+    return { success: false, message: "not current action player" };
   }
-
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   if (player["state"] == "fold") {
-    return { success: false, message: "the player has folded the cards" }
+    return { success: false, message: "the player has folded the cards" };
   }
 
   player["declare_count"] += 1;
-  player["last_action_timestamp"] = Date.now();
-  room["last_action_timestamp"] = Date.now();
+  player["last_acted_at"] = Date.now();
+  room["last_acted_at"] = Date.now();
   player["hand_state"] = "all_in";
 
   var response = {}
-  response["m"] = 'all_in';
+  response["m"] = "action";
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
   data["betting_history"] = room["betting_history"];
   data["bet_amount"] = bet_amount;
-  data["action"] = "all_in";
+  data["type"] = "all_in";
   response["data"] = data;
-
-  return { success: true, data: data }
+  broadcast_in_room(room_id, response);
+  if (player["actions"] != []) {
+    player["actions"] = [];
+  }
+  broadcast_userupdate(chair_id);
+  var action_declared = is_action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!action_declared && !all_fold) {
+    game_action(room_id);
+  }
 };
 
 
@@ -848,16 +870,16 @@ exports.room_check = function(message) {
   data["bet_amount"] = 0;
   data["type"] = "check";
   response["data"] = data;
-  console.log("here1");
+  // console.log("here1");
   broadcast_in_room(room_id, response);
-  console.log("here2")
+  // console.log("here2")
   // clean up action for this player
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  console.log("here3");
+  // console.log("here3");
   broadcast_userupdate(chair_id);
-  console.log("here4")
+  // console.log("here4")
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {

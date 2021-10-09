@@ -7,18 +7,18 @@ dotenv.config();
 
 var room_key_to_room_id = {};
 
-function deal_community_cards(phase_name, no_of_cards) {
-    for (var i = 0; i < no_of_cards; i++) {
-        board.add(deck.deal());
-    }
-    notify_board_update();
-}
+// function deal_community_cards(phase_name, no_of_cards) {
+//     for (var i = 0; i < no_of_cards; i++) {
+//         board.add(deck.deal());
+//     }
+//     notify_board_update();
+// }
 
-function check_start() {
-    if (state != "none") {
-
-    }
-};
+// function check_start() {
+//     if (state != "none") {
+//
+//     }
+// };
 
 function get_chair_id_by_uid(uid) {
     return null;

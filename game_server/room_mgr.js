@@ -545,7 +545,7 @@ function smallblind(room_id) {
   room["hand_state"] = "small_blind";
   room["ctx_seq"] += 1;
   room["current"] = room["smallblind_id"];
-  room["last_bet_time"] = Date.now();
+  //room["last_bet_time"] = Date.now();
 
   if (room["smallblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
@@ -590,7 +590,7 @@ function bigblind(room_id) {
   room["hand_state"] = "big_blind";
   room["ctx_seq"] += 1;
   room["current"] = room["bigblind_id"];
-  room["last_bet_time"] = Date.now();
+  //room["last_bet_time"] = Date.now();
 
   if (room["bigblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
@@ -622,7 +622,7 @@ function bigblind(room_id) {
   broadcast_in_room(room_id, response);
   broadcast_userupdate(room["current"]);
   console.log("before deal hole cards");
-  console.log(room);
+  // console.log(room["game_state"]);
   deal_hole_cards(room_id);
 };
 
@@ -917,53 +917,20 @@ function deal_hole_cards(room_id) {
       console.log("after deal hole cards");
     }
   }
+  console.log("room info in deal hole cards");
+  console.log(room);
   room["game_state"] = "preflop";
   room["time_state"] = "preflop";
   room["action_declare_list"] = [];
 
 };
 
-// function game_action() {
+// function wait_for_action() {
 //   var room = rooms.filter(room => room["name"] == "test")[0];
-//   room["ctx_seq"] = (room["ctx_seq"] == undefined) ? 1 : room["ctx_seq"] + 1;
-//   room["last_action_timestamp"] = Date.now();
-//
-//   room["current"] = room["smallblind_id"];
-//   //var chair_id = room["smallblind_id"];
-//   console.log("current chair_id");
-//   console.log(room);
-//   var player_cur = room["players"].filter(player => player["chair_id"] == (room["smallblind_id"]))[0];
-//   player_cur["hand_state"] = "thinking";
-//   for (var i = 0; i < room["players"].length; i++) {
-//     if (room["players"][i]["status"] != "sit_out") {
-//       hole_cards = [];
-//       hole_cards.push(room["deck"].deal().toString());
-//       hole_cards.push(room["deck"].deal().toString());
-//       room["players"][i]["hole_cards"] = hole_cards;
-//
-//       var uid = room["players"][i]["uid"];
-//       var ws = user_mgr.get(uid);
-//       var response = {};
-//       response["m"] = "room";
-//       response["c"] = "start_timer";
-//       var data = {};
-//       data["started_at"] = Date.now();
-//       data["duaration"] = room["XZTIMER"];
-//       data["chair_id"] = player_cur["chair_id"];
-//       response.data = data;
-//       ws.send(JSON.stringify(response));
-//     }
-//   }
-//   wait_for_action();
-//
+//   var time_out = setTimeout(function() {
+//     time_out_fold();
+//   }, XZTIMER * 1000);
 // };
-
-function wait_for_action() {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  var time_out = setTimeout(function() {
-    time_out_fold();
-  }, XZTIMER * 1000);
-};
 
 function time_out_fold() {
   console.log("timeout");
@@ -1028,9 +995,9 @@ exports.room_deal_flop_cards = function(message) {
         response["c"] = "room";
         response["data"] = data;
         response["data"]["card_array"] = cards;
-        console.log("before deal hole cards");
+        console.log("before deal flop cards");
         ws.send(JSON.stringify(response));
-        console.log("after deal hole cards");
+        console.log("after deal flop cards");
       }
     }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
@@ -1059,9 +1026,9 @@ exports.room_deal_turn_card = function(message) {
         response["c"] = "room";
         response["data"] = data;
         response["data"]["card_array"] = cards;
-        console.log("before deal hole cards");
+        console.log("before deal turn cards");
         ws.send(JSON.stringify(response));
-        console.log("after deal hole cards");
+        console.log("after deal turn cards");
       }
     }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
@@ -1089,9 +1056,9 @@ exports.room_deal_river_card = function(message) {
         response["c"] = "room";
         response["data"] = data;
         response["data"]["card_array"] = cards;
-        console.log("before deal hole cards");
+        console.log("before deal river action cards");
         ws.send(JSON.stringify(response));
-        console.log("after deal hole cards");
+        console.log("after deal river cards");
       }
     }
     // fake_hole_cards_status = [true, true, true, true, true, true, true, true];

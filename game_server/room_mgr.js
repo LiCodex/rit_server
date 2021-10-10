@@ -337,7 +337,7 @@ function rnd_button(room_id) {
   }
 };
 
-exports.room_join = async function(message) {
+exports.room_join = function(message) {
     var room_id = message.room_id;
     var o_id = new ObjectID(room_id);
     var user_id = message.user_id;
@@ -355,7 +355,7 @@ exports.room_join = async function(message) {
     return { success: true, players: room["players"] }
 };
 
-exports.room_quit = async function(message) {
+exports.room_quit = function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var uid = message.uid;
   console.log("room players");
@@ -390,7 +390,7 @@ exports.room_quit = async function(message) {
 
 };
 
-exports.room_add_time = async function(message) {
+exports.room_add_time = function(message) {
   var room = rooms["test"];
   var chair_id = message.chair_id;
   var player = room["players"][chair_id];
@@ -410,7 +410,7 @@ exports.room_add_time = async function(message) {
   return { success: true, message: "15 seconds have been added" }
 }
 
-exports.room_sit = async function(message) {
+exports.room_sit = function(message) {
   var uid = message.uid;
   var chair_id = message.chair_id;
   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -427,16 +427,16 @@ exports.room_sit = async function(message) {
   player = {"uid": uid, "hand_state": "default", "game_state": "waiting", "chair_id": chair_id, "money_on_the_table": 0 }
   room["players"].push(player);
   room["players_count"]++;
-  Room.findOne({ name: "test" }, function (err, room) {
-    room.players_count += 1;
-    room.save();
-  });
+  // Room.findOne({ name: "test" }, function (err, room) {
+  //   room.players_count += 1;
+  //   room.save();
+  // });
 
   return { success: true, chair_id: chair_id }
   // check_start(room["_id"]);
 };
 
-exports.hall_user_profile = async function(message) {
+exports.hall_user_profile = function(message) {
   var result;
   res = user_coins_helper(message.uid);
   await Promise.resolve(res).then(function(val) {
@@ -459,7 +459,7 @@ async function user_coins_helper(uid) {
 
 
 
-exports.room_standup = async function(message) {
+exports.room_standup = function(message) {
   var uid = message.uid;
   var room = rooms.filter(room => room["name"] == "test")[0];
 
@@ -1191,7 +1191,7 @@ exports.get_user_location = function() {
     return user_location;
 };
 
-exports.room_show_hand = async function(message) {
+exports.room_show_hand = function(message) {
     var room_id = message.room_id;
     var o_id = new ObjectID(room_id);
     var user_id = message.user_id;
@@ -1214,7 +1214,7 @@ function get_context(room_id) {
   return { success: true, room: room }
 }
 
-exports.room_load_context = async function(message) {
+exports.room_load_context = function(message) {
   var room_id = message.room_id;
   var o_id = new ObjectID(room_id);
   var user_id = message.user_id;

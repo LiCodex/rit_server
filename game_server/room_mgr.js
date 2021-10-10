@@ -670,10 +670,11 @@ exports.room_buy_in = async function(message) {
       user.save();
     });
     broadcast_userupdate_includeme(chair_id);
+    return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
     console.log("before check start");
     check_start(room["_id"]);
     console.log("after check start");
-    //return { success: true, amount: player["money_on_the_table"], total_assets: total_assets, message: "success" }
+
   }
 };
 

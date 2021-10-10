@@ -436,7 +436,7 @@ exports.room_sit = function(message) {
   // check_start(room["_id"]);
 };
 
-exports.hall_user_profile = function(message) {
+exports.hall_user_profile = async function(message) {
   var result;
   res = user_coins_helper(message.uid);
   await Promise.resolve(res).then(function(val) {

@@ -594,7 +594,7 @@ function smallblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response);
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room["_id"], room["current"]);
   bigblind(room_id);
 };
 
@@ -634,7 +634,7 @@ function bigblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response);
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room["_id"], room["current"]);
   console.log("before deal hole cards");
   // console.log(room["game_state"]);
   deal_hole_cards(room_id);
@@ -669,7 +669,7 @@ exports.room_buy_in = async function(message) {
       console.log(total_assets);
       user.save();
     });
-    broadcast_userupdate_includeme(chair_id);
+    broadcast_userupdate_includeme(room["_id"], chair_id);
 
     console.log("before check start");
     check_start(room["_id"]);
@@ -714,7 +714,7 @@ exports.room_fold = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room["_id"], chair_id);
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
@@ -758,7 +758,7 @@ exports.room_call = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room["_id"], chair_id);
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
@@ -802,7 +802,7 @@ exports.room_raise = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room["_id"], chair_id);
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
@@ -846,7 +846,7 @@ exports.room_all_in = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room["_id"], chair_id);
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
@@ -894,7 +894,7 @@ exports.room_check = function(message) {
     player["actions"] = [];
   }
   // console.log("here3");
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room["_id"], chair_id);
   // console.log("here4")
   var action_declared = is_action_declared(room_id);
   var all_fold = is_all_fold(room_id);
@@ -1358,7 +1358,7 @@ exports.winner_showhands = function(message) {
   }
 };
 
-function broadcast_userupdate_includeme(chair_id) {
+function broadcast_userupdate_includeme(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   for (var i = 0; i < room["players"].length; i++) {

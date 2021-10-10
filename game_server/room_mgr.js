@@ -31,7 +31,7 @@ function active_player_count(players) {
   return res;
 }
 
-function check_start(room_id) {
+async function check_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("check start");
   var active_players = 0;

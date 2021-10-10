@@ -967,6 +967,7 @@ function time_out_fold() {
 }
 
 function get_next(room, chair_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
   room["players"].sort((player1, player2) => player1["chair_id"] - player2["chair_id"]);
   console.log("room");
   console.log(room["players"]);

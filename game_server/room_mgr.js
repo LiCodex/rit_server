@@ -1509,7 +1509,7 @@ function broadcast_in_room(room_id, response) {
 
 function broadcast_userupdate_onlyme(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter({ player => player["chair_id"] == chair_id })[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   if (player) {
     var response = {};
     response["m"] = "userupdate";
@@ -1542,7 +1542,7 @@ function broadcast_userupdate_onlyme(room_id, chair_id) {
 
 function get_full_player_info(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter({ player => player["chair_id"] == chair_id })[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
 
   var data = {};
   data["chair_id"] = chair_id;
@@ -1551,13 +1551,13 @@ function get_full_player_info(room_id, chair_id) {
   data["show_timer_button"] = player["show_timer_button"];
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
-  data["hole_cards"] = player["hole_"]
+  data["hole_cards"] = player["hole_cards"]
   return data;
 };
 
 function get_basic_player_info(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter({ player => player["chair_id"] == chair_id })[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
 
   var data = {};
   data["chair_id"] = chair_id;
@@ -1566,6 +1566,6 @@ function get_basic_player_info(room_id, chair_id) {
   data["show_timer_button"] = player["show_timer_button"];
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
-  data["hole_cards"] = player["hole_"]
+  data["hole_cards"] = player["hole_cards"]
   return data;
 };

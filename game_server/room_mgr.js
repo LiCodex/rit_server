@@ -50,8 +50,8 @@ async function check_start(room_id) {
 function delay_action(room_id) {
   console.log("delay action");
   var room = rooms.filter(room => room["name"] == "test")[0];
-
-  game_actions(room["_id"]);
+  game_betting();
+  // game_actions(room["_id"]);
   setTimeout(function() {
     console.log("in timeout");
     if (room["game_finished"] != true) {
@@ -120,7 +120,7 @@ function game_actions(room_id) {
   console.log("in game actions");
   console.log(room["XZTIMER"]);
   console.log(room["ctx_seq"]);
-  
+
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;
 
@@ -533,28 +533,28 @@ exports.index_login = function(message) {
   return response;
 };
 
-exports.room_game_start = function(message) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  room["state"] = "playing";
-  room["play_state"] = "start";
-
-  if (room["round"] == 0) {
-    room["started_at"] = Date.now();
-  }
-
-  room["round"]++;
-  if (room["button"] == undefined) {
-    button = rnd_button(room["_id"]);
-    room["button"] = button;
-    room["players"]["button"] = true;
-  } else {
-    room["button"] = get_next(room, room["button"]);
-  }
-
-  if (room["button"] != undefined) {
-  }
-  smallblind(room_id);
-};
+// exports.room_game_start = function(message) {
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   room["state"] = "playing";
+//   room["play_state"] = "start";
+//
+//   if (room["round"] == 0) {
+//     room["started_at"] = Date.now();
+//   }
+//
+//   room["round"]++;
+//   if (room["button"] == undefined) {
+//     button = rnd_button(room["_id"]);
+//     room["button"] = button;
+//     room["players"]["button"] = true;
+//   } else {
+//     room["button"] = get_next(room, room["button"]);
+//   }
+//
+//   if (room["button"] != undefined) {
+//   }
+//   smallblind(room_id);
+// };
 
 function smallblind(room_id) {
   // console.log("in smallblind");
@@ -1264,6 +1264,10 @@ function game_betting(room_id) {
   var all_in = is_all_in();
   if (action_declared == true && all_in == true && room["game_state"] != "game_result") {
     direct_settlement();
+    return;
+  }
+  if (room["state"] == "start") {
+    delay_game_start();
     return;
   }
   if (room["state"] == "preflop") {

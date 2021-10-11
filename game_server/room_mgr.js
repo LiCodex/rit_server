@@ -264,7 +264,7 @@ function game_preflop(room_id) {
     return;
   }
   console.log(room["last_bet_time"]);
-  var is_action_declared = action_declared();
+  var is_action_declared = action_declared(room_id);
   if (is_action_declared == true) {
     exports.room_deal_flop_cards(room_id);
     return;
@@ -316,7 +316,7 @@ function game_flop(room_id) {
   if (room["deal_rest"] == true) {
     return;
   }
-  var is_action_declared = action_declared();
+  var is_action_declared = action_declared(room_id);
   if (is_action_declared == true) {
     deal_turn_card(room_id);
     return;
@@ -1260,7 +1260,7 @@ function game_betting(room_id) {
     game_all_fold();
     return;
   }
-  var action_declared = action_declared();
+  var action_declared = action_declared(room_id);
   var all_in = is_all_in();
   if (action_declared == true && all_in == true && room["game_state"] != "game_result") {
     direct_settlement();
@@ -1410,7 +1410,7 @@ function preflop_action(room_id) {
   if (room["deal_rest"]) {
     return;
   }
-  var is_action_declared = action_declared();
+  var is_action_declared = action_declared(room_id);
   if (is_action_declared) {
     exports.room_deal_flop_cards(room_id);
     return;
@@ -1431,7 +1431,7 @@ function turn_action(room_id) {
   if (room["deal_rest"]) {
     return;
   }
-  var is_action_declared = action_declared();
+  var is_action_declared = action_declared(room_id);
   if (is_action_declared) {
     exports.room_deal_turn_cards(room_id);
     return;
@@ -1450,7 +1450,7 @@ function river_action(room_id) {
   if (room["deal_rest"]) {
     return;
   }
-  var is_action_declared = action_declared();
+  var is_action_declared = action_declared(room_id);
   if (is_action_declared) {
     exports.room_deal_river_cards(room_id);
     return;

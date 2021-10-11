@@ -115,11 +115,13 @@ function has_all_in(players) {
 function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["XZTIMER"] = 15;
+  room["last_bet_time"] = Date.now();
   room["ctx_seq"] = room["ctx_seq"] == null ? 1 : (room["ctx_seq"] + 1);
   room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"])/1000;
   console.log("in game actions");
   console.log(room["XZTIMER"]);
   console.log(room["ctx_seq"]);
+  console.log(room["timer"]);
 
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;

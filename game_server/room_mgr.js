@@ -116,7 +116,7 @@ function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["XZTIMER"] = 15;
   room["ctx_seq"] = room["ctx_seq"] == null ? 1 : (room["ctx_seq"] + 1);
-  room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"]);
+  room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"])/1000;
   console.log("in game actions");
   console.log(room["XZTIMER"]);
   console.log(room["ctx_seq"]);
@@ -274,7 +274,7 @@ function game_preflop(room_id) {
     return;
   }
 
-  if ((Date.now() - room["last_bet_time"] >= room["XZTIMER"])) {
+  if ((Date.now() - room["last_bet_time"])/1000 >= room["XZTIMER"]) {
     time_out_fold(room_id);
   }
 };
@@ -326,7 +326,7 @@ function game_flop(room_id) {
     return;
   }
 
-  if ((Date.now() - room["last_bet_time"] >= room["XZTIMER"])) {
+  if ((Date.now() - room["last_bet_time"])/1000 >= room["XZTIMER"]) {
     time_out_fold(room_id);
   }
 };
@@ -409,7 +409,7 @@ exports.room_add_time = async function(message) {
   }
 
   room["XZTIMER"] += 15;
-  room["current_player_timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"]);
+  room["current_player_timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"])/1000;
   return { success: true, message: "15 seconds have been added" }
 }
 
@@ -950,7 +950,7 @@ function deal_hole_cards(room_id) {
 //   }, XZTIMER * 1000);
 // };
 
-function time_out_fold() {
+function x_fold() {
   console.log("timeout");
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
@@ -1424,9 +1424,9 @@ function preflop_action(room_id) {
   if (room["last_bet_time"] == undefined) {
     return;
   }
-  if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
+  if ((Date.now() - room["last_bet_time"])/1000 > room["XZTIMER"]) {
     console.log("in checking time out fold");
-    console.log(Date.now() - room["last_bet_time"]);
+    console.log((Date.now() - room["last_bet_time"])/1000);
     time_out_fold(room_id);
   }
 
@@ -1446,7 +1446,7 @@ function turn_action(room_id) {
   if (room["last_bet_time"] == undefined) {
     return;
   }
-  if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
+  if ((Date.now() - room["last_bet_time"])/1000 > room["XZTIMER"]) {
     time_out_fold(room_id);
   }
 };
@@ -1465,7 +1465,7 @@ function river_action(room_id) {
   if (room["last_bet_time"] == undefined) {
     return;
   }
-  if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
+  if ((Date.now() - room["last_bet_time"])/1000 > room["XZTIMER"]) {
     time_out_fold(room_id);
   }
 };

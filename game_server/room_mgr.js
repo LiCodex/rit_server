@@ -718,7 +718,7 @@ exports.room_fold = function(message) {
     player["actions"] = [];
   }
   broadcast_userupdate(chair_id);
-  var action_declared = is_action_declared(room_id);
+  var action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
     game_actions(room_id);
@@ -762,7 +762,7 @@ exports.room_call = function(message) {
     player["actions"] = [];
   }
   broadcast_userupdate(chair_id);
-  var action_declared = is_action_declared(room_id);
+  var action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
     game_actions(room_id);
@@ -806,7 +806,7 @@ exports.room_raise = function(message) {
     player["actions"] = [];
   }
   broadcast_userupdate(chair_id);
-  var action_declared = is_action_declared(room_id);
+  var action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
     game_actions(room_id);
@@ -850,7 +850,7 @@ exports.room_all_in = function(message) {
     player["actions"] = [];
   }
   broadcast_userupdate(chair_id);
-  var action_declared = is_action_declared(room_id);
+  var action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
     game_actions(room_id);
@@ -899,7 +899,7 @@ exports.room_check = function(message) {
   // console.log("here3");
   broadcast_userupdate(chair_id);
   // console.log("here4")
-  var action_declared = is_action_declared(room_id);
+  var action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!action_declared && !all_fold) {
     game_actions(room_id);
@@ -1260,7 +1260,7 @@ function game_betting(room_id) {
     game_all_fold();
     return;
   }
-  var action_declared = is_action_declared();
+  var action_declared = action_declared();
   var all_in = is_all_in();
   if (action_declared == true && all_in == true && room["game_state"] != "game_result") {
     direct_settlement();

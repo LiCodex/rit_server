@@ -117,7 +117,10 @@ function game_actions(room_id) {
   room["XZTIMER"] = 15;
   room["ctx_seq"] = room["ctx_seq"] == null ? 1 : (room["ctx_seq"] + 1);
   room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"]);
-
+  console.log("in game actions");
+  console.log(room["XZTIMER"]);
+  console.log(room["ctx_seq"]);
+  
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;
 

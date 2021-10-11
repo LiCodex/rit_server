@@ -1266,27 +1266,28 @@ function game_betting(room_id) {
   console.log(is_action_declared);
   console.log("all in");
   console.log(all_in);
-  if (is_action_declared == true && all_in == true && room["game_state"] != "game_result") {
+  console.log(room["time_state"]);
+  if (is_action_declared == true && all_in == true && room["time_state"] != "game_result") {
     direct_settlement();
     return;
   }
-  if (room["state"] == "start") {
+  if (room["time_state"] == "start") {
     delay_game_start();
     return;
   }
-  if (room["state"] == "preflop") {
+  if (room["time_state"] == "preflop") {
     preflop_action();
     return;
   }
-  if (room["state"] == "flop") {
+  if (room["time_state"] == "flop") {
     flop_action();
     return;
   }
-  if (room["state"] == "turn") {
+  if (room["time_state"] == "turn") {
     turn_action();
     return;
   }
-  if (room["state"] == "river") {
+  if (room["time_state"] == "river") {
     river_action();
     return;
   }

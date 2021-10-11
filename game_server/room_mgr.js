@@ -1271,23 +1271,23 @@ function game_betting(room_id) {
     return;
   }
   if (room["time_state"] == "start") {
-    delay_game_start();
+    delay_game_start(room_id);
     return;
   }
   if (room["time_state"] == "preflop") {
-    preflop_action();
+    preflop_action(room_id);
     return;
   }
   if (room["time_state"] == "flop") {
-    flop_action();
+    flop_action(room_id);
     return;
   }
   if (room["time_state"] == "turn") {
-    turn_action();
+    turn_action(room_id);
     return;
   }
   if (room["time_state"] == "river") {
-    river_action();
+    river_action(room_id);
     return;
   }
 };
@@ -1409,7 +1409,7 @@ function delay_betting() {
 function preflop_action(room_id) {
   console.log("in preflop action");
   console.log("last bet time1");
-  console.log(room["last_bet_time"]);
+  // console.log(room["last_bet_time"]);
   var room = rooms.filter(room => room["name"] == "test")[0];
   if (room["deal_rest"]) {
     return;
@@ -1425,6 +1425,8 @@ function preflop_action(room_id) {
     return;
   }
   if (Date.now() - room["last_bet_time"] > room["XZTIMER"]) {
+    console.log("in checking time out fold");
+    console.log(Date.now() - room["last_bet_time"]);
     time_out_fold(room_id);
   }
 

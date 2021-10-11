@@ -1261,7 +1261,11 @@ function game_betting(room_id) {
     return;
   }
   var is_action_declared = action_declared(room_id);
-  var all_in = is_all_in();
+  var all_in = has_all_in(room["players"]);
+  console.log("is action declared");
+  console.log(is_action_declared);
+  console.log("all in");
+  console.log(all_in);
   if (is_action_declared == true && all_in == true && room["game_state"] != "game_result") {
     direct_settlement();
     return;

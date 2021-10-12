@@ -5,7 +5,7 @@ const ObjectID = require('mongodb').ObjectID;
 const jwt = require("jsonwebtoken");
 const user_mgr = require('./user_mgr');
 
-var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
+var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": Date.now(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
 var creating_rooms = {};
 
 var user_location = {};
@@ -258,34 +258,34 @@ function game_start(room_id) {
 
 };
 
-function game_preflop(room_id) {
-  console.log("in game preflop");
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  // if all the rest of the cards need to be dealt without more action
-  if (room["deal_rest"] == true) {
-    return;
-  }
-  console.log(room["last_bet_time"]);
-  var is_action_declared = action_declared(room_id);
-  if (is_action_declared == true) {
-    exports.room_deal_flop_cards(room_id);
-    return;
-  }
-
-  if (room["last_bet_time"] == null) {
-    return;
-  }
-
-  if ((Date.now() - room["last_bet_time"])/1000 >= room["XZTIMER"]) {
-    time_out_fold(room_id);
-  }
-};
+// function game_preflop(room_id) {
+//   console.log("in game preflop");
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   // if all the rest of the cards need to be dealt without more action
+//   if (room["deal_rest"] == true) {
+//     return;
+//   }
+//   console.log(room["last_bet_time"]);
+//   var is_action_declared = action_declared(room_id);
+//   if (is_action_declared == true) {
+//     exports.room_deal_flop_cards(room_id);
+//     return;
+//   }
+//
+//   if (room["last_bet_time"] == null) {
+//     return;
+//   }
+//
+//   if ((Date.now() - room["last_bet_time"])/1000 >= room["XZTIMER"]) {
+//     time_out_fold(room_id);
+//   }
+// };
 
 function time_out_fold(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["ctx_seq"] += 1;
-  var actions = room["player"].filter(player => player["chair_id"] == chair_id)[0]["actions"];
-  var player = room["player"].filter(player => player["chair_id"] == chair_id)[0];
+  var player = room["player"].filter(player => player["chair_id"] == room["current"])[0];
+  var actions = player["actions"];
   player["declare_count"] += 1;
   player["last_declared_at"] = Date.now();
   room["last_bet_time"] = Date.now();
@@ -952,7 +952,7 @@ function deal_hole_cards(room_id) {
 //   }, XZTIMER * 1000);
 // };
 
-function x_fold() {
+function time_out_fold() {
   console.log("timeout");
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
@@ -995,38 +995,31 @@ function get_next(room, chair_id) {
   return room["players"][current_index]["chair_id"];
 };
 
-exports.room_deal_flop_cards = function(message) {
-    var uid = message.uid;
-    var room_id = message.room_id;
-    var room = rooms.filter(room => room["name"] == "test")[0];
-
-    var cards = [];
-    cards.push(room["deck"].deal().toString());
-    cards.push(room["deck"].deal().toString());
-    cards.push(room["deck"].deal().toString());
-    room["flop"] = cards;
-    if (room["community_cards"] == null) {
-      room["community_cards"].concat(room["flop"]);
+function deal_flop_cards(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var cards = [];
+  cards.push(room["deck"].deal().toString());
+  cards.push(room["deck"].deal().toString());
+  cards.push(room["deck"].deal().toString());
+  room["flop"] = cards;
+  if (room["community_cards"] == null) {
+    room["community_cards"].concat(room["flop"]);
+  }
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["status"] != "sit_out") {
+      var uid = room["players"][i]["uid"];
+      var ws = user_mgr.get(uid);
+      var response = {};
+      var data = {};
+      response["m"] = "deal_flop_cards";
+      response["c"] = "room";
+      response["data"] = data;
+      response["data"]["card_array"] = cards;
+      console.log("before deal flop cards");
+      ws.send(JSON.stringify(response));
+      console.log("after deal flop cards");
     }
-    for (var i = 0; i < room["players"].length; i++) {
-      if (room["players"][i]["status"] != "sit_out") {
-
-        var uid = room["players"][i]["uid"];
-        var ws = user_mgr.get(uid);
-        var response = {};
-        var data = {};
-        response["m"] = "deal_flop_cards";
-        response["c"] = "room";
-        response["data"] = data;
-        response["data"]["card_array"] = cards;
-        console.log("before deal flop cards");
-        ws.send(JSON.stringify(response));
-        console.log("after deal flop cards");
-      }
-    }
-    // fake_hole_cards_status = [true, true, true, true, true, true, true, true];
-    //return { "cards": cards }
-
+  }
 };
 
 
@@ -1418,7 +1411,7 @@ function preflop_action(room_id) {
   }
   var is_action_declared = action_declared(room_id);
   if (is_action_declared) {
-    exports.room_deal_flop_cards(room_id);
+    deal_flop_cards(room_id);
     return;
   }
   console.log("last bet time2");

@@ -647,6 +647,7 @@ function bigblind(room_id) {
 
 
 exports.room_buy_in = async function(message) {
+  console.log("in buy in");
   var uid = message.uid;
   var room_id = message.room_id;
   var amount = message.amount;

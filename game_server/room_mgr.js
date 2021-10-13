@@ -71,7 +71,7 @@ function is_all_fold(room_id) {
   }
 };
 
-function game_player_all_fold(room_id) {
+function game_all_fold(room_id) {
   game_result(room_id);
 };
 

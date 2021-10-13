@@ -1033,6 +1033,7 @@ function deal_flop_cards(room_id) {
   cards.push(room["deck"].deal().toString());
   room["flop"] = cards;
   if (room["community_cards"] == null) {
+    room["community_cards"] = [];
     room["community_cards"].concat(room["flop"]);
   }
   for (var i = 0; i < room["players"].length; i++) {

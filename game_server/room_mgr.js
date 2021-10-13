@@ -442,7 +442,7 @@ exports.room_sit = async function(message) {
   var data = {};
   data["chair_id"] = chair_id;
   response["data"] = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room["_id"], response);
 
   return { success: true, chair_id: chair_id }
 };

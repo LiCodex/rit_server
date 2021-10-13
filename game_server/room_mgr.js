@@ -441,7 +441,7 @@ exports.room_sit = async function(message) {
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
-  response["data"] = data;
+  response["data"] = player;
   broadcast_in_room(room["_id"], response);
 
   return { success: true, chair_id: chair_id }
@@ -467,8 +467,6 @@ async function user_coins_helper(uid) {
     return { success: true, coins: user.coins, avatar: user.avatar }
   }
 };
-
-
 
 exports.room_standup = async function(message) {
   var uid = message.uid;

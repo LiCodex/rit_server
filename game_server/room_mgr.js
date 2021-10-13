@@ -281,16 +281,16 @@ function game_start(room_id) {
 //   }
 // };
 
-function time_out_fold(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  room["ctx_seq"] += 1;
-  var player = room["player"].filter(player => player["chair_id"] == room["current"])[0];
-  var actions = player["actions"];
-  player["declare_count"] += 1;
-  player["last_declared_at"] = Date.now();
-  room["last_bet_time"] = Date.now();
-  room["action_declare_list"].push({chair_id: chair_id, action_declared: true});
-};
+// function time_out_fold(room_id) {
+//   var room = rooms.filter(room => room["name"] == "test")[0];
+//   room["ctx_seq"] += 1;
+//   var player = room["player"].filter(player => player["chair_id"] == room["current"])[0];
+//   var actions = player["actions"];
+//   player["declare_count"] += 1;
+//   player["last_declared_at"] = Date.now();
+//   room["last_bet_time"] = Date.now();
+//   room["action_declare_list"].push({chair_id: chair_id, action_declared: true});
+// };
 //
 // function broadcast_user_update(room_id, chair_id) {
 //   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -436,9 +436,15 @@ exports.room_sit = async function(message) {
     room.players_count += 1;
     room.save();
   });
+  var response = {};
+  response["m"] = "sit";
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  response["data"] = data;
+  broadcast_in_room(response);
 
   return { success: true, chair_id: chair_id }
-  // check_start(room["_id"]);
 };
 
 exports.hall_user_profile = async function(message) {
@@ -953,21 +959,46 @@ function deal_hole_cards(room_id) {
 //   }, XZTIMER * 1000);
 // };
 
-function time_out_fold() {
+function time_out_fold(room_id) {
   console.log("timeout");
   var room = rooms.filter(room => room["name"] == "test")[0];
-  for (var i = 0; i < room["players"].length; i++) {
-    if (room["players"][i]["status"] != "sit_out") {
-      var uid = room["players"][i]["uid"];
-      var ws = user_mgr.get(uid);
-      var response = {};
-      response["m"] = "room";
-      response["c"] = "time_out";
-      var data = {};
-      data["message"] = "15s has passed has to fold";
-      response.data = data;
-      ws.send(JSON.stringify(response));
-    }
+  room["ctx_seq"] += 1;
+
+  var player = room["players"].filter(player => player["chair_id"] == room["current"])[0];
+  var actions = player["actions"];
+
+  if (actions.filter(action => action["op"] == "fold") != []) {
+    player["state"] == "fold";
+  }
+
+  // if (actions.filter(action => action["op"] == "check") != []) {
+  //   player["state"] == "check";
+  // }
+
+  if (player["is_offline"]) {
+    player["state"] == "fold";
+  }
+
+  player["declare_count"] += 1;
+  player["last_declared_at"] = Date.now();
+  room["last_bet_time"] = Date.now();
+  room["action_declare_list"].push({chair_id: player["chair_id"], action_declared: true});
+
+  var response = {};
+  response["m"] = "time_out_fold";
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = room["current"];
+  data["betting_list"] = room["betting_list"];
+
+  response.data = data;
+  broadcast_in_room(response);
+  actions = [];
+  broadcast_userupdate(room["current"]);
+  var is_action_declared = action_declared(room_id);
+  var all_fold = is_all_fold(room_id);
+  if (!is_action_declared && !all_fold) {
+    game_actions(room_id);
   }
 }
 

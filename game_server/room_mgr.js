@@ -437,12 +437,12 @@ exports.room_sit = async function(message) {
     room.save();
   });
   var response = {};
-  response["m"] = "sit";
+  response["m"] = "sit_broad_test";
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
   response["data"] = data;
-  broadcast_in_room(response);
+  broadcast_in_room(room_id, response);
 
   return { success: true, chair_id: chair_id }
 };
@@ -992,7 +992,7 @@ function time_out_fold(room_id) {
   data["betting_list"] = room["betting_list"];
 
   response.data = data;
-  broadcast_in_room(response);
+  broadcast_in_room(room_id, response);
   actions = [];
   broadcast_userupdate(room["current"]);
   var is_action_declared = action_declared(room_id);

@@ -252,7 +252,7 @@ function game_start(room_id) {
   var response = {};
   response["m"] = "start";
   response["c"] = "room";
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, '');
 
   smallblind(room_id);
 
@@ -442,7 +442,7 @@ exports.room_sit = async function(message) {
   var data = {};
   data["chair_id"] = chair_id;
   response["data"] = player;
-  broadcast_in_room(room["_id"], response);
+  broadcast_in_room(room["_id"], response, chair_id);
 
   return { success: true, chair_id: chair_id }
 };
@@ -601,7 +601,7 @@ function smallblind(room_id) {
   data["chair_id"] = room["smallblind_id"];
   response["data"] = data;
   //broadcast
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, '');
   broadcast_userupdate(room["current"]);
   bigblind(room_id);
 };
@@ -641,7 +641,7 @@ function bigblind(room_id) {
   data["chair_id"] = room["bigblind_id"];
   response["data"] = data;
   //broadcast
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, '');
   broadcast_userupdate(room["current"]);
   console.log("before deal hole cards");
   // console.log(room["game_state"]);
@@ -719,7 +719,7 @@ exports.room_fold = function(message) {
   data["bet_amount"] = bet_amount;
   data["type"] = "fold";
   response["data"] = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, chair_id);
   if (player["actions"] != []) {
     player["actions"] = [];
   }
@@ -763,7 +763,7 @@ exports.room_call = function(message) {
   data["bet_amount"] = bet_amount;
   data["type"] = "call";
   response["data"] = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, chair_id);
   if (player["actions"] != []) {
     player["actions"] = [];
   }
@@ -807,7 +807,7 @@ exports.room_raise = function(message) {
   data["bet_amount"] = bet_amount;
   data["type"] = "raise";
   response["data"] = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, chair_id);
   if (player["actions"] != []) {
     player["actions"] = [];
   }
@@ -851,7 +851,7 @@ exports.room_all_in = function(message) {
   data["bet_amount"] = bet_amount;
   data["type"] = "all_in";
   response["data"] = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, chair_id);
   if (player["actions"] != []) {
     player["actions"] = [];
   }
@@ -896,7 +896,7 @@ exports.room_check = function(message) {
   data["type"] = "check";
   response["data"] = data;
   // console.log("here1");
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, chair_id);
   // console.log("here2")
   // clean up action for this player
   if (player["actions"] != []) {
@@ -990,7 +990,7 @@ function time_out_fold(room_id) {
   data["betting_list"] = room["betting_list"];
 
   response.data = data;
-  broadcast_in_room(room_id, response);
+  broadcast_in_room(room_id, response, '');
   actions = [];
   broadcast_userupdate(room["current"]);
   var is_action_declared = action_declared(room_id);
@@ -1537,9 +1537,12 @@ function game_dismiss(room_id) {
 };
 
 
-function broadcast_in_room(room_id, response) {
+function broadcast_in_room(room_id, response, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["chair_id"] == chair_id) {
+      continue;
+    }
     var uid = room["players"][i]["uid"];
     var ws = user_mgr.get(uid);
     ws.send(JSON.stringify(response));

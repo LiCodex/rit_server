@@ -50,8 +50,7 @@ async function check_start(room_id) {
 function delay_action(room_id) {
   console.log("delay action");
   var room = rooms.filter(room => room["name"] == "test")[0];
-  game_betting();
-  // game_actions(room["_id"]);
+  game_betting(room_id);
   setTimeout(function() {
     console.log("in timeout");
     if (room["game_finished"] != true) {
@@ -116,6 +115,8 @@ function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["XZTIMER"] = 15;
   room["last_bet_time"] = Date.now();
+  console.log("in game actions last bet time");
+  console.log(room["last_bet_time"]);
   room["ctx_seq"] = room["ctx_seq"] == null ? 1 : (room["ctx_seq"] + 1);
   room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"])/1000;
   console.log("in game actions");
@@ -258,28 +259,6 @@ function game_start(room_id) {
 
 };
 
-// function game_preflop(room_id) {
-//   console.log("in game preflop");
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   // if all the rest of the cards need to be dealt without more action
-//   if (room["deal_rest"] == true) {
-//     return;
-//   }
-//   console.log(room["last_bet_time"]);
-//   var is_action_declared = action_declared(room_id);
-//   if (is_action_declared == true) {
-//     exports.room_deal_flop_cards(room_id);
-//     return;
-//   }
-//
-//   if (room["last_bet_time"] == null) {
-//     return;
-//   }
-//
-//   if ((Date.now() - room["last_bet_time"])/1000 >= room["XZTIMER"]) {
-//     time_out_fold(room_id);
-//   }
-// };
 
 // function time_out_fold(room_id) {
 //   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -709,6 +688,8 @@ exports.room_fold = function(message) {
   player["last_bet_time"] = Date.now();
   room["last_bet_time"] = Date.now();
   player["hand_state"] = "fold";
+  console.log("room fold last bet time");
+  console.log(player["last_bet_time"]);
 
   var response = {}
   response["m"] = "action";
@@ -753,6 +734,8 @@ exports.room_call = function(message) {
   player["last_bet_time"] = Date.now();
   room["last_bet_time"] = Date.now();
   player["hand_state"] = "call";
+  console.log("room call last bet time");
+  console.log(player["last_bet_time"]);
 
   var response = {}
   response["m"] = "action";
@@ -797,6 +780,8 @@ exports.room_raise = function(message) {
   player["last_bet_time"] = Date.now();
   room["last_bet_time"] = Date.now();
   player["hand_state"] = "raise";
+  console.log("room raise last bet time");
+  console.log(player["last_bet_time"]);
 
   var response = {}
   response["m"] = "action";
@@ -841,6 +826,8 @@ exports.room_all_in = function(message) {
   player["last_bet_time"] = Date.now();
   room["last_bet_time"] = Date.now();
   player["hand_state"] = "all_in";
+  console.log("room all in last bet time");
+  console.log(player["last_bet_time"]);
 
   var response = {}
   response["m"] = "action";
@@ -885,6 +872,8 @@ exports.room_check = function(message) {
   player["last_bet_time"] = Date.now();
   room["last_bet_time"] = Date.now();
   player["hand_state"] = "check";
+  console.log("room check last bet time");
+  console.log(player["last_bet_time"]);
 
   var response = {}
   response["m"] = "action";
@@ -980,6 +969,8 @@ function time_out_fold(room_id) {
   player["declare_count"] += 1;
   player["last_declared_at"] = Date.now();
   room["last_bet_time"] = Date.now();
+  console.log("last bet time in time_out_fold");
+  console.log(room["last_bet_time"]);
   room["action_declare_list"].push({chair_id: player["chair_id"], action_declared: true});
 
   var response = {};
@@ -1423,12 +1414,12 @@ function broadcast_userupdate(chair_id) {
   }
 };
 
-function delay_betting() {
-  game_betting();
+function delay_betting(room_id) {
+  game_betting(room_id);
   setTimeout(function() {
     var room = rooms.filter(room => room["name"] == "test")[0];
     if (room["finished"] != true) {
-      delay_betting();
+      delay_betting(room_id);
     }
   }, 1000);
 };
@@ -1437,7 +1428,6 @@ function delay_betting() {
 function preflop_action(room_id) {
   console.log("in preflop action");
   console.log("last bet time1");
-  // console.log(room["last_bet_time"]);
   var room = rooms.filter(room => room["name"] == "test")[0];
   if (room["deal_rest"]) {
     return;

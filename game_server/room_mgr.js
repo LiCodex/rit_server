@@ -1063,6 +1063,7 @@ exports.room_deal_turn_card = function(message) {
     cards.push(room["deck"].deal().toString());
     room["turn"] = cards;
     if (room["community_cards"] == null) {
+      room["community_cards"] = [];
       room["community_cards"].concat(room["turn"]);
     }
     for (var i = 0; i < room["players"].length; i++) {
@@ -1095,6 +1096,7 @@ exports.room_deal_river_card = function(message) {
     cards.push(room["deck"].deal().toString());
     room["river"] = cards;
     if (room["community_cards"] == null) {
+      room["community_cards"] = [];
       room["community_cards"].concat(room["river"]);
     }
     for (var i = 0; i < room["players"].length; i++) {

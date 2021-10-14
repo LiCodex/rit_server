@@ -1003,7 +1003,7 @@ function get_next(room, chair_id) {
     console.log("sort testing");
     console.log(room["players"][i]["chair_id"]);
   }
-  var current_index = 0
+  var current_index = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["chair_id"] == chair_id) {
       current_index = i;

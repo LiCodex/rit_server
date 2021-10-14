@@ -942,20 +942,20 @@ function deal_hole_cards(room_id) {
 // };
 
 function time_out_fold(room_id) {
-  console.log("timeout");
+  console.log("timeout fold ");
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["ctx_seq"] += 1;
 
   var player = room["players"].filter(player => player["chair_id"] == room["current"])[0];
   var actions = player["actions"];
+  player["state"] = "fold";
+  // if (actions.filter(action => action["op"] == "fold") != []) {
+  //   player["state"] == "fold";
+  // }
 
-  if (actions.filter(action => action["op"] == "fold") != []) {
-    player["state"] == "fold";
-  }
-
-  if (player["is_offline"]) {
-    player["state"] == "fold";
-  }
+  // if (player["is_offline"]) {
+  //   player["state"] == "fold";
+  // }
 
   player["declare_count"] = player["declare_count"] == null ? 1 : (player["declare_count"] + 1);
   player["last_declared_at"] = Date.now();

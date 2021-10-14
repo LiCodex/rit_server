@@ -961,15 +961,11 @@ function time_out_fold(room_id) {
     player["state"] == "fold";
   }
 
-  // if (actions.filter(action => action["op"] == "check") != []) {
-  //   player["state"] == "check";
-  // }
-
   if (player["is_offline"]) {
     player["state"] == "fold";
   }
 
-  player["declare_count"] += 1;
+  player["declare_count"] = player["declare_count"] == null ? 1 : (player["declare_count"] + 1);
   player["last_declared_at"] = Date.now();
   room["last_bet_time"] = Date.now();
   console.log("last bet time in time_out_fold");

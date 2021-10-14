@@ -132,11 +132,12 @@ function game_actions(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     count++;
   }
-  if (round <= 1 && count == 2) {
+  if (room["round"] <= 1 && count == 2) {
     room["current"] = room["button"];
   }
   console.log("current in game actions");
   console.log(room["current"]);
+  console.log(room["round"]);
   var pcur = room["players"].filter(player => player["chair_id"] == room["current"])[0];
   pcur["state"] = "thinking";
 

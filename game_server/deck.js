@@ -32,6 +32,8 @@ const Deck = class{
     }
 
     deal() {
+        console.log("in deal");
+        console.log(this.cards[this.next_card_index++]);
         if (this.next_card_index + 1 > Deck.NO_OF_CARDS) {
             throw 'no cards left in the deck';
         }

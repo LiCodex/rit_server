@@ -133,7 +133,7 @@ function game_start(room) {
     room.play_state = 'start';
 
     if (room.round == 0) {
-        room.create_time = Date.now();
+        room.create_time = new Date();
     }
 
     room.round++;

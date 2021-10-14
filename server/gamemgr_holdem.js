@@ -310,7 +310,7 @@ function gameover() {
         return;
     }
 
-    var cur_time = Date.now();
+    var cur_time = new Date();
     this.room.config.time = 30;
     
     if (cur_time - this.start_time >= 60) {

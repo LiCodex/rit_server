@@ -9,7 +9,7 @@ exports.createToken = function(user_id, life_time) {
         this.delToken(token);
     }
 
-    var time = Date.now();
+    var time = new Date();
     token = crypto.md5(user_id + "!@#$%^&" + time);
     token[token] = {
         user_id: user_id,

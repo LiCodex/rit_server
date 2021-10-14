@@ -64,7 +64,10 @@ function delay_action(room_id) {
 function is_all_fold(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var active_player = room["players"].filter(player => player["state"] != "sit_out");
+  console.log("is_all_fold");
+  console.log(active_player);
   var folded_player = active_player.filter(player => player["state"] == "fold");
+  console.log(folded_player);
   if (active_player.length - folded_player.length == 1) {
     return true;
   } else {
@@ -1297,6 +1300,10 @@ function game_betting(room_id) {
   }
   if (room["time_state"] == "river") {
     river_action(room_id);
+    return;
+  }
+  if (room["time_state"] == "game_result") {
+    game_result(room_id);
     return;
   }
 };

@@ -121,6 +121,7 @@ function game_actions(room_id) {
   room["timer"] = room["XZTIMER"] - (Date.now() - room["last_bet_time"])/1000;
   console.log("in game actions");
   console.log(room["XZTIMER"]);
+  console.log("ctx seq");
   console.log(room["ctx_seq"]);
   console.log(room["timer"]);
 
@@ -165,6 +166,8 @@ function game_actions(room_id) {
   if (pcur["money_on_the_table"] > 3 * pot) {
     actions.push({"op": "raise", "amount": 3 * pot});
   }
+  console.log(actions);
+  broadcast_userupdate_includeme(room["current"]);
 
 };
 
@@ -581,7 +584,7 @@ function smallblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response, '');
-  broadcast_userupdate(room["current"]);
+  broadcast_userupdate_includeme(room["current"]);
   bigblind(room_id);
 };
 
@@ -621,7 +624,7 @@ function bigblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response, '');
-  broadcast_userupdate(room["current"]);
+  broadcast_userupdate_includeme(room["current"]);
   console.log("before deal hole cards");
   // console.log(room["game_state"]);
   deal_hole_cards(room_id);
@@ -704,7 +707,7 @@ exports.room_fold = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate(chair_id);
+  broadcast_userupdate_includeme(chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -750,7 +753,7 @@ exports.room_call = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate(chair_id);
+  broadcast_userupdate_includeme(chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -796,7 +799,7 @@ exports.room_raise = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate(chair_id);
+  broadcast_userupdate_includeme(chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -842,7 +845,7 @@ exports.room_all_in = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate(chair_id);
+  broadcast_userupdate_includeme(chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -892,7 +895,7 @@ exports.room_check = function(message) {
     player["actions"] = [];
   }
   // console.log("here3");
-  broadcast_userupdate(chair_id);
+  broadcast_userupdate_includeme(chair_id);
   // console.log("here4")
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
@@ -983,7 +986,7 @@ function time_out_fold(room_id) {
   response.data = data;
   broadcast_in_room(room_id, response, '');
   actions = [];
-  broadcast_userupdate(room["current"]);
+  broadcast_userupdate_includeme(room["current"]);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -1378,7 +1381,7 @@ exports.winner_showhands = function(message) {
   }
 };
 
-function broadcast_userupdate(chair_id) {
+function broadcast_userupdate_includeme(chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   for (var i = 0; i < room["players"].length; i++) {
@@ -1411,6 +1414,9 @@ function broadcast_userupdate(chair_id) {
     var uid = room["players"][i]["uid"];
     var ws = user_mgr.get(uid);
     ws.send(JSON.stringify(response));
+    console.log("response in broadcast");
+    console.log(chair_id);
+    console.log(response);
   }
 };
 

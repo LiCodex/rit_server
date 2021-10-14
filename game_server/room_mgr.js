@@ -41,8 +41,10 @@ async function check_start(room_id) {
     }
   }
   if (active_players >= 2) {
+    if (room["round"] == 0) {
+      delay_action(room_id);
+    }
     room["time_state"] = 'start';
-    delay_action(room_id);
   }
 
 };
@@ -530,29 +532,6 @@ exports.index_login = function(message) {
   response.room_id = "";
   return response;
 };
-
-// exports.room_game_start = function(message) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   room["state"] = "playing";
-//   room["play_state"] = "start";
-//
-//   if (room["round"] == 0) {
-//     room["started_at"] = Date.now();
-//   }
-//
-//   room["round"]++;
-//   if (room["button"] == undefined) {
-//     button = rnd_button(room["_id"]);
-//     room["button"] = button;
-//     room["players"]["button"] = true;
-//   } else {
-//     room["button"] = get_next(room, room["button"]);
-//   }
-//
-//   if (room["button"] != undefined) {
-//   }
-//   smallblind(room_id);
-// };
 
 function smallblind(room_id) {
   // console.log("in smallblind");
@@ -1282,6 +1261,8 @@ exports.exit_room = function(user_id) {
 function game_betting(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var all_fold = is_all_fold(room_id);
+  console.log("all fold in game betgting");
+  console.log(all_fold);
   // only one player exists and
   if (all_fold == true && room["game_state"] != "game_result") {
     game_all_fold();

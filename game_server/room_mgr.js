@@ -1543,7 +1543,7 @@ function game_result(room_id) {
 
 
   reset(room_id);
-  active_players = active_player_count(room_id);
+  active_players = active_player_count(room["players"]);
   if (active_players >= 2) {
     room["time_state"] = "start";
   }

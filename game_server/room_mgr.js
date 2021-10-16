@@ -23,7 +23,7 @@ function generate_room_id() {
 
 function active_player_count(players) {
   var res = 0;
-  for (var i = 0; i < player.length; i++) {
+  for (var i = 0; i < players.length; i++) {
     if ((players[i]["game_state"] == "playing" || players[i]["game_state"] == "waiting") && players[i]["money_on_the_table"] > 0) {
       res++;
     }

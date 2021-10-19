@@ -1,4 +1,5 @@
 const Deck = require('./deck.js');
+const Pot = require('./pot.js');
 const Room = require('../models/room');
 const User = require('../models/user');
 const ObjectID = require('mongodb').ObjectID;
@@ -1535,9 +1536,12 @@ function game_result(room_id) {
   room["last_game_result_time"] = new Date();
 
   for (var i = 0; i < room["players"].length; i++) {
-    var response = {};
-    response["c"] = "room";
-    response["m"] = "game_result";
+    var player = room["players"][i];
+    room["player_scores"] = room["player_scores"] || [];
+    if (is_active(player)) {
+      var player_score = {};
+
+    }
 
   }
 
@@ -1653,28 +1657,75 @@ function get_basic_player_info(room_id, chair_id) {
 };
 
 function reset(room_id) {
-
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  clear_player_actions(room_id);
 };
 
-function clear_actions(room_id) {
+function clear_player_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["timer"] = -1;
-  room["game_state"] = null;
-  room["time_state"] = null;
-  room["hand_state"] = null;
-  room["smallblind_id"] = null;
-  room["bigblind_id"] = null;
-  room["button"] = null;
-  room["current"] = null;
+  for (var i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["actions"]) {
+      room["players"][i]["actions"] = [];
+    }
+    room["timer"] = -1;
+    room["game_state"] = null;
+    room["time_state"] = null;
+    room["hand_state"] = null;
+    room["smallblind_id"] = null;
+    room["bigblind_id"] = null;
+    room["button"] = null;
+    room["current"] = null;
+    room["pots"] = [];
+    room["direct_settlement"] = false;
+    room["deal_rest"] = null;
+    room["last_started_at"] = null;
+  }
+};
 
-  room["betting_list"] = [];
-  room["declare_list"] = [];
-  room["last_hand_finished_at"] = null;
-  room["last_direct_settlement_time"] = null;
-  room["direct_settlement"] = null;
-  room["deal_rest"] = null;
-  room["last_started_at"] = null;
+// function clear_actions(room_id) {
+//   var room = rooms.filter(room => room["name"] == "test")[0];
 
+//
+//   room["betting_list"] = [];
+//   room["declare_list"] = [];
+//   room["last_hand_finished_at"] = null;
+//   room["last_direct_settlement_time"] = null;
+//   room["direct_settlement"] = null;
+//   room["deal_rest"] = null;
+//   room["last_started_at"] = null;
+// };
 
+function contribute_pot(room_id, amount) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  for (var i = 0; i < room["pots"].length; i++) {
+    pot = room["pots"][i];
+    if (!pot.has_contributor(room["current"])) {
+      var pot_bet = pot.get_bet();
+      if (amount >= pot_bet) {
+        //regular call bet or raise
+        pot.add_contributor(room["current"]);
+        amount -= pot.get_bet();
+      } else {
+        //partial all in, redistribugte the pot
+        room["pots"].push(pot.split(room["current"],amount));
+        amount = 0;
+      }
+    }
+    if (amount <= 0) {
+      break;
+    }
+  }
+};
 
+function do_showdown(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var showing_players = [];
+  for (var i = 0; i < room["pots"].length; i++) {
+    pot = room["pots"][i];
+    for (var i = 0; i < pot.get_contributors(); i++) {
+      //if ()
+    }
+  }
+
+  
 };

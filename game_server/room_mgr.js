@@ -1135,101 +1135,84 @@ exports.destroy = function(room_id){
 }
 
 exports.get_total_rooms = function() {
-    return total_rooms;
+  return total_rooms;
 };
 
 exports.get_room = function(room_id) {
-    return rooms[room_id];
+  return rooms[room_id];
 };
 // rooms can be only created by admins
 exports.is_creator = function(room_id, admin_id) {
-    var room_info = rooms[room_id];
-    if (room_info == null) {
-        return false;
-    }
-    return room_info.conf.creator == admin_id;
+  var room_info = rooms[room_id];
+  if (room_info == null) {
+    return false;
+  }
+  return room_info.conf.creator == admin_id;
 };
 
 
 exports.enter_room = function(room_id, user_id, user_name, callback) {
-    var room = rooms[room_id];
-
+  var room = rooms[room_id];
 };
 
 exports.set_ready = function(user_id, value) {
-    var room_id = exports.get_user_room(user_id);
-    if (room_id == null) {
-        return;
-    }
+  var room_id = exports.get_user_room(user_id);
+  if (room_id == null) {
+    return;
+  }
 
-    var room = exports.get_room(room_id);
-    if (room == null) {
-        return;
-    }
+  var room = exports.get_room(room_id);
+  if (room == null) {
+    return;
+  }
 
-    var seat_index = exports.get_user_seat(user_id);
-    if (seat_index == null) {
-        return;
-    }
+  var seat_index = exports.get_user_seat(user_id);
+  if (seat_index == null) {
+    return;
+  }
 
-    var seat = room.seats[seat_index];
-    seat.ready = value;
+  var seat = room.seats[seat_index];
+  seat.ready = value;
 };
 
 exports.is_ready = function(user_id) {
-    var room_id = exports.get_user_room(user_id);
-    if (room_id == null) {
-        return;
-    }
+  var room_id = exports.get_user_room(user_id);
+  if (room_id == null) {
+    return;
+  }
 
-    var room = exports.get_room(room_id);
-    if (room == null) {
-        return;
-    }
+  var room = exports.get_room(room_id);
+  if (room == null) {
+    return;
+  }
 
-    var seat_index = exports.get_user_seat(user_id);
-    if (seat_index == null) {
-        return;
-    }
+  var seat_index = exports.get_user_seat(user_id);
+  if (seat_index == null) {
+    return;
+  }
 
-    var seat = room.seats[seat_index];
-    return seat.ready;
+  var seat = room.seats[seat_index];
+  return seat.ready;
 };
 
 exports.get_user_room = function(user_id) {
-    var location = user_location[user_id];
-    if (location != null) {
-        return location.seat_index;
-    }
-    return null;
+  var location = user_location[user_id];
+  if (location != null) {
+    return location.seat_index;
+  }
+  return null;
 };
 
 exports.get_user_location = function() {
-    return user_location;
+  return user_location;
 };
 
 exports.room_show_hand = async function(message) {
-    var room_id = message.room_id;
-    var o_id = new ObjectID(room_id);
-    var user_id = message.user_id;
-    var room = rooms.filter(room => room["name"] == "test")[0];
-
-    // Room.findOne({ _id: o_id }, function (err, room) {
-    //   room.total_players_count += 1;
-    //   room.save();
-    // });
-
-    //return { success: true, card1: , card2: }
+  var room_id = message.room_id;
+  var o_id = new ObjectID(room_id);
+  var user_id = message.user_id;
+  var room = rooms.filter(room => room["name"] == "test")[0];
 };
-
-// function get_context(room_id) {
-//   var room_id = message.room_id;
-//   var o_id = new ObjectID(room_id);
-//   var user_id = message.user_id;
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//
-//   return { success: true, room: room }
-// }
 
 function get_context(room_id, chair_id, show_all) {
   var room = rooms.filter(room => room["name"] == "test")[0];

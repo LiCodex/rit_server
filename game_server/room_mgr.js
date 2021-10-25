@@ -177,6 +177,7 @@ function game_actions(room_id) {
 
   if (pcur["money_on_the_table"] > 2 * pot) {
     actions.push({"op": "raise", "amount": 2 * pot});
+    actions.push({"op": "raise", "amount": 0});
   }
   if (pcur["money_on_the_table"] > 2.5 * pot) {
     actions.push({"op": "raise", "amount": 2.5 * pot});
@@ -185,7 +186,7 @@ function game_actions(room_id) {
     actions.push({"op": "raise", "amount": 3 * pot});
   }
   console.log(actions);
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room_id, room["current"]);
 
 };
 
@@ -579,7 +580,7 @@ function smallblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response, '');
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room_id, room["current"]);
   bigblind(room_id);
 };
 
@@ -619,7 +620,7 @@ function bigblind(room_id) {
   response["data"] = data;
   //broadcast
   broadcast_in_room(room_id, response, '');
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room_id, room["current"]);
   console.log("before deal hole cards");
   // console.log(room["game_state"]);
   deal_hole_cards(room_id);
@@ -702,7 +703,7 @@ exports.room_fold = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -748,7 +749,7 @@ exports.room_call = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -794,7 +795,7 @@ exports.room_raise = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -840,7 +841,7 @@ exports.room_all_in = function(message) {
   if (player["actions"] != []) {
     player["actions"] = [];
   }
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -890,7 +891,7 @@ exports.room_check = function(message) {
     player["actions"] = [];
   }
   // console.log("here3");
-  broadcast_userupdate_includeme(chair_id);
+  broadcast_userupdate_includeme(room_id, chair_id);
   // console.log("here4")
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
@@ -978,7 +979,7 @@ function time_out_fold(room_id) {
   response.data = data;
   broadcast_in_room(room_id, response, '');
   actions = [];
-  broadcast_userupdate_includeme(room["current"]);
+  broadcast_userupdate_includeme(room_id, room["current"]);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
   if (!is_action_declared && !all_fold) {
@@ -1413,7 +1414,7 @@ exports.winner_showhands = function(message) {
   }
 };
 
-function broadcast_userupdate_includeme(chair_id) {
+function broadcast_userupdate_includeme(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   for (var i = 0; i < room["players"].length; i++) {
@@ -1422,7 +1423,7 @@ function broadcast_userupdate_includeme(chair_id) {
     response["c"] = "room";
     var data = {};
 
-    if (chair_id != player["chair_id"]) {
+    if (chair_id != room["players"]["chair_id"]) {
       data = get_basic_player_info(room["_id"], chair_id);
       data["actions"] = [];
     } else {
@@ -1727,5 +1728,16 @@ function do_showdown(room_id) {
     }
   }
 
-  
+  room["players_scores"] = room["players_scores"] || [];
+  for (var i = 0; i < room["players"].length; i++) {
+    var player = room["players"][i]);
+    if (is_active(player) {
+      var hand_type = HandEvaluator(player["hole_cards"], room["community_cards"]);
+      var
+      var response = {};
+
+    }
+  }
+
+
 };

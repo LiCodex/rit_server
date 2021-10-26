@@ -2,6 +2,7 @@ const Deck = require('./deck.js');
 const Pot = require('./pot.js');
 const Room = require('../models/room');
 const User = require('../models/user');
+const HandEvaluator = require('./hand_evaluator');
 const ObjectID = require('mongodb').ObjectID;
 const jwt = require("jsonwebtoken");
 const user_mgr = require('./user_mgr');
@@ -1761,7 +1762,7 @@ function do_showdown(room_id) {
   room["players_scores"] = room["players_scores"] || [];
   for (var i = 0; i < room["players"].length; i++) {
     var player = room["players"][i];
-    if (is_active(player) {
+    if (is_active(player)) {
       var hand_type = HandEvaluator(player["hole_cards"], room["community_cards"]);
       //var
       var response = {};

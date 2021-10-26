@@ -55,6 +55,8 @@ const HandEvaluator = class {
   }
 
   calculate_distribution() {
+    console.log("calculate distribution");
+    console.log(this.cards);
     for (var i = 0; i < this.cards.length; i++) {
       this.rank_distribution[this.cards[i].rank]++;
       this.suite_distribution[this.cards[i].suite]++;

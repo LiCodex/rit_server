@@ -127,8 +127,8 @@ const HandEvaluator = class {
   };
 
   calculate_high_card() {
-    this.hand_type = HandEvaluator.HIGH_CARD;
-    this.rankings[0] == this.hand_type.get_value();
+    this.hand_type = "HIGH_CARD";
+    this.rankings[0] == this.type_to_rank(this.hand_type);
     var index = 1;
     for (var i = 0; i <= this.cards.length; i++) {
       this.rankings[index++] = this.cards[i].rank;
@@ -140,8 +140,8 @@ const HandEvaluator = class {
 
   is_one_pair() {
     if (this.no_of_pairs == 1) {
-      this.hand_type = HandEvaluator.ONE_PAIR;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "ONE_PAIR";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       var pair_rank = this.pairs[0];
       this.rankings[1] = pair_rank;
 
@@ -161,8 +161,8 @@ const HandEvaluator = class {
 
   is_two_pair() {
     if (this.no_of_pairs == 2) {
-      this.hand_type = HandEvaluator.TWO_PAIRS;
-      this.rankings[0] = this.hand_type.value;
+      this.hand_type = "TWO_PAIRS";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
 
       var high_rank = this.pairs[0];
       var low_rank = this.pairs[1];
@@ -184,8 +184,8 @@ const HandEvaluator = class {
 
   is_three_of_a_kind() {
     if (this.triple_rank != -1) {
-      this.hand_type = HandEvaluator.THREE_OF_A_KIND;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "THREE_OF_A_KIND";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       this.rankings[1] = this.triple_rank;
 
       var index = 2;
@@ -205,8 +205,8 @@ const HandEvaluator = class {
 
   is_straight() {
     if (this.straight_rank != -1) {
-      this.hand_type = HandEvaluator.STRAIGHT;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "STRAIGHT";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       this.rankings[1] = this.straight_rank;
       return true;
     } else {
@@ -216,8 +216,8 @@ const HandEvaluator = class {
 
   is_flush() {
     if (this.flush_suite != -1) {
-      this.hand_type = HandValueType.FLUSH;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "FLUSH";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       var index = 1;
       for (var i = 0; i < this.cards.length; i++) {
         if (this.cards[i].suite == this.flush_suite) {
@@ -239,8 +239,8 @@ const HandEvaluator = class {
 
   is_full_house() {
     if ((this.triple_rank != -1) && (this.no_of_pairs > 0)) {
-      this.hand_type = HandValueType.FULL_HOUSE;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "FULL_HOUSE";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       this.rankings[1] = this.triple_rank;
       this.rankings[2] = this.pairs[0];
       return true;
@@ -251,8 +251,8 @@ const HandEvaluator = class {
 
   is_four_of_a_kind() {
     if (this.quad_rank != -1) {
-      this.hand_type = HandEvaluator.FOUR_OF_A_KIND;
-      this.rankings[0] = this.hand_type.get_value();
+      this.hand_type = "FOUR_OF_A_KIND";
+      this.rankings[0] = this.type_to_rank(this.hand_type);
       this.rankings[1] = this.quad_rank;
 
       var index = 2;
@@ -308,18 +308,18 @@ const HandEvaluator = class {
 
       if(in_straight >= 5 && in_flush >= 5) {
         if (this.straight_rank == Card.ACE) {
-          this.hand_type = Card.ROYAL_FLUSH;
-          this.rankings[0] = this.hand_type.get_value();
+          this.hand_type = "ROYAL_FLUSH";
+          this.rankings[0] = this.type_to_rank(this.hand_type);
           return true;
         } else {
-          this.hand_type = HandEvaluator.STRAIGHT_FLUSH;
-          this.rankings[0] = this.hand_type.get_value();
+          this.hand_type = "STRAIGHT_FLUSH";
+          this.rankings[0] = this.type_to_rank(this.hand_type);
           this.rankings[1] = straight_rank2;
           return true;
         }
       } else if (this.wheeling_ace && in_straight >= 4 && in_flush >= 4) {
-        this.hand_type = HandEvaluator.STRAIGHT_FLUSH;
-        this.rankings[0] = this.hand_type.get_value();
+        this.hand_type = "STRAIGHT_FLUSH";
+        this.rankings[0] = this.type_to_rank(this.hand_type);
         this.rankings[1] = straight_rank2;
         return true;
       } else {
@@ -329,6 +329,13 @@ const HandEvaluator = class {
       return false;
     }
   }
+
+  type_to_rank(type) {
+    let mapping = { "ROYAL_FLUSH": 9, "STRAIGHT_FLUSH": 8, "FOUR_OF_A_KIND": 7, "FULL_HOUSE": 6, "FLUSH": 5, "STRAIGHT": 4, "THREE_OF_A_KIND": 3, "TWO_PAIRS": 2, "ONE_PAIR": 1, "HIGH_CARD": 0 };
+    return mapping[type];
+  }
+
+
 }
 
 module.exports = HandEvaluator

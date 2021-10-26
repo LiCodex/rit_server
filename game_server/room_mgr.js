@@ -1531,7 +1531,7 @@ function game_result(room_id) {
     room["player_scores"] = room["player_scores"] || [];
     if (is_active(player)) {
       let player_score = {};
-      let hand_evaluator = new HandEvaluator(player["hole_cards"], room["community_cards"]);
+      let hand_evaluator = new HandEvaluator(room["community_cards"], player["hole_cards"]);
       let score = hand_evaluator.get_score();
       let type = hand_evaluator.get_type();
       player_score["chair_id"] = player["chair_id"];

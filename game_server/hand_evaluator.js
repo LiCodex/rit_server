@@ -27,22 +27,22 @@ const HandEvaluator = class {
     all_cards.push(community_cards);
     all_cards.push(hole_cards);
     this.cards = all_cards;
-    calculate_distribution();
-    find_straight();
-    find_flush();
-    find_dups();
+    this.calculate_distribution();
+    this.find_straight();
+    this.find_flush();
+    this.find_dups();
 
-    is_special_value = is_straight_flush()
-                       || is_four_of_a_kind()
-                       || is_full_house()
-                       || is_flush()
-                       || is_straight()
-                       || is_three_of_a_kind()
-                       || is_two_pair()
-                       || is_one_pair();
+    is_special_value = this.is_straight_flush()
+                       || this.is_four_of_a_kind()
+                       || this.is_full_house()
+                       || this.is_flush()
+                       || this.is_straight()
+                       || this.is_three_of_a_kind()
+                       || this.is_two_pair()
+                       || this.is_one_pair();
 
     if (!is_special_value) {
-      calculate_high_card();
+      this.calculate_high_card();
     }
 
     for (var i = 0; i < HandEvaluator.NO_OF_RANKINGS; i++) {

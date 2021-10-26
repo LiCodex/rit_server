@@ -919,8 +919,8 @@ function deal_hole_cards(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["status"] != "sit_out") {
       hole_cards = [];
-      hole_cards.push(room["deck"].deal().toString());
-      hole_cards.push(room["deck"].deal().toString());
+      hole_cards.push(room["deck"].deal());
+      hole_cards.push(room["deck"].deal());
       room["players"][i]["hole_cards"] = hole_cards;
 
       var uid = room["players"][i]["uid"];
@@ -930,6 +930,9 @@ function deal_hole_cards(room_id) {
       response["m"] = "deal_hole_cards";
       response["c"] = "room";
       response["data"] = data;
+      for (let i = 0; i < hole_cards.length; i++) {
+        hole_cards[i] = hole_cards[i].toString();
+      }
       response["data"]["hole_cards"] = hole_cards;
       response["chair_id"] = room["players"][i]["chair_id"];
       console.log("before deal hole cards");
@@ -1413,14 +1416,15 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     var data = {};
 
     if (chair_id != room["players"]["chair_id"]) {
+      data = get_full_player_info(room["_id"], chair_id);
+      data["actions"] = room["players"][i]["actions"] || [];
+    } else {
       data = get_basic_player_info(room["_id"], chair_id);
       data["actions"] = [];
-    } else {
-      data = get_full_player_info(room["_id"], chair_id);
-      data["actions"] = player["actions"] || [];
     }
     // if
     if (player["hand_finished"]) {
+      console.log("hand finished");
       data["actions"] = [];
     }
 

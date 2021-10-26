@@ -1760,10 +1760,10 @@ function do_showdown(room_id) {
 
   room["players_scores"] = room["players_scores"] || [];
   for (var i = 0; i < room["players"].length; i++) {
-    var player = room["players"][i]);
+    var player = room["players"][i];
     if (is_active(player) {
       var hand_type = HandEvaluator(player["hole_cards"], room["community_cards"]);
-      var
+      //var
       var response = {};
 
     }

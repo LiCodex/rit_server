@@ -24,8 +24,8 @@ const HandEvaluator = class {
 
   constructor(community_cards, hole_cards) {
     let all_cards = [];
-    community = community_cards || [];
-    hole = hole_cards || [];
+    let community = community_cards || [];
+    let hole = hole_cards || [];
     for (let i = 0; i < community.length; i++) {
       all_cards.push(community[i]);
     }

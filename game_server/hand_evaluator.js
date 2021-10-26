@@ -24,8 +24,14 @@ const HandEvaluator = class {
 
   constructor(community_cards, hole_cards) {
     let all_cards = [];
-    all_cards.push(community_cards);
-    all_cards.push(hole_cards);
+    community = community_cards || [];
+    hole = hole_cards || [];
+    for (let i = 0; i < community.length; i++) {
+      all_cards.push(community[i]);
+    }
+    for (let i = 0; i < hole.length; i++) {
+      all_cards.push(hole[i]);
+    }
     this.cards = all_cards;
     this.calculate_distribution();
     this.find_straight();

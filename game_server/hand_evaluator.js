@@ -22,8 +22,11 @@ const HandEvaluator = class {
   quad_rank = -1;
   rankings = new Array(HandEvaluator.NO_OF_RANKINGS);
 
-  constructor(hand) {
-    this.cards = hand.get_cards();
+  constructor(community_cards, hole_cards) {
+    let all_cards = [];
+    all_cards.push(community_cards);
+    all_cards.push(hole_cards);
+    this.cards = all_cards;
     calculate_distribution();
     find_straight();
     find_flush();

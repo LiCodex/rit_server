@@ -1531,8 +1531,9 @@ function game_result(room_id) {
     room["player_scores"] = room["player_scores"] || [];
     if (is_active(player)) {
       let player_score = {};
-      let score = HandEvaluator(player["hole_cards"], room["community_cards"]).get_score();
-      let type = HandEvaluator(player["hole_cards"], room["community_cards"]).get_type();
+      let hand_evaluator = new HandEvaluator(player["hole_cards"], room["community_cards"]);
+      let score = hand_evaluator.get_score();
+      let type = hand_evaluator.get_type();
       player_score["chair_id"] = player["chair_id"];
       player_score["score"] = score;
       player_score["type"] = type;
@@ -1553,10 +1554,6 @@ function game_result(room_id) {
   }
 
   reset(room_id);
-  // active_players = active_player_count(room["players"]);
-  // if (active_players >= 2) {
-  //   room["time_state"] = "start";
-  // }
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];

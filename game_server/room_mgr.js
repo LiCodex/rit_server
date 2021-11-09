@@ -7,16 +7,15 @@ const ObjectID = require('mongodb').ObjectID;
 const jwt = require("jsonwebtoken");
 const user_mgr = require('./user_mgr');
 
-var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": new Date(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
+var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": new Date(), "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": null, "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "duaration": 90, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
 var creating_rooms = {};
-
 var user_location = {};
 var total_rooms = 0;
-var START_TIMER = 1;
+const START_TIMER = 1;
 
 function generate_room_id() {
   var room_id = "";
-  for (var i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     room_id += Math.floor(Math.random() * 10);
   }
   return room_id;
@@ -25,7 +24,7 @@ function generate_room_id() {
 
 function active_player_count(players) {
   var res = 0;
-  for (var i = 0; i < players.length; i++) {
+  for (let i = 0; i < players.length; i++) {
     if ((players[i]["game_state"] == "playing" || players[i]["game_state"] == "waiting") && players[i]["money_on_the_table"] > 0) {
       res++;
     }
@@ -274,7 +273,6 @@ function game_start(room_id) {
   console.log(player);
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["actions"] != []) {
-      //console.log(room["players"][i]["actions"]);
       room["players"][i]["actions"] = [];
     }
   }
@@ -282,7 +280,6 @@ function game_start(room_id) {
   response["m"] = "start";
   response["c"] = "room";
   broadcast_in_room(room_id, response, '');
-
   smallblind(room_id);
 
 };
@@ -413,7 +410,7 @@ exports.room_add_time = async function(message) {
     return { success: false, message: "not current player" }
   }
 
-  if (player["money_in_the_bank"] < room["small_blind"]) {
+  if (player["money_in_the_bank"] < room["smallblind"]) {
     return { success: false, message: "do not have enough in the bank" }
   }
 
@@ -527,7 +524,7 @@ function table_to_bank(player, amount) {
 
 
 exports.room_refresh = function() {
-  var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": new Date(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "small_blind": 1, "big_blind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
+  var rooms = [{"_id": "608f829787c9b44b2c186f16", "name": "test", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 0, "last_bet_time": new Date(), "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "players": []},{"_id": "6119cbab01f8ca1b5e7ed509", "name": "test_medium1", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "total_players_count": 0, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbd101f8ca1b5e7ed50a", "name": "test_medium2", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]}, {"_id": "6119cbdb01f8ca1b5e7ed50b", "name": "test_medium3", "deck": [], "seat_count": 8, "min_buy_in": 50, "max_buy_in": 400, "players_count": 2, "last_bet_time": new Date(), "XZTIMER": 15, "smallblind": 1, "bigblind": 2, "current_action_player": 0, "round": 0, "players": [{"uid": "61196590e0f26367a6ea43d4", "hand_state": "default", "game_state": "playing", "chair_id": 0, "money_on_the_table": 400}, { "uid": "61196878e0f26367a6ea43d5", "hand_state": "default", "game_state": "sit_out", "chair_id": 1, "money_on_the_table": 100}]} ];
   return { success: true }
 };
 
@@ -549,7 +546,7 @@ exports.index_login = function(message) {
 function smallblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["hand_state"] = "small_blind";
+  room["hand_state"] = "smallblind";
   room["ctx_seq"] += 1;
   room["current"] = room["smallblind_id"];
 
@@ -557,19 +554,20 @@ function smallblind(room_id) {
     var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
     console.log("money on the table was deducted test");
     console.log(player["money_on_the_table"]);
-    player["money_on_the_table"] -= room["small_blind"];
+    player["money_on_the_table"] -= room["smallblind"];
     console.log(player["money_on_the_table"]);
+    contribute_pot(room_id, room["smallblind"]);
     if (room["betting_list"] == null) {
       room["betting_list"] = [];
     }
     var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["smallblind_id"])[0];
     if (elem != null) {
-      elem["betting_amount"] += room["small_blind"];
+      elem["betting_amount"] += room["smallblind"];
     } else {
       var record = {};
       record["chair_id"] = room["smallblind_id"];
       record["betting_amount"] = 0;
-      record["betting_amount"] += room["small_blind"];
+      record["betting_amount"] += room["smallblind"];
       room["betting_list"].push(record);
     }
   }
@@ -577,11 +575,11 @@ function smallblind(room_id) {
   console.log(room["betting_list"]);
   console.log(room["current"]);
   var response = {};
-  response["m"] = "small_blind";
+  response["m"] = "smallblind";
   response["c"] = "room";
 
   var data = {};
-  data["betting_amount"] = room["small_blind"];
+  data["betting_amount"] = room["smallblind"];
   data["chair_id"] = room["smallblind_id"];
   response["data"] = data;
   //broadcast
@@ -593,35 +591,36 @@ function smallblind(room_id) {
 function bigblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["hand_state"] = "big_blind";
+  room["hand_state"] = "bigblind";
   room["ctx_seq"] += 1;
   room["current"] = room["bigblind_id"];
   //room["last_bet_time"] = new Date();
 
   if (room["bigblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
-    player["money_on_the_table"] -= room["big_blind"];
+    player["money_on_the_table"] -= room["bigblind"];
+    contribute_pot(room_id, room["bigblind"]);
     if (room["betting_list"] == null) {
       room["betting_list"] = [];
     }
     var elem = room["betting_list"].filter(bet => bet["chair_id"] == room["bigblind_id"])[0];
     if (elem != null) {
-      elem["betting_amount"] += room["big_blind"];
+      elem["betting_amount"] += room["bigblind"];
     } else {
       var record = {};
       record["chair_id"] = room["bigblind_id"];
       record["betting_amount"] = 0;
-      record["betting_amount"] += room["big_blind"];
+      record["betting_amount"] += room["bigblind"];
       room["betting_list"].push(record);
     }
   }
 
   var response = {};
-  response["m"] = "big_blind";
+  response["m"] = "bigblind";
   response["c"] = "room";
 
   var data = {};
-  data["betting_amount"] = room["big_blind"];
+  data["betting_amount"] = room["bigblind"];
   data["chair_id"] = room["bigblind_id"];
   response["data"] = data;
   //broadcast
@@ -1364,7 +1363,6 @@ exports.user_showhands = function(message) {
   }
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["status"] != "sit_out") {
-      // room["players"][i]["hole_cards"] = hole_cards;
       var uid = room["players"][i]["uid"];
       var ws = user_mgr.get(uid);
       var response = {};
@@ -1422,7 +1420,7 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
       data = get_basic_player_info(room["_id"], chair_id);
       data["actions"] = [];
     }
-    // if
+
     if (player["hand_finished"]) {
       console.log("hand finished");
       data["actions"] = [];
@@ -1520,7 +1518,6 @@ function river_action(room_id) {
   }
 };
 
-
 function game_result(room_id) {
   let room = rooms.filter(room => room["name"] == "test")[0];
   console.log("in game result");
@@ -1557,7 +1554,26 @@ function game_result(room_id) {
     }
   }
 
-  reset(room_id);
+  let showing_players = new Set();
+  // determin showing player, all in players first
+  for (let i = 0; i < room["pots"].length; i++) {
+    let pot = room["pots"][i];
+    let contributors = pot.get_contributors();
+    for (let j = 0; j < contributors.length; j++) {
+      if (!showing_players.has(contributors[j]["chair_id"]) && is_all_in(contributors[j])) {
+        showing_players.add(contributors[j]);
+      }
+    }
+  }
+  // add last aggressor
+  if (room["last_aggressor"] != null) {
+    if (!showing_players.has(room["last_agressor"]["chair_id"])) {
+      show_players.add(room["last_agressor"]["chair_id"]);
+    }
+  }
+
+  // and finally remaining players, starting from left of the button
+  reset_room(room_id);
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
@@ -1683,50 +1699,25 @@ function get_basic_player_info(room_id, chair_id) {
   return data;
 };
 
-function reset(room_id) {
+function reset_room(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   reset_players(room);
   room["community_cards"] = [];
   room["deck"] = [];
-
+  room["timer"] = -1;
+  room["game_state"] = null;
+  room["time_state"] = null;
+  room["hand_state"] = null;
+  room["smallblind_id"] = null;
+  room["bigblind_id"] = null;
+  room["button"] = null;
+  room["current"] = null;
+  room["pots"] = [];
+  room["direct_settlement"] = false;
+  room["deal_rest"] = null;
+  room["last_started_at"] = null;
   room["last_game_result_time"] = null;
-  // clear_player_actions(room_id);
-
 };
-
-function clear_player_actions(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  for (var i = 0; i < room["players"].length; i++) {
-    if (room["players"][i]["actions"]) {
-      room["players"][i]["actions"] = [];
-    }
-    room["timer"] = -1;
-    room["game_state"] = null;
-    room["time_state"] = null;
-    room["hand_state"] = null;
-    room["smallblind_id"] = null;
-    room["bigblind_id"] = null;
-    room["button"] = null;
-    room["current"] = null;
-    room["pots"] = [];
-    room["direct_settlement"] = false;
-    room["deal_rest"] = null;
-    room["last_started_at"] = null;
-  }
-};
-
-// function clear_actions(room_id) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-
-//
-//   room["betting_list"] = [];
-//   room["declare_list"] = [];
-//   room["last_hand_finished_at"] = null;
-//   room["last_direct_settlement_time"] = null;
-//   room["direct_settlement"] = null;
-//   room["deal_rest"] = null;
-//   room["last_started_at"] = null;
-// };
 
 function contribute_pot(room_id, amount) {
   var room = rooms.filter(room => room["name"] == "test")[0];

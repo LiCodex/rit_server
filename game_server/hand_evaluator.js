@@ -1,26 +1,25 @@
 const Card = require('./card.js');
 
 const HandEvaluator = class {
-  // number of hand ranking
   static NO_OF_RANKINGS  = 6;
   static MAX_NO_OF_PAIRS = 2;
   static NO_OF_RANKS = 13;
   static NO_OF_SUITE = 4;
   static RANKING_FACTORS = [371293, 28561, 2197, 169, 13, 1];
   hand_type;
-  hand_value;
+  hand_value = 0;
   cards = [];
-  rank_distribution = new Array(HandEvaluator.NO_OF_RANKS);
-  suite_distribution = new Array(HandEvaluator.NO_OF_SUITE);
+  rank_distribution = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  suite_distribution = new Array(0, 0, 0, 0);
   no_of_pairs = 0;
-  pairs = new Array(HandEvaluator.MAX_NO_OF_PAIRS);
+  pairs = new Array(0, 0);
   flush_suite = -1;
   flush_rank = -1;
   triple_rank = -1;
   straight_rank = -1;
   wheeling_ace = false;
   quad_rank = -1;
-  rankings = new Array(HandEvaluator.NO_OF_RANKINGS);
+  rankings = new Array(0, 0, 0, 0, 0, 0);
 
   constructor(community_cards, hole_cards) {
     let all_cards = [];
@@ -33,12 +32,27 @@ const HandEvaluator = class {
       all_cards.push(hole[i]);
     }
     this.cards = all_cards;
+    console.log("rank_distribution1");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution1");
     this.calculate_distribution();
+    console.log("rank_distribution2");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution2");
     this.find_straight();
+    console.log("rank_distribution3");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution3");
     this.find_flush();
+    console.log("rank_distribution4");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution4");
     this.find_dups();
+    console.log("rank_distribution5");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution5");
 
-    is_special_value = this.is_straight_flush()
+    let is_special_value = this.is_straight_flush()
                        || this.is_four_of_a_kind()
                        || this.is_full_house()
                        || this.is_flush()
@@ -51,22 +65,39 @@ const HandEvaluator = class {
       this.calculate_high_card();
     }
 
+    console.log("ranking");
+    console.log(this.rankings);
     for (var i = 0; i < HandEvaluator.NO_OF_RANKINGS; i++) {
       this.hand_value += this.rankings[i] * HandEvaluator.RANKING_FACTORS[i];
     }
   }
 
   get_value() {
-    return this.value;
+    console.log("hand-value");
+    return this.hand_value;
+  }
+
+  get_type() {
+    console.log("hand type");
+    return this.hand_type;
   }
 
   calculate_distribution() {
-    console.log("calculate distribution");
-    console.log(this.cards);
+    console.log("rank_distribution7");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution7");
+    console.log(this.suite_distribution);
+
     for (var i = 0; i < this.cards.length; i++) {
+      console.log("this.cards[i].rank");
+      console.log(this.cards[i].rank);
       this.rank_distribution[this.cards[i].rank]++;
       this.suite_distribution[this.cards[i].suite]++;
     }
+    console.log("rank_distribution8");
+    console.log(this.rank_distribution);
+    console.log("suite_distribution8");
+    console.log(this.suite_distribution);
   };
 
   find_flush() {
@@ -130,7 +161,8 @@ const HandEvaluator = class {
     this.hand_type = "HIGH_CARD";
     this.rankings[0] == this.type_to_rank(this.hand_type);
     var index = 1;
-    for (var i = 0; i <= this.cards.length; i++) {
+    console.log(this.cards);
+    for (var i = 0; i < this.cards.length; i++) {
       this.rankings[index++] = this.cards[i].rank;
       if (index > 5) {
         break;
@@ -331,11 +363,9 @@ const HandEvaluator = class {
   }
 
   type_to_rank(type) {
-    let mapping = { "ROYAL_FLUSH": 9, "STRAIGHT_FLUSH": 8, "FOUR_OF_A_KIND": 7, "FULL_HOUSE": 6, "FLUSH": 5, "STRAIGHT": 4, "THREE_OF_A_KIND": 3, "TWO_PAIRS": 2, "ONE_PAIR": 1, "HIGH_CARD": 0 };
+    let mapping = { "ROYAL_FLUSH": 9, "STRAIGHT_FLUSH": 8, "FOUR_OF_A_KIND": 7, "FULL_HOUSE": 6, "FLUSH": 5, "STRAIGHT": 4, "THREE_OF_A_KIND": 3, "TWO_PAIRS": 2, "ONE_PAIR": 1, "HIGH_CARD": 0 } 0 };
     return mapping[type];
   }
-
-
 }
 
 module.exports = HandEvaluator

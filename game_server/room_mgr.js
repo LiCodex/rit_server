@@ -1414,10 +1414,12 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     var data = {};
 
     if (chair_id != room["players"][i]["chair_id"]) {
+      console.log("in chair_id1");
+      console.log(chair_id);
       data = get_full_player_info(room["_id"], chair_id);
       data["actions"] = room["players"][i]["actions"] || [];
     } else {
-      console.log("in chair_id");
+      console.log("in chair_id2");
       console.log(chair_id);
       data = get_basic_player_info(room["_id"], chair_id);
       data["actions"] = [];
@@ -1597,7 +1599,9 @@ function game_result(room_id) {
       player["game_state"] = "wait";
     }
     player["hand_finished"] = true;
-    broadcast_userupdate_includeme(room_id, player["chaid_id"]);
+    // console.log("game result");
+    // console.log(player["chair_id"]);
+    broadcast_userupdate_includeme(room_id, player["chair_id"]);
   }
   console.log("in game result reset reset complete");
 

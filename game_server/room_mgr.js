@@ -1413,10 +1413,12 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     response["c"] = "room";
     var data = {};
 
-    if (chair_id != room["players"]["chair_id"]) {
+    if (chair_id != room["players"][i]["chair_id"]) {
       data = get_full_player_info(room["_id"], chair_id);
       data["actions"] = room["players"][i]["actions"] || [];
     } else {
+      console.log("in chair_id");
+      console.log(chair_id);
       data = get_basic_player_info(room["_id"], chair_id);
       data["actions"] = [];
     }

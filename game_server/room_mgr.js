@@ -1780,6 +1780,7 @@ function reset_players(room_id) {
     if (player["game_state"] != "offline") {
       player["hand_state"] = "default";
       player["game_state"] = "default";
+      player["state"] = "default";
       player["actions"] = [];
     }
   }

@@ -78,6 +78,8 @@ function is_all_fold(room_id) {
 
 function game_all_fold(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
+  console.log("game all fold");
+  console.log(room["players"]);
   room["direct_settlement"] = true;
   game_result(room_id);
 };
@@ -1576,9 +1578,6 @@ function game_result(room_id) {
     }
   }
 
-  // and finally remaining players, starting from left of the button
-  reset_room(room_id);
-
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
     console.log("player information");
@@ -1605,6 +1604,8 @@ function game_result(room_id) {
     // console.log(player["chair_id"]);
     broadcast_userupdate_includeme(room_id, player["chair_id"]);
   }
+  // and finally remaining players, starting from left of the button
+  reset_room(room_id);
   console.log("in game result reset reset complete");
 
 };
@@ -1778,7 +1779,7 @@ function reset_players(room_id) {
     if (player["game_state"] != "offline") {
       player["hand_state"] = "default";
       player["game_state"] = "default";
-      player["actinos"] = [];
+      player["actions"] = [];
     }
   }
 };

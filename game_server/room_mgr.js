@@ -1581,6 +1581,8 @@ function game_result(room_id) {
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
+    console.log("player information");
+    console.log(player);
     let response = {};
     response["m"] = "hand_finished";
     response["c"] = "room";
@@ -1712,7 +1714,7 @@ function reset_room(room_id) {
   room["deck"] = [];
   room["timer"] = -1;
   room["game_state"] = null;
-  room["time_state"] = null;
+  room["time_state"] = "start";
   room["hand_state"] = null;
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;

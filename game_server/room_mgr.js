@@ -1297,7 +1297,7 @@ function game_betting(room_id) {
   var all_fold = is_all_fold(room_id);
   console.log("all fold in game betgting");
   console.log(all_fold);
-  console.log("game state");
+  console.log(room);
   // only one player exists and
   if (all_fold == true && room["game_state"] != "game_result") {
     game_all_fold();
@@ -1527,6 +1527,7 @@ function river_action(room_id) {
 function game_result(room_id) {
   let room = rooms.filter(room => room["name"] == "test")[0];
   console.log("in game result");
+  console.log(room["players"]);
   room["game_state"] = "game_result";
   room["hand_state"] = "game_result";
   room["time_state"] = "game_result";

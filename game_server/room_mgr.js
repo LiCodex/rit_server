@@ -1420,8 +1420,14 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     if (chair_id != room["players"][i]["chair_id"]) {
       console.log("in chair_id1");
       console.log(chair_id);
+      console.log(room["players"][i]);
       data = get_full_player_info(room["_id"], chair_id);
-      data["actions"] = room["players"][i]["actions"] || [];
+      if (!room["players"][i]["actions"]) {
+        data["actions"] = [];
+      } else {
+        data["actions"] = room["players"][i]["actions"];
+      }
+
     } else {
       console.log("in chair_id2");
       console.log(chair_id);
@@ -1670,8 +1676,6 @@ function broadcast_userupdate_onlyme(room_id, chair_id) {
     data["current"] = room["current"];
     data["community_cards"] = room["community_cards"];
     //run it twice community cards
-
-
     var actions = player["actions"] || [];
     data["actions"] = actions;
     response["data"] = data;

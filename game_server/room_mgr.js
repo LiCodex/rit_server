@@ -1689,7 +1689,9 @@ function broadcast_userupdate_onlyme(room_id, chair_id) {
 function get_full_player_info(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-
+  console.log("get_full_player_info");
+  console.log(player);
+  console.log(chair_id);
   var data = {};
   data["chair_id"] = chair_id;
   data["community_cards"] = room["community_cards"];

@@ -1417,7 +1417,7 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     response["c"] = "room";
     var data = {};
 
-    if (chair_id != room["players"][i]["chair_id"]) {
+    if (chair_id == room["players"][i]["chair_id"]) {
       console.log("in chair_id1");
       console.log(chair_id);
       console.log(room["players"][i]);

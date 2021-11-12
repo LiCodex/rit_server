@@ -1,5 +1,6 @@
 const Deck = require('./deck.js');
 const Pot = require('./pot.js');
+const Card = require('./card.js');
 const Room = require('../models/room');
 const User = require('../models/user');
 const HandEvaluator = require('./hand_evaluator');

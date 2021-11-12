@@ -193,6 +193,7 @@ function game_actions(room_id) {
   if (pcur["money_on_the_table"] > 3 * pot) {
     actions.push({"op": "raise", "amount": 3 * pot});
   }
+  console.log("show actions");
   console.log(actions);
   broadcast_userupdate_includeme(room_id, room["current"]);
 };
@@ -1539,7 +1540,8 @@ function game_result(room_id) {
     room["player_scores"] = room["player_scores"] || [];
     if (is_active(player)) {
       let player_score = {};
-      let hand_evaluator = new HandEvaluator(room["community_cards"], player["hole_cards"]);
+      let hole_cards = player["hole_cards"].map(card_string => string_to_card(card_string));
+      let hand_evaluator = new HandEvaluator(room["community_cards"], hole_cards);
       let score = hand_evaluator.get_value();
       let type = hand_evaluator.get_type();
       player_score["chair_id"] = player["chair_id"];
@@ -1690,7 +1692,7 @@ function get_full_player_info(room_id, chair_id) {
   //data["show_timer_button"] = player["show_timer_button"];
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
-  data["hole_cards"] = player["hole_cards"]
+  data["hole_cards"] = player["hole_cards"];
   return data;
 };
 
@@ -1765,7 +1767,7 @@ function do_showdown(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     var player = room["players"][i];
     if (is_active(player)) {
-      var hand_type = HandEvaluator(player["hole_cards"], room["community_cards"]);
+      var hand_type = new HandEvaluator(room["community_cards"], player["hole_cards"]);
       //var
       var response = {};
 
@@ -1785,3 +1787,9 @@ function reset_players(room_id) {
     }
   }
 };
+
+function string_to_card(card_string) {
+  var rank = card_string.substring(1, 3);
+  var suite = card_string.substring(0, 1);
+  return new Card(parseInt(rank), parseInt(suite));
+}

@@ -1798,8 +1798,17 @@ function reset_players(room_id) {
   }
 };
 
+// function string_to_card(card_string) {
+//   var rank = card_string.substring(1, 3);
+//   var suite = card_string.substring(0, 1);
+//   return new Card(parseInt(rank), parseInt(suite));
+// }
+
 function string_to_card(card_string) {
   var rank = card_string.substring(1, 3);
   var suite = card_string.substring(0, 1);
+  console.log("string_to_card");
+  console.log(rank);
+  console.log(suite);
   return new Card(parseInt(rank), parseInt(suite));
-}
+};

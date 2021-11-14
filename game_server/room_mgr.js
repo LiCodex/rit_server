@@ -1725,9 +1725,9 @@ function reset_room(room_id) {
   room["community_cards"] = [];
   room["deck"] = [];
   room["timer"] = -1;
-  room["game_state"] = null;
+  room["game_state"] = "playing";
   room["time_state"] = "start";
-  room["hand_state"] = null;
+  room["hand_state"] = "start";
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;
   room["button"] = null;
@@ -1737,6 +1737,7 @@ function reset_room(room_id) {
   room["deal_rest"] = null;
   room["last_started_at"] = null;
   room["last_game_result_time"] = null;
+  room["betting_list"] = [];
   console.log("reset_room");
   console.log(room);
 };

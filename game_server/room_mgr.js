@@ -219,6 +219,7 @@ function delay_game_start(room_id) {
   }
 
   if (room["game_state"] != "start") {
+    console.log("in delay game start");
     game_start(room_id);
     return;
   }
@@ -285,40 +286,7 @@ function game_start(room_id) {
   response["c"] = "room";
   broadcast_in_room(room_id, response, '');
   smallblind(room_id);
-
 };
-
-
-// function time_out_fold(room_id) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   room["ctx_seq"] += 1;
-//   var player = room["player"].filter(player => player["chair_id"] == room["current"])[0];
-//   var actions = player["actions"];
-//   player["declare_count"] += 1;
-//   player["last_declared_at"] = new Date();
-//   room["last_bet_time"] = new Date();
-//   room["action_declare_list"].push({chair_id: chair_id, action_declared: true});
-// };
-//
-// function broadcast_user_update(room_id, chair_id) {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
-//   for (var i = 0; i < room["players"].length; i++) {
-//     var response = {};
-//     response["m"] = "user_update";
-//     response["c"] = "room";
-//     var data = {};
-//     data["timer"] = room["timer"];
-//     data["ctx_seq"] = room["ctx_seq"];
-//     data["button"] = room["button"];
-//     data["chair_id"] = room["chair_id"];
-//     data["smallblind_id"] = room["smallblind_id"];
-//     data["bigblind_id"] = room["bigblind_id"];
-//     data["current"] = room["current"];
-//     //data[""]
-//   }
-//
-// };
 
 function game_flop(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -358,7 +326,7 @@ exports.room_join = async function(message) {
   console.log("room");
   console.log(room);
 
-  room["total_players_count"] += 1;
+  room["total_players_count"]++;
 
   Room.findOne({ _id: o_id }, function (err, room) {
     room.total_players_count += 1;
@@ -406,7 +374,7 @@ exports.room_quit = async function(message) {
 exports.room_add_time = async function(message) {
   var room = rooms["test"];
   var chair_id = message.chair_id;
-  var player = room["players"][chair_id];
+  var player = room["players"].filter(player => player[chair_id] == chair_id);
   if (player["hand_state"] == "fold") {
     return { success: false, message: "the player has folded the hole cards, cannot add time" }
   }
@@ -1443,7 +1411,7 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     data["timer"] = room["timer"];
     data["ctx_seq"] = room["ctx_seq"];
     data["button"] = room["button"];
-    data["chair_id"] = room["chair_id"];
+    data["chair_id"] = chair_id;
     data["smallblind_id"] = room["smallblind_id"];
     data["bigblind_id"] = room["bigblind_id"];
     data["current"] = room["current"];
@@ -1611,8 +1579,6 @@ function game_result(room_id) {
       player["game_state"] = "wait";
     }
     player["hand_finished"] = true;
-    // console.log("game result");
-    // console.log(player["chair_id"]);
     broadcast_userupdate_includeme(room_id, player["chair_id"]);
   }
   // and finally remaining players, starting from left of the button
@@ -1730,7 +1696,7 @@ function reset_room(room_id) {
   room["hand_state"] = "start";
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;
-  room["button"] = null;
+  // room["button"] = null;
   room["current"] = null;
   room["pots"] = [];
   room["direct_settlement"] = false;
@@ -1738,6 +1704,7 @@ function reset_room(room_id) {
   room["last_started_at"] = null;
   room["last_game_result_time"] = null;
   room["betting_list"] = [];
+  room["action_declare_list"] = [];
   console.log("reset_room");
   console.log(room);
 };

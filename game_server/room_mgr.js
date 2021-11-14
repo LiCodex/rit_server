@@ -1736,6 +1736,8 @@ function reset_room(room_id) {
   room["deal_rest"] = null;
   room["last_started_at"] = null;
   room["last_game_result_time"] = null;
+  console.log("reset_room");
+  console.log(room);
 };
 
 function contribute_pot(room_id, amount) {

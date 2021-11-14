@@ -32,38 +32,11 @@ const HandEvaluator = class {
       all_cards.push(hole[i]);
     }
     this.cards = all_cards;
-    console.log("rank_distribution1");
-    console.log(this.rank_distribution);
-    console.log(this.rankings);
-    console.log("suite_distribution1");
     this.calculate_distribution();
-    console.log("rank_distribution2");
-    console.log(this.rank_distribution);
-    console.log(this.rankings);
-    console.log("suite_distribution2");
     this.find_straight();
-    console.log("rank_distribution3");
-    console.log(this.rank_distribution);
-    console.log(this.rankings);
-    console.log("suite_distribution3");
     this.find_flush();
-    console.log("rank_distribution4");
-    console.log(this.rank_distribution);
-    console.log(this.rankings);
-    console.log("suite_distribution4");
     this.find_dups();
-    console.log("rank_distribution5");
-    console.log(this.rank_distribution);
-    console.log(this.rankings);
-    console.log("suite_distribution5");
-    // this.is_straight_flush();
-    // this.is_four_of_a_kind();
-    // this.is_full_house();
-    // this.is_flush();
-    // this.is_straight();
-    // this.is_three_of_a_kind();
-    // this.is_two_pair();
-    // this.is_one_pair();
+
     let is_special_value = this.is_straight_flush()
                        || this.is_four_of_a_kind()
                        || this.is_full_house()
@@ -73,71 +46,50 @@ const HandEvaluator = class {
                        || this.is_two_pair()
                        || this.is_one_pair();
 
-
-     console.log("rank_distribution666");
-     console.log(this.rank_distribution);
-     console.log(this.rankings);
-     console.log("suite_distribution666");
-
-
     if (!is_special_value) {
       this.calculate_high_card();
     }
 
-    console.log("ranking");
-    console.log(this.rankings);
     for (var i = 0; i < HandEvaluator.NO_OF_RANKINGS; i++) {
       this.hand_value += this.rankings[i] * HandEvaluator.RANKING_FACTORS[i];
     }
   }
 
   get_value() {
-    console.log("hand-value");
     return this.hand_value;
   }
 
   get_type() {
-    console.log("hand type");
     return this.hand_type;
   }
 
   calculate_distribution() {
-    console.log("rank_distribution7");
-    console.log(this.rank_distribution);
-    console.log("suite_distribution7");
-    console.log(this.suite_distribution);
-
     for (var i = 0; i < this.cards.length; i++) {
-      console.log("this.cards[i].rank");
-      console.log(this.cards[i].rank);
-
       let rank = this.cards[i].rank - 2;
       this.rank_distribution[rank]++;
       this.suite_distribution[this.cards[i].suite]++;
     }
-    console.log("rank_distribution8");
-    console.log(this.rank_distribution);
-    console.log("suite_distribution8");
-    console.log(this.suite_distribution);
   };
 
   find_flush() {
     for (var i = 0; i < HandEvaluator.NO_OF_SUITE; i++) {
       if (this.suite_distribution[i] >= 5) {
         this.flush_suite = i;
+        if (this.wheeling_ace) {
+          // 5 + 2
+          this.flush_rank = 7;
+          break;
+        }
+        var max_flush_rank = -1;
         for (var i = 0; i < this.cards.length; i++) {
           if (this.cards[i].suite == this.flush_suite) {
-            if (!this.wheeling_ace || this.cards[i].rank != Card.ACE) {
-              this.flush_rank = this.cards[i].rank;
-              break;
-            }
+              max_flush_rank = (this.cards[i].rank > max_flush_rank) ? this.cards[i].rank : max_flush_rank;
           }
         }
         break;
       }
     }
-    console.log("flush rank");
-    console.log(this.flush_rank);
+    this.flush_rank = max_flush_rank;
   }
 
   find_straight() {
@@ -160,17 +112,15 @@ const HandEvaluator = class {
         }
       }
     }
-    if ((count == 4) && (rank = Card.FIVE) && (this.rank_distribution[Card.ACE - 1] > 0)) {
+
+    if ((count == 4) && ((rank + 2) == Card.FIVE) && (this.rank_distribution[Card.ACE - 2] > 0)) {
       this.wheeling_ace = true;
       this.straight_rank = rank;
     }
-    console.log("in straight");
-    console.log(this.straight_rank);
-    console.log(this.wheeling_ace);
   };
 
   find_dups() {
-    for (var i = HandEvaluator.NO_OF_RANKINGS - 1; i >= 0; i--) {
+    for (var i = HandEvaluator.NO_OF_RANKS - 1; i >= 0; i--) {
       if (this.rank_distribution[i] == 4) {
         this.quad_rank = i;
       } else if (this.rank_distribution[i] == 3) {
@@ -187,7 +137,6 @@ const HandEvaluator = class {
     this.hand_type = "HIGH_CARD";
     this.rankings[0] == this.type_to_rank(this.hand_type);
     var index = 1;
-    console.log(this.cards);
     for (var i = 0; i < this.cards.length; i++) {
       this.rankings[index++] = this.cards[i].rank;
       if (index > 5) {
@@ -256,6 +205,7 @@ const HandEvaluator = class {
           }
         }
       }
+      return true;
     } else {
       return false;
     }
@@ -314,10 +264,9 @@ const HandEvaluator = class {
       this.rankings[1] = this.quad_rank;
 
       var index = 2;
-      for (var i = 0; i < this.cards.length; i++) {
-        var rank = this.cards[i].rank;
-        if (this.cards[i] != this.quad_rank) {
-          this.rankings[index++] = rank;
+      for (var i = HandEvaluator.NO_OF_RANKS - 1; i >= 0 ;i--) {
+        if (this.rank_distribution[i] > 0 && i != this.quad_rank) {
+          this.rankings[2] = i;
           break;
         }
       }
@@ -329,61 +278,18 @@ const HandEvaluator = class {
 
   is_straight_flush() {
     if ((this.straight_rank != -1) && this.flush_rank == this.straight_rank) {
-      var straight_rank2 = -1;
-      var last_suite = -1;
-      var last_rank = -1;
-      var in_straight = 1;
-      var in_flush = 1;
-      for (var i = 0; i < this.cards.length; i++) {
-        var rank = this.cards[i].rank;
-        var suite = this.cards[i].suite;
-        if (last_rank != -1) {
-          var rank_diff = last_rank - rank;
-          if (rank_diff == 1) {
-            in_straight++;
-            if (straight_rank2 == -1) {
-              straight_rank2 = last_rank;
-            }
-            if (suite == last_suite) {
-              in_flush++;
-            } else {
-              in_flush = 1;
-            }
-            if (in_straight >= 5 && in_flush >= 5) {
-              break;
-            }
-          } else if (rank_diff == 0) {
-            // duplicate ranks
-          } else {
-            straight_rank2 = -1;
-            in_straigh = 1;
-            in_flush = 1;
-          }
-        }
-        last_rank = rank;
-        last_suite = suite;
-      }
-
-      if(in_straight >= 5 && in_flush >= 5) {
-        if (this.straight_rank == Card.ACE) {
-          this.hand_type = "ROYAL_FLUSH";
-          this.rankings[0] = this.type_to_rank(this.hand_type);
-          return true;
-        } else {
-          this.hand_type = "STRAIGHT_FLUSH";
-          this.rankings[0] = this.type_to_rank(this.hand_type);
-          this.rankings[1] = straight_rank2;
-          return true;
-        }
-      } else if (this.wheeling_ace && in_straight >= 4 && in_flush >= 4) {
-        this.hand_type = "STRAIGHT_FLUSH";
+      if (this.straight_rank == Card.ACE) {
+        this.hand_type = "ROYAL_FLUSH";
         this.rankings[0] = this.type_to_rank(this.hand_type);
-        this.rankings[1] = straight_rank2;
         return true;
       } else {
-        return false;
+        this.hand_type = "STRAIGHT_FLUSH";
+        this.rankings[0] = this.type_to_rank(this.hand_type);
+        this.rankings[1] = this.straight_rank;
+        return true;
       }
-    } else {
+    }
+    else {
       return false;
     }
   }

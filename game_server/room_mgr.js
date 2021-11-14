@@ -1535,7 +1535,7 @@ function river_action(room_id) {
 function game_result(room_id) {
   let room = rooms.filter(room => room["name"] == "test")[0];
   console.log("in game result");
-  console.log(room["players"]);
+  console.log(room);
   room["game_state"] = "game_result";
   room["hand_state"] = "game_result";
   room["time_state"] = "game_result";
@@ -1544,12 +1544,12 @@ function game_result(room_id) {
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
+    let community_cards = room["community_cards"].map(card_string => string_to_card(card_string));
     room["player_scores"] = room["player_scores"] || [];
     if (is_active(player)) {
       let player_score = {};
-      let community = room["community_cards"].map(card_string => string_to_card(card_string));
       let hole_cards = player["hole_cards"].map(card_string => string_to_card(card_string));
-      let hand_evaluator = new HandEvaluator(community, hole_cards);
+      let hand_evaluator = new HandEvaluator(community_cards, hole_cards);
       let score = hand_evaluator.get_value();
       let type = hand_evaluator.get_type();
       player_score["chair_id"] = player["chair_id"];

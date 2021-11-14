@@ -1810,5 +1810,5 @@ function string_to_card(card_string) {
   console.log("string_to_card");
   console.log(rank);
   console.log(suite);
-  return new Card(parseInt(rank), parseInt(suite));
+  return new Card(parseInt(rank), parseInt(suite) - 1);
 };

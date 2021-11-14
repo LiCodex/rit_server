@@ -45,12 +45,6 @@ const Card = class {
         return (this.suite + 1).toString() + (this.rank + 2).toString();
       }
     }
-
-    stringToCard(card_string) {
-      var rank = card_string.substring(1, 3);
-      var suite = card_string.substring(0, 1);
-      return new Card(parseInt(suite), parseInt(rank));
-    }
 }
 
 module.exports = Card

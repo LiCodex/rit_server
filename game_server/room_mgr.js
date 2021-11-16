@@ -528,7 +528,7 @@ function smallblind(room_id) {
     console.log(player["money_on_the_table"]);
     player["money_on_the_table"] -= room["smallblind"];
     console.log(player["money_on_the_table"]);
-    contribute_pot(room_id, room["smallblind"]);
+    contribute_pot(room_id, room["smallblind"], room["smallblind_id"]);
     if (room["betting_list"] == null) {
       room["betting_list"] = [];
     }
@@ -571,7 +571,7 @@ function bigblind(room_id) {
   if (room["bigblind_id"] != null) {
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
     player["money_on_the_table"] -= room["bigblind"];
-    contribute_pot(room_id, room["bigblind"]);
+    contribute_pot(room_id, room["bigblind"], room["bigblind_id"]);
     if (room["betting_list"] == null) {
       room["betting_list"] = [];
     }
@@ -1237,29 +1237,29 @@ exports.room_load_context = async function(message) {
 };
 
 exports.exit_room = function(user_id) {
-    var location = user_location[user_id];
-    if (location == null) {
-        return;
-    }
+  var location = user_location[user_id];
+  if (location == null) {
+    return;
+  }
 
-    var room_id = location.room_id;
-    var seat_index = location.seat_index;
-    var room = rooms[room_id];
-    delete user_location[user_id];
-    if (room == null || seat_index == null) {
-        return;
-    }
+  var room_id = location.room_id;
+  var seat_index = location.seat_index;
+  var room = rooms[room_id];
+  delete user_location[user_id];
+  if (room == null || seat_index == null) {
+    return;
+  }
 
-    var seat = room.seats[seat_index];
-    seat.user_id = 0;
-    seat.name = "";
+  var seat = room.seats[seat_index];
+  seat.user_id = 0;
+  seat.name = "";
 
-    var num_of_players = 0;
-    for (var i = 0; i < rooms.length; i++) {
-        if (room.seats[i].user_id > 0) {
-            num_of_players++;
-        }
+  var num_of_players = 0;
+  for (var i = 0; i < rooms.length; i++) {
+    if (room.seats[i].user_id > 0) {
+      num_of_players++;
     }
+  }
 };
 
 function game_betting(room_id) {
@@ -1709,19 +1709,19 @@ function reset_room(room_id) {
   console.log(room);
 };
 
-function contribute_pot(room_id, amount) {
+function contribute_pot(room_id, amount, contributor) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   for (var i = 0; i < room["pots"].length; i++) {
     pot = room["pots"][i];
-    if (!pot.has_contributor(room["current"])) {
+    if (!pot.has_contributor(contributor)) {
       var pot_bet = pot.get_bet();
       if (amount >= pot_bet) {
         //regular call bet or raise
-        pot.add_contributor(room["current"]);
+        pot.add_contributor(contributor);
         amount -= pot.get_bet();
       } else {
         //partial all in, redistribugte the pot
-        room["pots"].push(pot.split(room["current"],amount));
+        room["pots"].push(pot.split(room["current"], amount));
         amount = 0;
       }
     }

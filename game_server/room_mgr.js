@@ -1729,6 +1729,11 @@ function contribute_pot(room_id, amount, contributor) {
       break;
     }
   }
+  if (amount > 0) {
+    var pot = new Pot();
+    pot.add_contributor(contributor);
+    room["pots"].push(pot);
+  }
 };
 
 function do_showdown(room_id) {

@@ -1687,6 +1687,8 @@ function get_basic_player_info(room_id, chair_id) {
 
 function reset_room(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
+  console.log("before reset");
+  console.log(room)
   reset_players(room);
   room["community_cards"] = [];
   room["deck"] = [];

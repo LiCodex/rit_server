@@ -1278,8 +1278,8 @@ function game_betting(room_id) {
   console.log("is action declared");
   console.log(is_action_declared);
   console.log("all in");
-  console.log(all_in);
-  console.log(room["time_state"]);
+  // console.log(all_in);
+  console.log(room);
   if (is_action_declared == true && all_in == true && room["time_state"] != "game_result") {
     direct_settlement();
     return;

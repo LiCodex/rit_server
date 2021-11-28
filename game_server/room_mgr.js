@@ -1214,7 +1214,7 @@ function get_context(room_id, chair_id) {
   data["actions"] = player["actions"];
   data["players"] = [];
   data["pots"] = room["pots"];
-
+  
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["chair_id"] == chair_id) {
       data["players"].push(get_full_player_info(room["_id"], chair_id));
@@ -1281,6 +1281,7 @@ function game_betting(room_id) {
   // console.log(all_in);
   console.log(room);
   if (is_action_declared == true && all_in == true && room["time_state"] != "game_result") {
+    console.log("in direct settlement");
     direct_settlement();
     return;
   }

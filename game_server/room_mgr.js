@@ -1194,7 +1194,7 @@ exports.room_show_hand = async function(message) {
   var room = rooms.filter(room => room["name"] == "test")[0];
 };
 
-function get_context(room_id, chair_id, show_all) {
+function get_context(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var player = room["players"].filter(player => player["chair_id"] = chair_id)[0];
   var response = {};
@@ -1564,7 +1564,7 @@ function game_result(room_id) {
     let response = {};
     response["m"] = "hand_finished";
     response["c"] = "room";
-    let context = get_context(room_id, player["chair_id"], show_all = true);
+    let context = get_context(room_id, player["chair_id"]);
     let data = context["data"];
     data["actions"] = [];
     data["player_scores"] = room["player_scores"];

@@ -1711,6 +1711,7 @@ function reset_room(room_id) {
 
 function contribute_pot(room_id, amount, contributor) {
   var room = rooms.filter(room => room["name"] == "test")[0];
+  var pots = room["pots"];
   for (var i = 0; i < room["pots"].length; i++) {
     pot = room["pots"][i];
     if (!pot.has_contributor(contributor)) {
@@ -1728,6 +1729,11 @@ function contribute_pot(room_id, amount, contributor) {
     if (amount <= 0) {
       break;
     }
+  }
+  if (amount > 0) {
+    var pot = new Pot(amount);
+    pot.add_contributor(contributor);
+    pots.push(pot);
   }
 };
 

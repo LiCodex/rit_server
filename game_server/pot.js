@@ -34,7 +34,7 @@ const Pot = class{
       pot.add_contributor(player);
     }
     this.bet = partial_bet;
-    contributors.add(player);
+    this.contributors.add(player);
     return pot;
   }
 

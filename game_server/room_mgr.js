@@ -1511,6 +1511,9 @@ function game_result(room_id) {
   room["last_game_result_time"] = new Date();
   room["player_scores"] = [];
 
+  console.log("here1");
+  console.log(room["players"]);
+
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
     let community_cards = room["community_cards"].map(card_string => string_to_card(card_string));
@@ -1528,6 +1531,9 @@ function game_result(room_id) {
     }
   }
 
+  console.log("here2");
+  console.log(room["players"]);
+
   let player_show_cards = [];
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
@@ -1540,6 +1546,9 @@ function game_result(room_id) {
     }
   }
 
+
+  console.log("here3");
+  console.log(room["players"]);
   let showing_players = new Set();
   // determin showing player, all in players first
   for (let i = 0; i < room["pots"].length; i++) {
@@ -1551,12 +1560,18 @@ function game_result(room_id) {
       }
     }
   }
+
+  console.log("here4");
+  console.log(room["players"]);
   // add last aggressor
   if (room["last_aggressor"] != null) {
     if (!showing_players.has(room["last_agressor"]["chair_id"])) {
       show_players.add(room["last_agressor"]["chair_id"]);
     }
   }
+
+  console.log("here5");
+  console.log(room["players"]);
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];

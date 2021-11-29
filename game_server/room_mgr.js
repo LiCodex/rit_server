@@ -1580,6 +1580,8 @@ function game_result(room_id) {
     let response = {};
     response["m"] = "hand_finished";
     response["c"] = "room";
+    console.log("here6");
+    console.log(room["players"]);
     let context = get_context(room_id, player["chair_id"]);
     let data = context["data"];
     data["actions"] = [];
@@ -1597,6 +1599,9 @@ function game_result(room_id) {
     player["hand_finished"] = true;
     broadcast_userupdate_includeme(room_id, player["chair_id"]);
   }
+
+  console.log("here7");
+  console.log(room["players"]);
   // and finally remaining players, starting from left of the button
   reset_room(room_id);
   console.log("in game result reset reset complete");

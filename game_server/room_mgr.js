@@ -136,8 +136,14 @@ function game_actions(room_id) {
   console.log(room["ctx_seq"]);
   console.log(room["timer"]);
 
+  console.log("in game actions");
+  console.log(room);
+
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;
+
+  console.log("after updating seats");
+  console.log(room);
 
   var count = 0;
   for (var i = 0; i < room["players"].length; i++) {
@@ -1575,13 +1581,13 @@ function game_result(room_id) {
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
-    console.log("player information");
-    console.log(player);
+    // console.log("player information");
+    // console.log(player);
     let response = {};
     response["m"] = "hand_finished";
     response["c"] = "room";
-    console.log("here6");
-    console.log(room["players"]);
+    // console.log("here6");
+    // console.log(room["players"]);
     let context = get_context(room_id, player["chair_id"]);
     let data = context["data"];
     data["actions"] = [];
@@ -1600,8 +1606,8 @@ function game_result(room_id) {
     broadcast_userupdate_includeme(room_id, player["chair_id"]);
   }
 
-  console.log("here7");
-  console.log(room["players"]);
+  // console.log("here7");
+  // console.log(room["players"]);
   // and finally remaining players, starting from left of the button
   reset_room(room_id);
   console.log("in game result reset reset complete");

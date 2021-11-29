@@ -1196,7 +1196,7 @@ exports.room_show_hand = async function(message) {
 
 function get_context(room_id, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var player = room["players"].filter(player => player["chair_id"] = chair_id)[0];
+  var player = room["players"].filter(player => player["chair_id"] == chair_id)[0];
   var response = {};
   response["c"] = "room";
   response["m"] = "load_context";

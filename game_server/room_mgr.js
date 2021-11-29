@@ -247,6 +247,8 @@ function game_start(room_id) {
     if (player["money_on_the_table"] > 0) {
       player["state"] = "default";
       player_count += 1;
+    } else {
+      player["state"] = "sit_out";
     }
   }
 
@@ -1292,6 +1294,8 @@ function game_betting(room_id) {
     return;
   }
   if (room["time_state"] == "start") {
+    console.log("in game start");
+    console.log(room);
     delay_game_start(room_id);
     return;
   }

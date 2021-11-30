@@ -149,7 +149,7 @@ function game_actions(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     count++;
   }
-  if (room["round"] <= 1 && count == 2) {
+  if (count == 2) {
     room["current"] = room["button"];
   }
   console.log("current in game actions");

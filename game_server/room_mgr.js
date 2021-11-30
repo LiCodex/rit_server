@@ -155,6 +155,7 @@ function game_actions(room_id) {
   console.log("current in game actions");
   console.log(room["current"]);
   console.log(room["round"]);
+  console.log(room);
   var pcur = room["players"].filter(player => player["chair_id"] == room["current"])[0];
   pcur["state"] = "thinking";
 

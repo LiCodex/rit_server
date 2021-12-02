@@ -35,7 +35,7 @@ function active_player_count(players) {
 
 async function check_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  console.log("check start")
+  // console.log("check start")
   var active_players = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["game_state"] != "sit_out" && room["players"][i]["money_on_the_table"] > 0) {
@@ -52,11 +52,11 @@ async function check_start(room_id) {
 };
 
 function delay_action(room_id) {
-  console.log("delay action");
+  // console.log("delay action");
   var room = rooms.filter(room => room["name"] == "test")[0];
   game_betting(room_id);
   setTimeout(function() {
-    console.log("in timeout");
+    // console.log("in timeout");
     if (room["game_finished"] != true) {
       delay_action(room["_id"]);
     }
@@ -79,8 +79,8 @@ function is_all_fold(room_id) {
 
 function game_all_fold(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  console.log("game all fold");
-  console.log(room["players"]);
+  // console.log("game all fold");
+  // console.log(room["players"]);
   room["direct_settlement"] = true;
   game_result(room_id);
 };
@@ -126,24 +126,24 @@ function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   room["XZTIMER"] = 15;
   room["last_bet_time"] = new Date();
-  console.log("in game actions last bet time");
-  console.log(room["last_bet_time"]);
+  // console.log("in game actions last bet time");
+  // console.log(room["last_bet_time"]);
   room["ctx_seq"] = room["ctx_seq"] ? 1 : (room["ctx_seq"] + 1);
   room["timer"] = room["XZTIMER"] - (new Date() - room["last_bet_time"])/1000;
-  console.log("in game actions");
-  console.log(room["XZTIMER"]);
-  console.log("ctx seq");
-  console.log(room["ctx_seq"]);
-  console.log(room["timer"]);
+  // console.log("in game actions");
+  // console.log(room["XZTIMER"]);
+  // console.log("ctx seq");
+  // console.log(room["ctx_seq"]);
+  // console.log(room["timer"]);
 
-  console.log("in game actions");
-  console.log(room);
+  // console.log("in game actions");
+  // console.log(room);
 
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;
 
-  console.log("after updating seats");
-  console.log(room);
+  // console.log("after updating seats");
+  // console.log(room);
 
   var count = 0;
   for (var i = 0; i < room["players"].length; i++) {
@@ -152,10 +152,10 @@ function game_actions(room_id) {
   if (count == 2) {
     room["current"] = room["button"];
   }
-  console.log("current in game actions");
-  console.log(room["current"]);
-  console.log(room["round"]);
-  console.log(room);
+  // console.log("current in game actions");
+  // console.log(room["current"]);
+  // console.log(room["round"]);
+  // console.log(room);
   var pcur = room["players"].filter(player => player["chair_id"] == room["current"])[0];
   pcur["state"] = "thinking";
 
@@ -174,10 +174,10 @@ function game_actions(room_id) {
     actions.push({"op": "check"});
   }
 
-  console.log("money on the table");
-  console.log(pcur["money_on_the_table"]);
-  console.log("call amount");
-  console.log(call_amount);
+  // console.log("money on the table");
+  // console.log(pcur["money_on_the_table"]);
+  // console.log("call amount");
+  // console.log(call_amount);
 
   if (call_amount > 0) {
     if (call_amount >= pcur["money_on_the_table"]) {
@@ -267,24 +267,24 @@ function game_start(room_id) {
       room["smallblind_id"] = get_next(room, room["button"]);
     }
     var player = room["players"].filter(player => player["chair_id"] == room["smallblind_id"])[0];
-    console.log("bug fix chair_id");
+    // console.log("bug fix chair_id");
     player["state"] = "smallblind";
-    console.log(player["chair_id"], player["state"]);
+    // console.log(player["chair_id"], player["state"]);
   }
-  console.log("smallblind id");
-  console.log(room["smallblind_id"]);
+  // console.log("smallblind id");
+  // console.log(room["smallblind_id"]);
   if (room["smallblind_id"])
   {
     room["bigblind_id"] = get_next(room, room["smallblind_id"]);
-    console.log("bigblind id");
-    console.log(room["bigblind_id"]);
+    // console.log("bigblind id");
+    // console.log(room["bigblind_id"]);
     var player = room["players"].filter(player => player["chair_id"] == room["bigblind_id"])[0];
-    console.log("player");
-    console.log(player);
+    // console.log("player");
+    // console.log(player);
     player["state"] = "bigblind";
   }
-  console.log("actions");
-  console.log(player);
+  // console.log("actions");
+  // console.log(player);
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["actions"] != []) {
       room["players"][i]["actions"] = [];
@@ -332,8 +332,8 @@ exports.room_join = async function(message) {
   var o_id = new ObjectID(room_id);
   var user_id = message.user_id;
   var room = rooms.filter(room => room["_id"] == room_id)[0];
-  console.log("room");
-  console.log(room);
+  // console.log("room");
+  // console.log(room);
 
   room["total_players_count"]++;
 
@@ -674,7 +674,7 @@ exports.room_fold = function(message) {
   room["last_bet_time"] = new Date();
   player["hand_state"] = "fold";
   console.log("room fold last bet time");
-  console.log(player["last_bet_time"]);
+  console.log(room);
 
   var response = {}
   response["m"] = "action";
@@ -692,6 +692,10 @@ exports.room_fold = function(message) {
   broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
+  console.log("is_action_declared");
+  console.log(is_action_declared);
+  console.log("all_fold");
+  console.log(all_fold);
   if (!is_action_declared && !all_fold) {
     game_actions(room_id);
   }
@@ -1816,8 +1820,8 @@ function reset_players(room_id) {
 function string_to_card(card_string) {
   var rank = card_string.substring(1, 3);
   var suite = card_string.substring(0, 1);
-  console.log("string_to_card");
-  console.log(rank);
-  console.log(suite);
+  // console.log("string_to_card");
+  // console.log(rank);
+  // console.log(suite);
   return new Card(parseInt(rank), parseInt(suite) - 1);
 };

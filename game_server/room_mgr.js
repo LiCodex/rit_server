@@ -128,7 +128,7 @@ function game_actions(room_id) {
   room["last_bet_time"] = new Date();
   console.log("in game actions last bet time");
   console.log(room["last_bet_time"]);
-  room["ctx_seq"] = room["ctx_seq"] == null ? 1 : (room["ctx_seq"] + 1);
+  room["ctx_seq"] = room["ctx_seq"] ? 1 : (room["ctx_seq"] + 1);
   room["timer"] = room["XZTIMER"] - (new Date() - room["last_bet_time"])/1000;
   console.log("in game actions");
   console.log(room["XZTIMER"]);
@@ -1802,6 +1802,7 @@ function reset_players(room_id) {
       player["game_state"] = "default";
       player["state"] = "default";
       player["actions"] = [];
+      player["hand_finished"] = false;
     }
   }
 };

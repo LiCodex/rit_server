@@ -336,7 +336,7 @@ exports.room_join = async function(message) {
   // console.log(room);
 
   room["total_players_count"]++;
-  player = { "uid": uid };
+  player = { "uid": user_id };
   room["all_players"].push(player);
 
   Room.findOne({ _id: o_id }, function (err, room) {

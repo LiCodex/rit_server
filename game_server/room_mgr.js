@@ -472,6 +472,10 @@ exports.room_join = async function(message) {
   // console.log("room");
   // console.log(room);
 
+  console.log("user_id");
+  console.log(user_id);
+  console.log(message);
+
   room["total_players_count"]++;
   player = { uid: user_id };
   room["all_players"].push(player);

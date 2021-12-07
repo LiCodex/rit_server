@@ -1965,7 +1965,12 @@ function broadcast_in_room(room_id, response, chair_id) {
   )[0];
   console.log("player");
   console.log(player);
-  var uid = player["uid"];
+  if (player == undefined) {
+    var uid = undefined;
+  } else {
+    var uid = player["uid"];
+  }
+
   console.log("uid");
   console.log(uid);
   for (var i = 0; i < room["all_players"].length; i++) {

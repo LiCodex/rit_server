@@ -467,17 +467,17 @@ function rnd_button(room_id) {
 exports.room_join = async function(message) {
   var room_id = message.room_id;
   var o_id = new ObjectID(room_id);
-  var user_id = message.user_id;
+  var uid = message.uid;
   var room = rooms.filter(room => room["_id"] == room_id)[0];
   // console.log("room");
   // console.log(room);
 
   console.log("user_id");
-  console.log(user_id);
+  console.log(uid);
   console.log(message);
 
   room["total_players_count"]++;
-  player = { uid: user_id };
+  player = { uid: uid };
   room["all_players"].push(player);
 
   Room.findOne({ _id: o_id }, function(err, room) {

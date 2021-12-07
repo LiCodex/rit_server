@@ -1956,7 +1956,10 @@ function game_dismiss(room_id) {
 
 function broadcast_in_room(room_id, response, chair_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  var uid = room["players"].filter(player => player["chair_id"] == chair_id)[0];
+  var player = room["players"].filter(
+    player => player["chair_id"] == chair_id
+  )[0];
+  var uid = player["uid"];
   for (var i = 0; i < room["all_players"].length; i++) {
     if (room["all_players"][i]["uid"] == uid) {
       continue;

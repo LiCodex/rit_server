@@ -1959,11 +1959,17 @@ function broadcast_in_room(room_id, response, chair_id) {
   var player = room["players"].filter(
     player => player["chair_id"] == chair_id
   )[0];
+  console.log("player");
+  console.log(player);
   var uid = player["uid"];
+  console.log("uid");
+  console.log(uid);
   for (var i = 0; i < room["all_players"].length; i++) {
     if (room["all_players"][i]["uid"] == uid) {
       continue;
     }
+    console.log("all_players");
+    console.log(room["all_players"]);
     var user = room["all_players"][i]["uid"];
     var ws = user_mgr.get(user);
     ws.send(JSON.stringify(response));

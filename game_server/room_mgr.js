@@ -328,14 +328,14 @@ function game_actions(room_id) {
   }
 
   if (pcur["money_on_the_table"] > 2 * pot) {
-    actions.push({ op: "raise", amount: 2 * pot });
+    actions.push({ op: "raise", amount: 2 * pot, percentage: 1 });
     actions.push({ op: "raise", amount: 0 });
   }
   if (pcur["money_on_the_table"] > 2.5 * pot) {
-    actions.push({ op: "raise", amount: 2.5 * pot });
+    actions.push({ op: "raise", amount: 2.5 * pot, percentage: 2 });
   }
   if (pcur["money_on_the_table"] > 3 * pot) {
-    actions.push({ op: "raise", amount: 3 * pot });
+    actions.push({ op: "raise", amount: 3 * pot, percentage: 3 });
   }
   console.log("show actions");
   console.log(actions);
@@ -1225,13 +1225,6 @@ function deal_hole_cards(room_id) {
   room["action_declare_list"] = [];
   game_actions(room["_id"]);
 }
-
-// function wait_for_action() {
-//   var room = rooms.filter(room => room["name"] == "test")[0];
-//   var time_out = setTimeout(function() {
-//     time_out_fold();
-//   }, XZTIMER * 1000);
-// };
 
 function time_out_fold(room_id) {
   console.log("timeout fold ");

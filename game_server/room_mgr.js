@@ -270,9 +270,14 @@ function game_actions(room_id) {
 
   // console.log("in game actions");
   // console.log(room);
+  console.log("game actions");
+  console.log("prev current");
+  console.log(room["current"]);
 
   var chair_id = get_next(room["current"]);
   room["current"] = chair_id;
+  console.log("new current");
+  console.log(room["current"]);
 
   // console.log("after updating seats");
   // console.log(room);
@@ -281,9 +286,9 @@ function game_actions(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     count++;
   }
-  if (count == 2) {
-    room["current"] = room["button"];
-  }
+  // if (count == 2) {
+  //   room["current"] = room["button"];
+  // }
   // console.log("current in game actions");
   // console.log(room["current"]);
   // console.log(room["round"]);
@@ -1080,6 +1085,10 @@ exports.room_raise = function(message) {
   broadcast_userupdate_includeme(room_id, chair_id);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
+  console.log("is action declared");
+  console.log(is_action_declared);
+  console.log("all_fold");
+  console.log(all_fold);
   if (!is_action_declared && !all_fold) {
     game_actions(room_id);
   }

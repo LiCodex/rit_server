@@ -1061,8 +1061,8 @@ exports.room_raise = function(message) {
   player["last_bet_time"] = new Date();
   room["last_bet_time"] = new Date();
   player["hand_state"] = "raise";
-  console.log("room raise last bet time");
-  console.log(player["last_bet_time"]);
+  console.log("raising here here here");
+  console.log(room);
 
   var response = {};
   response["m"] = "action";

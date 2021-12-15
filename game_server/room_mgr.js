@@ -1281,7 +1281,7 @@ function get_next(room, chair_id) {
     (player1, player2) => player1["chair_id"] - player2["chair_id"]
   );
   console.log("room");
-  console.log(room["players"]);
+  console.log(room);
   for (var i = 0; i < room["players"].length; i++) {
     console.log("sort testing");
     console.log(room["players"][i]["chair_id"]);

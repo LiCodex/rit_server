@@ -1297,7 +1297,7 @@ function get_next(room, chair_id) {
   current_index = current_index % room["players"].length;
   console.log("current index");
   console.log(current_index);
-  console.log(room["players"]);
+  console.log(room);
 
   return room["players"][current_index]["chair_id"];
 }

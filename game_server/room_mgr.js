@@ -1292,6 +1292,8 @@ function get_next(room, chair_id) {
       console.log("current index0");
       console.log(current_index);
       current_index = i;
+      console.log(i);
+      console.log(current_index);
       break;
     }
   }

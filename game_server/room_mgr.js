@@ -274,7 +274,7 @@ function game_actions(room_id) {
   console.log("prev current");
   console.log(room["current"]);
 
-  var chair_id = get_next(room["current"]);
+  var chair_id = get_next(room ,room["current"]);
   room["current"] = chair_id;
   console.log("new current");
   console.log(room["current"]);

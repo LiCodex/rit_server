@@ -1293,9 +1293,11 @@ function get_next(room, chair_id) {
       break;
     }
   }
+  console.log("current index1");
+  console.log(current_index);
   current_index += 1;
   current_index = current_index % room["players"].length;
-  console.log("current index");
+  console.log("current index2");
   console.log(current_index);
   console.log(room);
 

@@ -1289,6 +1289,8 @@ function get_next(room, chair_id) {
   var current_index = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["chair_id"] == chair_id) {
+      console.log("current index0");
+      console.log(current_index);
       current_index = i;
       break;
     }

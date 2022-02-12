@@ -40,7 +40,7 @@ const Pot = class{
 
   clear() {
     this.bet = 0;
-    this.contributors.clear();
+    this.contributors = [];
   }
 }
 

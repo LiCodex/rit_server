@@ -208,6 +208,7 @@ function game_all_fold(room_id) {
   // console.log("game all fold");
   // console.log(room["players"]);
   room["direct_settlement"] = true;
+  // room["game_state"] = "game_result";
   game_result(room_id);
 }
 
@@ -274,7 +275,7 @@ function game_actions(room_id) {
   console.log("prev current");
   console.log(room["current"]);
 
-  var chair_id = get_next(room ,room["current"]);
+  var chair_id = get_next(room, room["current"]);
   room["current"] = chair_id;
   console.log("new current");
   console.log(room["current"]);
@@ -928,8 +929,6 @@ exports.room_buy_in = async function(message) {
       console.log(total_assets);
       user.save();
     });
-    // console.log("total_assets2");
-    // console.log(total_assets);
     console.log("before check start");
     check_start(room["_id"]);
     console.log("after check start");
@@ -2116,23 +2115,96 @@ function do_showdown(room_id) {
   var showing_players = [];
   for (var i = 0; i < room["pots"].length; i++) {
     pot = room["pots"][i];
-    for (var i = 0; i < pot.get_contributors(); i++) {
-      //if ()
+    contributors = pot.get_contributors();
+    for (var j = 0; j < contributors.length; j++) {
+      if (
+        !showing_players.include(contributors[j]) &&
+        contributors[j].is_all_in()
+      ) {
+        showing_players.push(contributors[j]);
+      }
     }
   }
+
+  // adding last agressor
+  if (room["last_agressor"] != null) {
+    if (!showing_players.include(room["last_agressor"])) {
+      showing_players.push(room["last_agressor"]);
+    }
+  }
+
+  // finally remaining players starting from small blind to the button
+  var pos = (room["button"] + 1) % room["active_players"].length;
+  while (showing_players.length < room["active_players"].length) {
+    var player = room["active_players"][0];
+    if (!showing_players.include(player)) {
+      showing_players.push(player);
+    }
+    pos = (pos + 1) % activePlayers.length;
+  }
+  //key is hand value, value is a list of players
+  var ranked_players = {};
 
   room["players_scores"] = room["players_scores"] || [];
   for (var i = 0; i < room["players"].length; i++) {
     var player = room["players"][i];
     if (is_active(player)) {
-      var hand_type = new HandEvaluator(
+      var hand = new HandEvaluator(
         room["community_cards"],
         player["hole_cards"]
       );
-      //var
-      var response = {};
+      if (hand.hand_value in ranked_players) {
+        ranked_players[hand.hand_value].push(room["players"][i]);
+      } else {
+        ranked_players[hand.hand_value] = [room["players"][i]];
+      }
     }
   }
+
+  var total_pot = get_total_pot(room_id);
+  var rank_values = Object.keys(ranked_players);
+  for (var i = 0; i < ranked_values.length; i++) {
+    var winners = ranked_players[ranked_values[i]];
+    for (var j = 0; j < room["pots"].length; j++) {
+      var pot = room["pots"][j];
+      var no_of_winners = 0;
+      for (var k = 0; k < winners.length; k++) {
+        if (pot.has_contributor(winners[k])) {
+          no_of_winners++;
+        }
+      }
+      if (no_of_winners > 0) {
+        var pot_share = pot.get_bet() / no_of_winners;
+        pot_share = pot_share.toFixed(2);
+        for (var m = 0; m < winners.length; m++) {
+          if (pot.has_contributor(winners[m])) {
+            var old_share = pot_division[winners[m]];
+            if (old_share != null) {
+              pot_division[winners[m]] += pot_share;
+            } else {
+              pot_division[winners[m]] = pot_share;
+            }
+          }
+        }
+        room["pots"] = [];
+      }
+    }
+  }
+
+  for (var winner in pot_division) {
+    var pot_share = pot_division[winner];
+    winner["money_on_the_table"] += pot_share;
+    broadcast_userupdate_includeme(room_id, winner["chair_id"]);
+  }
+}
+
+function get_total_pot(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var total_pot = 0;
+  for (var i = 0; i < room["pots"].length; i++) {
+    total_pot += room["pots"][i].get_bet();
+  }
+  return total_pot;
 }
 
 function reset_players(room_id) {

@@ -50,6 +50,10 @@ wss.on('connection', function connection(ws) {
 
   ws.on('login', function(data){
     var user_id = ws.user_id;
+    console.log("in ws login");
+    console.log(user_id);
+    console.log("data");
+    console.log(data);
     if(user_id == null){
       return;
     }
@@ -59,8 +63,6 @@ wss.on('connection', function connection(ws) {
 
   ws.on('message', async function incoming(message) {
     console.log(JSON.stringify(message));
-    // console.log(typeof message);
-    // console.log(message == "\"hello\"");
     var cmd = JSON.parse(message);
     var func = cmd["c"] + "_" + cmd["m"];
     try {
@@ -72,9 +74,7 @@ wss.on('connection', function connection(ws) {
         console.log("index_login");
       }
       res = await room_mgr[func](cmd["data"]);
-      // console.log("here2");
-      // console.log(res);
-      // console.log(func);
+
       if (res != null) {
         ws.send(JSON.stringify({c: cmd["c"], m: cmd["m"], data: {res}}));
         console.log("here1");

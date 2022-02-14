@@ -47,7 +47,7 @@ const wss = new WebSocket.Server({ server:server });
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
-
+  console.log(ws);
   ws.on('login', function(data){
     var user_id = ws.user_id;
     console.log("in ws login");

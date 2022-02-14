@@ -47,19 +47,19 @@ const wss = new WebSocket.Server({ server:server });
 
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
-  console.log(ws);
-  ws.on('login', function(data){
-    var user_id = ws.user_id;
-    console.log("in ws login");
-    console.log(user_id);
-    console.log("data");
-    console.log(data);
-    if(user_id == null){
-      return;
-    }
-    ws.gameMgr.setReady(user_id);
-    user_mgr.broacast_in_room('user_ready_push',{user_id: user_id, ready: true}, user_id, true);
-  });
+  // console.log(ws);
+  // ws.on('login', function(data){
+  //   var user_id = ws.user_id;
+  //   console.log("in ws login");
+  //   console.log(user_id);
+  //   console.log("data");
+  //   console.log(data);
+  //   if(user_id == null){
+  //     return;
+  //   }
+  //   ws.gameMgr.setReady(user_id);
+  //   user_mgr.broacast_in_room('user_ready_push',{user_id: user_id, ready: true}, user_id, true);
+  // });
 
   ws.on('message', async function incoming(message) {
     console.log(JSON.stringify(message));

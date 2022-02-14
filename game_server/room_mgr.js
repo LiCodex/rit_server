@@ -473,6 +473,8 @@ function rnd_button(room_id) {
 }
 
 exports.room_join = async function(message) {
+  console.log("message");
+  console.log(message);
   var room_id = message.room_id;
   var o_id = new ObjectID(room_id);
   var uid = message.uid;

@@ -64,6 +64,8 @@ wss.on('connection', function connection(ws) {
   ws.on('message', async function incoming(message) {
     console.log(JSON.stringify(message));
     var cmd = JSON.parse(message);
+    console.log("cmd");
+    console.log(cmd);
     var func = cmd["c"] + "_" + cmd["m"];
     try {
       if (func == "index_login") {

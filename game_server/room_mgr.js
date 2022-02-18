@@ -166,7 +166,7 @@ async function check_start(room_id) {
     }
   }
   console.log("in check start");
-  console.log(active_players);
+  console.log(room);
   if (active_players >= 2) {
     if (room["round"] == 0) {
       delay_action(room_id);

@@ -936,6 +936,7 @@ exports.room_buy_in = async function(message) {
       user.save();
     });
     console.log("before check start");
+    console.log(room);
     check_start(room["_id"]);
     console.log("after check start");
     return {

@@ -594,6 +594,8 @@ exports.room_sit = async function(message) {
   var data = {};
   data["chair_id"] = chair_id;
   response["data"] = player;
+  console.log("sit test");
+  console.log(response);
   broadcast_in_room(room["_id"], response, chair_id);
 
   return { success: true, chair_id: chair_id };

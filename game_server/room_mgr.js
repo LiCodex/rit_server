@@ -159,13 +159,23 @@ async function check_start(room_id) {
   var active_players = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (
-      room["players"][i]["game_state"] != "sit_out" &&
+      (room["players"][i]["game_state"] == "waiting" || room["players"][i]["game_state"] == "playing") &&
       room["players"][i]["money_on_the_table"] > 0
     ) {
       active_players++;
     }
   }
   console.log("in check start");
+  console.log(room);
+  if (active_players >= 2) {
+    for (var i = 0; i < room["players"].length; i++) {
+      if (room["players"][i]["game_state"] == "waiting")
+      {
+        room["players"][i]["game_state"] = "playing";
+      }
+    }
+  }
+  console.log("in check start11");
   console.log(room);
   if (active_players >= 2) {
     if (room["round"] == 0) {
@@ -371,18 +381,14 @@ function delay_game_start(room_id) {
   if (new Date() - room["last_started_at"] <= START_TIMER) {
     return;
   }
+  game_start(room_id);
 
-  if (room["game_state"] != "start") {
-    console.log("in delay game start");
-    game_start(room_id);
-    return;
-  }
 }
 
 function game_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["game_state"] = "playing";
-  room["hand_state"] = "start";
+  // room["game_state"] = "playing";
+  // room["hand_state"] = "start";
 
   if (room["round"] == 0) {
     room["created_at"] = new Date();
@@ -930,7 +936,7 @@ exports.room_buy_in = async function(message) {
     };
   } else {
     player["money_on_the_table"] += amount;
-    player["game_state"] = "playing";
+    player["game_state"] = "waiting";
     await User.findOne({ _id: uid }, function(err, user) {
       user.coins -= amount;
       total_assets = user.coins;
@@ -1238,7 +1244,7 @@ function deal_hole_cards(room_id) {
   }
   console.log("room info in deal hole cards");
   console.log(room);
-  room["game_state"] = "preflop";
+  // room["game_state"] = "preflop";
   room["time_state"] = "preflop";
   room["action_declare_list"] = [];
   game_actions(room["_id"]);
@@ -1252,11 +1258,11 @@ function time_out_fold(room_id) {
   var player = room["players"].filter(
     player => player["chair_id"] == room["current"]
   )[0];
-  var actions = player["actions"];
-  player["state"] = "fold";
+  // var actions = player["actions"];
+  player["hand_state"] = "fold";
 
-  player["declare_count"] =
-    player["declare_count"] == null ? 1 : player["declare_count"] + 1;
+  // player["declare_count"] =
+  //   player["declare_count"] == null ? 1 : player["declare_count"] + 1;
   player["last_declared_at"] = new Date();
   room["last_bet_time"] = new Date();
   console.log("last bet time in time_out_fold");
@@ -1273,14 +1279,19 @@ function time_out_fold(room_id) {
   data["chair_id"] = room["current"];
   data["betting_list"] = room["betting_list"];
 
-  response.data = data;
+  response["data"] = data;
   broadcast_in_room(room_id, response, "");
-  actions = [];
+  // actions = [];
   broadcast_userupdate_includeme(room_id, room["current"]);
   var is_action_declared = action_declared(room_id);
   var all_fold = is_all_fold(room_id);
+  console.log("in timeout")
+  console.log(is_action_declared);
+  console.log(all_fold);
   if (!is_action_declared && !all_fold) {
     game_actions(room_id);
+  } else {
+    room["time_state"] = "game_result";
   }
 }
 
@@ -1606,6 +1617,7 @@ function game_betting(room_id) {
     direct_settlement();
     return;
   }
+  // include dealing hole cards in start
   if (room["time_state"] == "start") {
     console.log("in game start");
     console.log(room);

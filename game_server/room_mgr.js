@@ -215,10 +215,13 @@ function game_all_fold(room_id) {
 }
 
 function action_declared(room_id) {
+  console.log("in action declared");
   var room = rooms.filter(room => room["name"] == "test")[0];
   // var active_players = room["players"].filter(player => player["state"] != "sit_out" && player["state"] != "fold");
   for (var i = 0; i < room["players"].length; i++) {
     if (room["action_declare_list"] == null) {
+      console.log("in action declared1");
+      console.log(room);
       var is_declared = false;
     } else {
       var declare_list = room["action_declare_list"].filter(
@@ -1610,6 +1613,8 @@ function game_betting(room_id) {
     return;
   }
   if (room["time_state"] == "preflop") {
+    console.log("preflop time_state");
+    console.log(room);
     preflop_action(room_id);
     return;
   }
@@ -1773,24 +1778,29 @@ function delay_betting(room_id) {
 
 function preflop_action(room_id) {
   console.log("in preflop action");
-  console.log("last bet time1");
   var room = rooms.filter(room => room["name"] == "test")[0];
   if (room["deal_rest"]) {
+    console.log("in deal_rest");
     return;
   }
+
   var is_action_declared = action_declared(room_id);
   if (is_action_declared) {
+    console.log("in preflop action11");
     deal_flop_cards(room_id);
     return;
   }
   console.log("last bet time2");
   console.log(room["last_bet_time"]);
   if (room["last_bet_time"] == undefined) {
+    console.log("in checking time out fold22");
+    console.log(room);
     return;
   }
   if ((new Date() - room["last_bet_time"]) / 1000 > room["XZTIMER"]) {
-    console.log("in checking time out fold");
-    console.log((new Date() - room["last_bet_time"]) / 1000);
+    console.log("in checking time out fold33");
+    console.log(room);
+    // console.log((new Date() - room["last_bet_time"]) / 1000);
     time_out_fold(room_id);
   }
 }

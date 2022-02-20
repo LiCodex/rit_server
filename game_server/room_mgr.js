@@ -27,7 +27,7 @@ var rooms = [
     round: 0,
     players: [],
     all_players: [],
-    action_declare_list = []
+    action_declare_list: []
   },
   {
     _id: "6119cbab01f8ca1b5e7ed509",
@@ -62,7 +62,7 @@ var rooms = [
       }
     ],
     all_players: [],
-    action_declare_list = []
+    action_declare_list: []
   },
   {
     _id: "6119cbd101f8ca1b5e7ed50a",
@@ -96,7 +96,7 @@ var rooms = [
       }
     ],
     all_players: [],
-    action_declare_list = []
+    action_declare_list: []
   },
   {
     _id: "6119cbdb01f8ca1b5e7ed50b",
@@ -130,7 +130,7 @@ var rooms = [
       }
     ],
     all_players: [],
-    action_declare_list = []
+    action_declare_list: []
   }
 ];
 var creating_rooms = {};

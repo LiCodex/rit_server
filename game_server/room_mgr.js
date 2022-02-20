@@ -396,7 +396,8 @@ function game_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   // room["game_state"] = "playing";
   // room["hand_state"] = "start";
-
+  console.log("in game start");
+  console.log(room);
   if (room["round"] == 0) {
     room["created_at"] = new Date();
   }
@@ -418,7 +419,8 @@ function game_start(room_id) {
   } else {
     room["button"] = get_next(room, room["button"]);
   }
-
+  console.log("in game start11");
+  console.log(room);
   if (room["button"]) {
     // heads up
     if (player_count == 2) {
@@ -433,6 +435,8 @@ function game_start(room_id) {
     player["state"] = "smallblind";
     // console.log(player["chair_id"], player["state"]);
   }
+  console.log("in game start22");
+  console.log(room);
   // console.log("smallblind id");
   // console.log(room["smallblind_id"]);
   if (room["smallblind_id"]) {

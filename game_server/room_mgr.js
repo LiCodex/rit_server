@@ -823,6 +823,8 @@ exports.index_login = function(message) {
 function smallblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
+  console.log("in smallblind");
+  console.log(room);
   room["hand_state"] = "smallblind";
   room["ctx_seq"] += 1;
   room["current"] = room["smallblind_id"];

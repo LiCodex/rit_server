@@ -444,7 +444,7 @@ function game_start(room_id) {
   console.log(room);
   // console.log("smallblind id");
   // console.log(room["smallblind_id"]);
-  if (room["smallblind_id"]) {
+  if (room["smallblind_id"] != null) {
     room["bigblind_id"] = get_next(room, room["smallblind_id"]);
     // console.log("bigblind id");
     // console.log(room["bigblind_id"]);

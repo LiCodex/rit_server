@@ -26,7 +26,8 @@ var rooms = [
     current_action_player: 0,
     round: 0,
     players: [],
-    all_players: []
+    all_players: [],
+    action_declare_list = []
   },
   {
     _id: "6119cbab01f8ca1b5e7ed509",
@@ -59,7 +60,9 @@ var rooms = [
         chair_id: 1,
         money_on_the_table: 100
       }
-    ]
+    ],
+    all_players: [],
+    action_declare_list = []
   },
   {
     _id: "6119cbd101f8ca1b5e7ed50a",
@@ -91,7 +94,9 @@ var rooms = [
         chair_id: 1,
         money_on_the_table: 100
       }
-    ]
+    ],
+    all_players: [],
+    action_declare_list = []
   },
   {
     _id: "6119cbdb01f8ca1b5e7ed50b",
@@ -123,7 +128,9 @@ var rooms = [
         chair_id: 1,
         money_on_the_table: 100
       }
-    ]
+    ],
+    all_players: [],
+    action_declare_list = []
   }
 ];
 var creating_rooms = {};
@@ -695,6 +702,7 @@ exports.room_refresh = function() {
       XZTIMER: 15,
       smallblind: 1,
       bigblind: 2,
+      total_players_count: 0,
       current_action_player: 0,
       round: 0,
       players: []
@@ -2099,7 +2107,7 @@ function reset_room(room_id) {
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;
   // room["button"] = null;
-  room["current"] = null;
+  // room["current"] = null;
   room["pots"] = [];
   room["direct_settlement"] = false;
   room["deal_rest"] = null;

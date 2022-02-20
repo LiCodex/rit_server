@@ -1319,7 +1319,7 @@ function get_next(room, chair_id) {
   room["players"].sort(
     (player1, player2) => player1["chair_id"] - player2["chair_id"]
   );
-  console.log("room");
+  console.log("get next");
   console.log(room);
   for (var i = 0; i < room["players"].length; i++) {
     console.log("sort testing");

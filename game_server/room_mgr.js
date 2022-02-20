@@ -1883,74 +1883,76 @@ function game_result(room_id) {
   room["time_state"] = "game_result";
   room["last_game_result_time"] = new Date();
   room["player_scores"] = [];
-
-  console.log("here1");
-  console.log(room["players"]);
-
-  for (let i = 0; i < room["players"].length; i++) {
-    let player = room["players"][i];
-    let community_cards = room["community_cards"].map(card_string =>
-      string_to_card(card_string)
-    );
-    room["player_scores"] = room["player_scores"] || [];
-    if (is_active(player)) {
-      let player_score = {};
-      let hole_cards = player["hole_cards"].map(card_string =>
-        string_to_card(card_string)
-      );
-      let hand_evaluator = new HandEvaluator(community_cards, hole_cards);
-      let score = hand_evaluator.get_value();
-      let type = hand_evaluator.get_type();
-      player_score["chair_id"] = player["chair_id"];
-      player_score["score"] = score;
-      player_score["type"] = type;
-      player_score["hole_cards"] = player["hole_cards"];
-    }
-  }
-
-  console.log("here2");
-  console.log(room["players"]);
-
-  let player_show_cards = [];
-  for (let i = 0; i < room["players"].length; i++) {
-    let player = room["players"][i];
-    if (player["show_card_status"] != 0) {
-      let elem = {};
-      elem["chair_id"] = player["chair_id"];
-      elem["hole_cards"] = player["hole_cards"];
-      elem["show_cards_status"] = player["show_card_status"];
-      player_show_cards.push(elem);
-    }
-  }
-
-  console.log("here3");
-  console.log(room["players"]);
-  let showing_players = new Set();
-  // determin showing player, all in players first
-  for (let i = 0; i < room["pots"].length; i++) {
-    let pot = room["pots"][i];
-    let contributors = pot.get_contributors();
-    for (let j = 0; j < contributors.length; j++) {
-      if (
-        !showing_players.has(contributors[j]["chair_id"]) &&
-        is_all_in(contributors[j])
-      ) {
-        showing_players.add(contributors[j]);
-      }
-    }
-  }
-
-  console.log("here4");
-  console.log(room["players"]);
-  // add last aggressor
-  if (room["last_aggressor"] != null) {
-    if (!showing_players.has(room["last_agressor"]["chair_id"])) {
-      show_players.add(room["last_agressor"]["chair_id"]);
-    }
-  }
-
-  console.log("here5");
-  console.log(room["players"]);
+  console.log("before do show down");
+  do_showdown(room_id);
+  console.log("after do show down");
+  // console.log("here1");
+  // console.log(room["players"]);
+  //
+  // for (let i = 0; i < room["players"].length; i++) {
+  //   let player = room["players"][i];
+  //   let community_cards = room["community_cards"].map(card_string =>
+  //     string_to_card(card_string)
+  //   );
+  //   room["player_scores"] = room["player_scores"] || [];
+  //   if (is_active(player)) {
+  //     let player_score = {};
+  //     let hole_cards = player["hole_cards"].map(card_string =>
+  //       string_to_card(card_string)
+  //     );
+  //     let hand_evaluator = new HandEvaluator(community_cards, hole_cards);
+  //     let score = hand_evaluator.get_value();
+  //     let type = hand_evaluator.get_type();
+  //     player_score["chair_id"] = player["chair_id"];
+  //     player_score["score"] = score;
+  //     player_score["type"] = type;
+  //     player_score["hole_cards"] = player["hole_cards"];
+  //   }
+  // }
+  //
+  // console.log("here2");
+  // console.log(room["players"]);
+  //
+  // let player_show_cards = [];
+  // for (let i = 0; i < room["players"].length; i++) {
+  //   let player = room["players"][i];
+  //   if (player["show_card_status"] != 0) {
+  //     let elem = {};
+  //     elem["chair_id"] = player["chair_id"];
+  //     elem["hole_cards"] = player["hole_cards"];
+  //     elem["show_cards_status"] = player["show_card_status"];
+  //     player_show_cards.push(elem);
+  //   }
+  // }
+  //
+  // console.log("here3");
+  // console.log(room["players"]);
+  // let showing_players = new Set();
+  // // determin showing player, all in players first
+  // for (let i = 0; i < room["pots"].length; i++) {
+  //   let pot = room["pots"][i];
+  //   let contributors = pot.get_contributors();
+  //   for (let j = 0; j < contributors.length; j++) {
+  //     if (
+  //       !showing_players.has(contributors[j]["chair_id"]) &&
+  //       is_all_in(contributors[j])
+  //     ) {
+  //       showing_players.add(contributors[j]);
+  //     }
+  //   }
+  // }
+  //
+  // console.log("here4");
+  // console.log(room["players"]);
+  // // add last aggressor
+  // if (room["last_aggressor"] != null) {
+  //   if (!showing_players.has(room["last_agressor"]["chair_id"])) {
+  //     show_players.add(room["last_agressor"]["chair_id"]);
+  //   }
+  // }
+  //
+  // console.log("here5");
+  // console.log(room["players"]);
 
   for (let i = 0; i < room["players"].length; i++) {
     let player = room["players"][i];
@@ -1973,7 +1975,7 @@ function game_result(room_id) {
     var ws = user_mgr.get(uid);
     ws.send(JSON.stringify(response));
     if (player["game_state"] != "offline") {
-      player["game_state"] = "wait";
+      player["game_state"] = "waiting";
     }
     player["hand_finished"] = true;
     broadcast_userupdate_includeme(room_id, player["chair_id"]);
@@ -2234,7 +2236,7 @@ function do_showdown(room_id) {
             }
           }
         }
-        room["pots"] = [];
+        // room["pots"] = [];
       }
     }
   }

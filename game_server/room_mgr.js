@@ -413,16 +413,21 @@ function game_start(room_id) {
       player["state"] = "sit_out";
     }
   }
+  console.log("player count");
+  console.log(player_count);
 
   if (room["button"] == null) {
+    console.log("button null");
     room["button"] = rnd_button();
   } else {
+    console.log("button not null");
     room["button"] = get_next(room, room["button"]);
   }
   console.log("in game start11");
   console.log(room);
-  if (room["button"]) {
+  if (room["button"] != null) {
     // heads up
+
     if (player_count == 2) {
       room["smallblind_id"] = room["button"];
     } else {

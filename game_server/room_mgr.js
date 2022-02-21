@@ -2163,6 +2163,7 @@ function contribute_pot(room_id, amount, contributor) {
 function do_showdown(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var showing_players = [];
+  console.log("do_showdown");
   for (var i = 0; i < room["pots"].length; i++) {
     pot = room["pots"][i];
     contributors = pot.get_contributors();
@@ -2175,22 +2176,25 @@ function do_showdown(room_id) {
       }
     }
   }
-
+  console.log("do_showdown11");
+  console.log(showing_players);
   // adding last agressor
   if (room["last_agressor"] != null) {
     if (!showing_players.include(room["last_agressor"])) {
       showing_players.push(room["last_agressor"]);
     }
   }
-
+  var active_players = room["players"].filter(player => player["hand_state"] != "fold");
+  console.log("do_showdown22");
+  console.log(active_players);
   // finally remaining players starting from small blind to the button
-  var pos = (room["button"] + 1) % room["active_players"].length;
-  while (showing_players.length < room["active_players"].length) {
-    var player = room["active_players"][0];
+  var pos = (room["button"] + 1) % active_players.length;
+  while (showing_players.length < active_players.length) {
+    var player = active_players[0];
     if (!showing_players.include(player)) {
       showing_players.push(player);
     }
-    pos = (pos + 1) % activePlayers.length;
+    pos = (pos + 1) % active_players.length;
   }
   //key is hand value, value is a list of players
   var ranked_players = {};

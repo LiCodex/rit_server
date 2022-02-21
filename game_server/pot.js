@@ -24,7 +24,7 @@ const Pot = class{
   }
 
   get_value() {
-    return this.bet * this.contributors.length;
+    return this.bet * this.contributors.size;
   }
 
   // keep the main pot and return the new splitted pot

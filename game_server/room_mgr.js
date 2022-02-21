@@ -2218,7 +2218,7 @@ function do_showdown(room_id) {
   var total_pot = get_total_pot(room_id);
   console.log("total_pot");
   console.log(total_pot);
-
+  var pot_devision = {};
   var ranked_values = Object.keys(ranked_players);
   for (var i = 0; i < ranked_values.length; i++) {
     var winners = ranked_players[ranked_values[i]];

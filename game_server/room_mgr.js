@@ -2180,7 +2180,7 @@ function do_showdown(room_id) {
   console.log(showing_players);
   // adding last agressor
   if (room["last_agressor"] != null) {
-    if (!showing_players.include(room["last_agressor"])) {
+    if (!showing_players.includes(room["last_agressor"])) {
       showing_players.push(room["last_agressor"]);
     }
   }
@@ -2191,7 +2191,7 @@ function do_showdown(room_id) {
   var pos = (room["button"] + 1) % active_players.length;
   while (showing_players.length < active_players.length) {
     var player = active_players[0];
-    if (!showing_players.include(player)) {
+    if (!showing_players.includes(player)) {
       showing_players.push(player);
     }
     pos = (pos + 1) % active_players.length;

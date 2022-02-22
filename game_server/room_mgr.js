@@ -2203,6 +2203,7 @@ function do_showdown(room_id) {
   for (var i = 0; i < room["players"].length; i++) {
     var player = room["players"][i];
     if (is_active(player)) {
+      console.log("in is active");
       var hand = new HandEvaluator(
         room["community_cards"],
         player["hole_cards"]

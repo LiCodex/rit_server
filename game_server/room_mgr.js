@@ -2202,11 +2202,12 @@ function do_showdown(room_id) {
   room["players_scores"] = room["players_scores"] || [];
   for (var i = 0; i < room["players"].length; i++) {
     var player = room["players"][i];
+    var player_hole_cards = player["hole_cards"].map(card => string_to_card(card));
     if (is_active(player)) {
       console.log("in is active");
       var hand = new HandEvaluator(
         room["community_cards"],
-        player["hole_cards"]
+        player_hole_cards
       );
       console.log(hand.get_value());
       if (hand.get_value() in ranked_players) {

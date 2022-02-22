@@ -258,9 +258,9 @@ function action_declared(room_id) {
 
 function is_active(player) {
   return (
-    player["state"] != "fold" &&
-    player["state"] != "sit_out" &&
-    player["state"] != "buy_in"
+    player["hand_state"] != "fold" &&
+    player["hand_state"] != "sit_out" &&
+    player["hand_state"] != "buy_in"
   );
 }
 
@@ -2208,10 +2208,11 @@ function do_showdown(room_id) {
         room["community_cards"],
         player["hole_cards"]
       );
-      if (hand.hand_value in ranked_players) {
-        ranked_players[hand.hand_value].push(room["players"][i]);
+      console.log(hand.get_value());
+      if (hand.get_value() in ranked_players) {
+        ranked_players[hand.get_value()].push(room["players"][i]);
       } else {
-        ranked_players[hand.hand_value] = [room["players"][i]];
+        ranked_players[hand.get_value()] = [room["players"][i]];
       }
     }
   }

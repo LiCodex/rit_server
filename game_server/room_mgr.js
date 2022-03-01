@@ -2251,6 +2251,8 @@ function do_showdown(room_id) {
       }
     }
   }
+  console.log("pot_devision");
+  console.log(pot_devision);
 
   for (var winner in pot_division) {
     var pot_share = pot_division[winner];

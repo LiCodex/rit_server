@@ -2277,6 +2277,7 @@ function do_showdown(room_id) {
     console.log(amount);
     console.log(winner["money_on_the_table"]);
     winner["money_on_the_table"] += amount;
+    console.log(winner);
     broadcast_userupdate_includeme(room_id, winner["chair_id"]);
 
   });

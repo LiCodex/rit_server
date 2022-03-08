@@ -2224,26 +2224,40 @@ function do_showdown(room_id) {
   console.log(ranked_players);
   var pot_division = {};
   var ranked_values = Object.keys(ranked_players);
+  //console.log("ranked_values");
+  //console.log(ranked_values);
   for (var i = 0; i < ranked_values.length; i++) {
     var winners = ranked_players[ranked_values[i]];
+    //console.log("winners");
+    //console.log(winners);
+    //console.log(room["pots"]);
     for (var j = 0; j < room["pots"].length; j++) {
       var pot = room["pots"][j];
       var no_of_winners = 0;
       for (var k = 0; k < winners.length; k++) {
-        if (pot.has_contributor(winners[k])) {
+        if (pot.has_contributor(winners[k]["chair_id"])) {
           no_of_winners++;
         }
       }
+      //console.log(":no_of_winners");
+      //console.log(no_of_winners);
       if (no_of_winners > 0) {
-        var pot_share = pot.get_bet() / no_of_winners;
-        pot_share = pot_share.toFixed(2);
+        var pot_share = pot.get_value() / no_of_winners;
+        //console.log("pot_share");
+        //console.log(pot.get_value());
+        //console.log(no_of_winners);
+        pot_share = pot_share;
         for (var m = 0; m < winners.length; m++) {
-          if (pot.has_contributor(winners[m])) {
-            var old_share = pot_division[winners[m]];
-            if (old_share != null) {
-              pot_division[winners[m]] += pot_share;
+          if (pot.has_contributor(winners[m]["chair_id"])) {
+            var old_share = pot_division[winners[m]["chair_id"]];
+            //console.log("old_share");
+            //console.log(old_share);
+            if (old_share != undefined) {
+              //console.log("here1");
+              pot_division[winners[m]["chair_id"]] += pot_share;
             } else {
-              pot_division[winners[m]] = pot_share;
+              //console.log("here2");
+              pot_division[winners[m]["chair_id"]] = pot_share;
             }
           }
         }

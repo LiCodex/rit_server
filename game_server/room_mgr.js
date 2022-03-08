@@ -2277,6 +2277,8 @@ function do_showdown(room_id) {
     var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
     console.log("winner");
     console.log(winner);
+    console.log(pot_share);
+    console.log(winner["money_on_the_table"]);
     winner["money_on_the_table"] += pot_share;
     broadcast_userupdate_includeme(room_id, winner["chair_id"]);
   }

@@ -2269,8 +2269,8 @@ function do_showdown(room_id) {
   console.log(pot_division);
 
   Object.entries(pot_division).forEach(entry => {
-    const [winner_seat, amount] = entry;
-    winner_seat = parseInt(winner_seat);
+    const [seat, amount] = entry;
+    var winner_seat = parseInt(seat);
     var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
     console.log("winner");
     console.log(winner);

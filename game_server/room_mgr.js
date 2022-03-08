@@ -2268,8 +2268,15 @@ function do_showdown(room_id) {
   console.log("pot_division");
   console.log(pot_division);
 
-  for (var winner in pot_division) {
+  for (var winner_seat in pot_division) {
     var pot_share = pot_division[winner];
+    // var pcur = room["players"].filter(
+    //   player => player["chair_id"] == room["current"]
+    // )[0];
+    winner_seat = parseInt(winner_seat);
+    var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
+    console.log("winner");
+    console.log(winner);
     winner["money_on_the_table"] += pot_share;
     broadcast_userupdate_includeme(room_id, winner["chair_id"]);
   }

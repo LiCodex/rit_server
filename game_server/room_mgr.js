@@ -2268,20 +2268,16 @@ function do_showdown(room_id) {
   console.log("pot_division");
   console.log(pot_division);
 
-  for (var winner_seat in pot_division) {
-    var pot_share = pot_division.filter(winner_seat);
-    // var pcur = room["players"].filter(
-    //   player => player["chair_id"] == room["current"]
-    // )[0];
-    winner_seat = parseInt(winner_seat);
+  pot_division.forEach( (seat, amount, map) => {
+    winner_seat = parseInt(seat);
     var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
     console.log("winner");
     console.log(winner);
-    console.log(pot_share);
+    console.log(amount);
     console.log(winner["money_on_the_table"]);
-    winner["money_on_the_table"] += pot_share;
+    winner["money_on_the_table"] += amount;
     broadcast_userupdate_includeme(room_id, winner["chair_id"]);
-  }
+  });
 }
 
 function get_total_pot(room_id) {

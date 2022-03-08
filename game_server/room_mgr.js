@@ -2268,8 +2268,9 @@ function do_showdown(room_id) {
   console.log("pot_division");
   console.log(pot_division);
 
-  pot_division.forEach( (seat, amount, map) => {
-    winner_seat = parseInt(seat);
+  Object.entries(pot_division).forEach(entry => {
+    const [winner_seat, amount] = entry;
+    winner_seat = parseInt(winner_seat);
     var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
     console.log("winner");
     console.log(winner);
@@ -2277,7 +2278,9 @@ function do_showdown(room_id) {
     console.log(winner["money_on_the_table"]);
     winner["money_on_the_table"] += amount;
     broadcast_userupdate_includeme(room_id, winner["chair_id"]);
+
   });
+
 }
 
 function get_total_pot(room_id) {

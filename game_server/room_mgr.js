@@ -2269,7 +2269,7 @@ function do_showdown(room_id) {
   console.log(pot_division);
 
   for (var winner_seat in pot_division) {
-    var pot_share = pot_division[winner];
+    var pot_share = pot_division.filter(winner_seat);
     // var pcur = room["players"].filter(
     //   player => player["chair_id"] == room["current"]
     // )[0];

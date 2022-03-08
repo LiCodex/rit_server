@@ -2269,17 +2269,18 @@ function do_showdown(room_id) {
   console.log(pot_division);
 
   Object.entries(pot_division).forEach(entry => {
-    const [seat, amount] = entry;
-    var winner_seat = parseInt(seat);
-    var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
-    console.log("winner");
-    console.log(winner);
-    console.log(amount);
-    console.log(winner["money_on_the_table"]);
-    winner["money_on_the_table"] += amount;
-    console.log(winner);
-    broadcast_userupdate_includeme(room_id, winner["chair_id"]);
-
+    if (entry != undefined) {
+      const [seat, amount] = entry;
+      var winner_seat = parseInt(seat);
+      var winner = room["players"].filter(room => room["chair_id"] == winner_seat)[0];
+      console.log("winner");
+      console.log(winner);
+      console.log(amount);
+      console.log(winner["money_on_the_table"]);
+      winner["money_on_the_table"] += amount;
+      console.log(winner);
+      broadcast_userupdate_includeme(room_id, winner["chair_id"]);
+    }
   });
 
 }

@@ -28,7 +28,8 @@ var rooms = [
     players: [],
     all_players: [],
     action_declare_list: [],
-    total_players_count: 0
+    total_players_count: 0,
+    ctx_seq: 0
   },
   {
     _id: "6119cbab01f8ca1b5e7ed509",

@@ -2097,11 +2097,10 @@ function get_basic_player_info(room_id, chair_id) {
   var data = {};
   data["chair_id"] = chair_id;
   data["community_cards"] = room["community_cards"];
-  data["type"] = "full_info";
-  //data["show_timer_button"] = player["show_timer_button"];
+  data["type"] = "basic_info";
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
-  data["hole_cards"] = player["hole_cards"];
+  // data["hole_cards"] = player["hole_cards"];
   return data;
 }
 

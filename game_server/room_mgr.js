@@ -29,7 +29,8 @@ var rooms = [
     all_players: [],
     action_declare_list: [],
     total_players_count: 0,
-    ctx_seq: 0
+    ctx_seq: 0,
+    state: "none"
   },
   {
     _id: "6119cbab01f8ca1b5e7ed509",
@@ -190,7 +191,7 @@ async function check_start(room_id) {
     if (room["round"] == 0) {
       delay_action(room_id);
     }
-    room["time_state"] = "start";
+    room["state"] = "start";
   }
 }
 
@@ -396,8 +397,6 @@ function delay_game_start(room_id) {
 
 function game_start(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  // room["game_state"] = "playing";
-  // room["hand_state"] = "start";
   console.log("in game start");
   console.log(room);
   if (room["round"] == 0) {
@@ -836,7 +835,7 @@ function smallblind(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("in smallblind");
   console.log(room);
-  room["hand_state"] = "smallblind";
+  room["state"] = "smallblind";
   room["ctx_seq"] += 1;
   room["current"] = room["smallblind_id"];
 
@@ -885,7 +884,7 @@ function smallblind(room_id) {
 function bigblind(room_id) {
   // console.log("in smallblind");
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["hand_state"] = "bigblind";
+  room["state"] = "bigblind";
   room["ctx_seq"] += 1;
   room["current"] = room["bigblind_id"];
   //room["last_bet_time"] = new Date();
@@ -1266,7 +1265,7 @@ function deal_hole_cards(room_id) {
   console.log("room info in deal hole cards");
   console.log(room);
   // room["game_state"] = "preflop";
-  room["time_state"] = "preflop";
+  room["state"] = "preflop";
   room["action_declare_list"] = [];
   game_actions(room["_id"]);
 }
@@ -1312,7 +1311,7 @@ function time_out_fold(room_id) {
   if (!is_action_declared && !all_fold) {
     game_actions(room_id);
   } else {
-    room["time_state"] = "game_result";
+    room["state"] = "game_result";
   }
 }
 
@@ -1632,38 +1631,38 @@ function game_betting(room_id) {
   if (
     is_action_declared == true &&
     all_in == true &&
-    room["time_state"] != "game_result"
+    room["state"] != "game_result"
   ) {
     console.log("in direct settlement");
     direct_settlement();
     return;
   }
   // include dealing hole cards in start
-  if (room["time_state"] == "start") {
+  if (room["state"] == "start") {
     console.log("in game start");
     console.log(room);
     delay_game_start(room_id);
     return;
   }
-  if (room["time_state"] == "preflop") {
+  if (room["state"] == "preflop") {
     console.log("preflop time_state");
     console.log(room);
     preflop_action(room_id);
     return;
   }
-  if (room["time_state"] == "flop") {
+  if (room["state"] == "flop") {
     flop_action(room_id);
     return;
   }
-  if (room["time_state"] == "turn") {
+  if (room["state"] == "turn") {
     turn_action(room_id);
     return;
   }
-  if (room["time_state"] == "river") {
+  if (room["state"] == "river") {
     river_action(room_id);
     return;
   }
-  if (room["time_state"] == "game_result") {
+  if (room["state"] == "game_result") {
     game_result(room_id);
     return;
   }
@@ -1880,9 +1879,7 @@ function game_result(room_id) {
   let room = rooms.filter(room => room["name"] == "test")[0];
   console.log("in game result");
   console.log(room);
-  room["game_state"] = "game_result";
-  room["hand_state"] = "game_result";
-  room["time_state"] = "game_result";
+  room["state"] = "game_result";
   room["last_game_result_time"] = new Date();
   room["player_scores"] = [];
   console.log("before do show down");
@@ -2116,13 +2113,9 @@ function reset_room(room_id) {
   room["community_cards"] = [];
   room["deck"] = [];
   room["timer"] = -1;
-  room["game_state"] = "playing";
-  room["time_state"] = "start";
-  room["hand_state"] = "start";
+  room["state"] = "start";
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;
-  // room["button"] = null;
-  // room["current"] = null;
   room["pots"] = [];
   room["direct_settlement"] = false;
   room["deal_rest"] = null;

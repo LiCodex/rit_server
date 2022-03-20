@@ -282,20 +282,13 @@ function has_all_in(players) {
 
 function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  room["XZTIMER"] = 15;
+  // room["XZTIMER"] = 15;
   room["last_bet_time"] = new Date();
   // console.log("in game actions last bet time");
   // console.log(room["last_bet_time"]);
   room["ctx_seq"] = room["ctx_seq"] ? 1 : room["ctx_seq"] + 1;
   room["timer"] = room["XZTIMER"] - (new Date() - room["last_bet_time"]) / 1000;
-  // console.log("in game actions");
-  // console.log(room["XZTIMER"]);
-  // console.log("ctx seq");
-  // console.log(room["ctx_seq"]);
-  // console.log(room["timer"]);
 
-  // console.log("in game actions");
-  // console.log(room);
   console.log("game actions");
   console.log("prev current");
   console.log(room["current"]);
@@ -305,20 +298,11 @@ function game_actions(room_id) {
   console.log("new current");
   console.log(room["current"]);
 
-  // console.log("after updating seats");
-  // console.log(room);
-
   var count = 0;
   for (var i = 0; i < room["players"].length; i++) {
     count++;
   }
-  // if (count == 2) {
-  //   room["current"] = room["button"];
-  // }
-  // console.log("current in game actions");
-  // console.log(room["current"]);
-  // console.log(room["round"]);
-  // console.log(room);
+
   var pcur = room["players"].filter(
     player => player["chair_id"] == room["current"]
   )[0];
@@ -353,10 +337,12 @@ function game_actions(room_id) {
       actions.push({ op: "call", amount: pcur["call_amount"] });
     }
   }
-  var pot = 0;
-  for (var i = 0; i < room["betting_list"].length; i++) {
-    pot += room["betting_list"][i]["betting_amount"];
-  }
+  // var pot = 0;
+  // for (var i = 0; i < room["betting_list"].length; i++) {
+  //   pot += room["betting_list"][i]["betting_amount"];
+  // }
+
+  var pot = get_total_pot(room_id);
 
   if (pcur["money_on_the_table"] > 2 * pot) {
     actions.push({ op: "raise", amount: 2 * pot, percentage: 1 });
@@ -370,7 +356,22 @@ function game_actions(room_id) {
   }
   console.log("show actions");
   console.log(actions);
+  pcur["action_type"] = "in_turn";
   broadcast_userupdate_includeme(room_id, room["current"]);
+  var players_left = room["players"].filter(player => player["cards_dealt"] == 1 && player["hand_state"] != "fold");
+  for (var i = 0; i < players.length; i++) {
+    players[i]["action_type"] = "no_turn";
+    players[i]["actions"] = [ { op: "fold"} ];
+    // players[i]["actions"].push({ op: "call", amount: pot });
+
+    max_bet = max_betting(room["betting_list"]);
+    my_bet = room["betting_list"].filter(
+      bet => bet["chair_id"] == player["chair_id"]
+    )[0]["betting_amount"];
+    call_amount = max_bet - my_bet;
+    players[i]["action"].push({op: "call", amount: call_amount });
+    broadcast_userupdate_includeme(room_id, player["chair_id"]);
+  }
 }
 
 function max_betting(betting_list) {
@@ -1244,6 +1245,7 @@ function deal_hole_cards(room_id) {
       hole_cards.push(room["deck"].deal());
       hole_cards.push(room["deck"].deal());
       room["players"][i]["hole_cards"] = hole_cards;
+      room["players"][i]["cards_dealt"] = 1;
 
       var uid = room["players"][i]["uid"];
       var ws = user_mgr.get(uid);
@@ -2298,6 +2300,7 @@ function reset_players(room_id) {
       player["state"] = "default";
       player["actions"] = [];
       player["hand_finished"] = false;
+      player["cards_dealt"] = 0;
     }
   }
 }

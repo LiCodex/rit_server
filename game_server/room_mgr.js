@@ -2301,6 +2301,7 @@ function reset_players(room_id) {
       player["actions"] = [];
       player["hand_finished"] = false;
       player["cards_dealt"] = 0;
+      player["action_type"] = "none";
     }
   }
 }

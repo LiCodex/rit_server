@@ -363,11 +363,14 @@ function game_actions(room_id) {
     players_left[i]["action_type"] = "no_turn";
     players_left[i]["actions"] = [ { op: "fold"} ];
     max_bet = max_betting(room["betting_list"]);
-    my_bet = room["betting_list"].filter(
+    my_bets = room["betting_list"].filter(
       bet => bet["chair_id"] == players_left["chair_id"]
     )[0]["betting_amount"];
-    call_amount = max_bet - my_bet;
-    players_left[i]["action"].push({op: "call", amount: call_amount });
+    if (my_bets.length > 0) {
+      my_bet = my_bets[0]["betting_amount"];
+      call_amount = max_bet - my_bet;
+      players_left[i]["action"].push({op: "call", amount: call_amount });
+    }
     broadcast_userupdate_includeme(room_id, players_left[i]["chair_id"]);
   }
 }

@@ -360,15 +360,15 @@ function game_actions(room_id) {
   broadcast_userupdate_includeme(room_id, room["current"]);
   var players_left = room["players"].filter(player => player["cards_dealt"] == 1 && player["hand_state"] != "fold");
   for (var i = 0; i < players_left.length; i++) {
-    players[i]["action_type"] = "no_turn";
-    players[i]["actions"] = [ { op: "fold"} ];
+    players_left[i]["action_type"] = "no_turn";
+    players_left[i]["actions"] = [ { op: "fold"} ];
     max_bet = max_betting(room["betting_list"]);
     my_bet = room["betting_list"].filter(
-      bet => bet["chair_id"] == player["chair_id"]
+      bet => bet["chair_id"] == players_left["chair_id"]
     )[0]["betting_amount"];
     call_amount = max_bet - my_bet;
-    players[i]["action"].push({op: "call", amount: call_amount });
-    broadcast_userupdate_includeme(room_id, players[i]["chair_id"]);
+    players_left[i]["action"].push({op: "call", amount: call_amount });
+    broadcast_userupdate_includeme(room_id, players_left[i]["chair_id"]);
   }
 }
 

@@ -365,7 +365,7 @@ function game_actions(room_id) {
     max_bet = max_betting(room["betting_list"]);
     my_bets = room["betting_list"].filter(
       bet => bet["chair_id"] == players_left["chair_id"]
-    )[0]["betting_amount"];
+    );
     if (my_bets.length > 0) {
       my_bet = my_bets[0]["betting_amount"];
       call_amount = max_bet - my_bet;

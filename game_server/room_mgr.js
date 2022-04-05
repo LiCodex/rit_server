@@ -567,8 +567,8 @@ exports.room_quit = async function(message) {
 
 exports.room_add_time = async function(message) {
   var room = rooms["test"];
-  var chair_id = message.chair_id;
-  var player = room["players"].filter(player => player[chair_id] == chair_id);
+  var chair_id = chair_id;
+  var player = room["players"].filter(player => player[chair_id] == chair_id)[0];
   if (player["hand_state"] == "fold") {
     return {
       success: false,
@@ -586,6 +586,16 @@ exports.room_add_time = async function(message) {
   room["XZTIMER"] += 15;
   room["current_player_timer"] =
     room["XZTIMER"] - (new Date() - room["last_bet_time"]) / 1000;
+  var response = {};
+  response["m"] = "add_time";
+  response["c"] = "room";
+  var data = {};
+  data["chair_id"] = chair_id;
+  response["data"] = player;
+  console.log("add timer");
+  console.log(response);
+  broadcast_in_room(room["_id"], response, "");
+  console.log(room);
   return { success: true, message: "15 seconds have been added" };
 };
 
@@ -1791,6 +1801,7 @@ function broadcast_userupdate_includeme(room_id, chair_id) {
     data["bigblind_id"] = room["bigblind_id"];
     data["current"] = room["current"];
     data["community_cards"] = room["community_cards"];
+
     response["data"] = data;
     var uid = room["players"][i]["uid"];
     var ws = user_mgr.get(uid);
@@ -2084,10 +2095,10 @@ function get_full_player_info(room_id, chair_id) {
   data["chair_id"] = chair_id;
   data["community_cards"] = room["community_cards"];
   data["type"] = "full_info";
-  //data["show_timer_button"] = player["show_timer_button"];
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
   data["hole_cards"] = player["hole_cards"];
+  data["action_type"] = player["action_type"];
   return data;
 }
 
@@ -2103,7 +2114,7 @@ function get_basic_player_info(room_id, chair_id) {
   data["type"] = "basic_info";
   data["money_on_the_table"] = player["money_on_the_table"];
   data["state"] = player["state"];
-  // data["hole_cards"] = player["hole_cards"];
+  data["action_type"] = player["action_type"];
   return data;
 }
 

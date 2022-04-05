@@ -360,6 +360,9 @@ function game_actions(room_id) {
   broadcast_userupdate_onlyme(room_id, room["current"]);
   var players_left = room["players"].filter(player => player["cards_dealt"] == 1 && player["hand_state"] != "fold");
   for (var i = 0; i < players_left.length; i++) {
+    if (players_left[i]["chair_id"] == room["current"]) {
+      continue;
+    }
     players_left[i]["action_type"] = "no_turn";
     players_left[i]["actions"] = [ { op: "fold"} ];
     max_bet = max_betting(room["betting_list"]);

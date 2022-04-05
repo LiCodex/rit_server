@@ -357,7 +357,7 @@ function game_actions(room_id) {
   console.log("show actions");
   console.log(actions);
   pcur["action_type"] = "in_turn";
-  broadcast_userupdate_includeme(room_id, room["current"]);
+  broadcast_userupdate_onlyme(room_id, room["current"]);
   var players_left = room["players"].filter(player => player["cards_dealt"] == 1 && player["hand_state"] != "fold");
   for (var i = 0; i < players_left.length; i++) {
     players_left[i]["action_type"] = "no_turn";
@@ -371,7 +371,7 @@ function game_actions(room_id) {
       call_amount = max_bet - my_bet;
       players_left[i]["action"].push({op: "call", amount: call_amount });
     }
-    broadcast_userupdate_includeme(room_id, players_left[i]["chair_id"]);
+    broadcast_userupdate_onlyme(room_id, players_left[i]["chair_id"]);
   }
 }
 
@@ -2055,7 +2055,7 @@ function broadcast_userupdate_onlyme(room_id, chair_id) {
   var player = room["players"].filter(
     player => player["chair_id"] == chair_id
   )[0];
-  if (player) {
+  if (player != undefined) {
     var response = {};
     response["m"] = "userupdate";
     response["c"] = "room";

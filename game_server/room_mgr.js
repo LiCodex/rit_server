@@ -578,6 +578,7 @@ exports.room_add_time = async function(message) {
   var user = User.findOne({ _id: uid });
   console.log("in add time");
   console.log(room);
+  console.log(chair_id);
   if (player["hand_state"] == "fold") {
     return {
       success: false,

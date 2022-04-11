@@ -576,6 +576,8 @@ exports.room_add_time = async function(message) {
     player => player["chair_id"] == chair_id
   )[0];
   var user = User.findOne({ _id: uid });
+  console.log("in add time");
+  console.log(room);
   if (player["hand_state"] == "fold") {
     return {
       success: false,
@@ -606,6 +608,7 @@ exports.room_add_time = async function(message) {
   console.log("add timer");
   console.log(response);
   broadcast_in_room(room["_id"], response, chair_id);
+  console.log("in timer");
   console.log(room);
   return { success: true, message: "15 seconds have been added" };
 };

@@ -602,10 +602,10 @@ exports.room_add_time = async function(message) {
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
-  // response["data"] = player;
+  response["data"] = data;
   console.log("add timer");
   console.log(response);
-  broadcast_in_room(room["_id"], response, "");
+  broadcast_in_room(room["_id"], response, chair_id);
   console.log(room);
   return { success: true, message: "15 seconds have been added" };
 };

@@ -23,7 +23,7 @@ var rooms = [
     XZTIMER: 15,
     smallblind: 1,
     bigblind: 2,
-    current_action_player: 0,
+    current: 0,
     round: 0,
     players: [],
     all_players: [],
@@ -45,7 +45,7 @@ var rooms = [
     smallblind: 1,
     bigblind: 2,
     total_players_count: 0,
-    current_action_player: 0,
+    current: 0,
     round: 0,
     duaration: 90,
     players: [
@@ -79,7 +79,7 @@ var rooms = [
     XZTIMER: 15,
     smallblind: 1,
     bigblind: 2,
-    current_action_player: 0,
+    current: 0,
     round: 0,
     duaration: 90,
     players: [
@@ -113,7 +113,7 @@ var rooms = [
     XZTIMER: 15,
     smallblind: 1,
     bigblind: 2,
-    current_action_player: 0,
+    current: 0,
     round: 0,
     duaration: 90,
     players: [
@@ -582,7 +582,7 @@ exports.room_add_time = async function(message) {
       message: "the player has folded the hole cards, cannot add time"
     };
   }
-  if (room["current_action_player"] != chair_id) {
+  if (room["current"] != chair_id) {
     return { success: false, message: "not current player" };
   }
   if (user.diamond < 10) {
@@ -736,7 +736,7 @@ exports.room_refresh = function() {
       smallblind: 1,
       bigblind: 2,
       total_players_count: 0,
-      current_action_player: 0,
+      current: 0,
       round: 0,
       players: []
     },
@@ -753,7 +753,7 @@ exports.room_refresh = function() {
       smallblind: 1,
       bigblind: 2,
       total_players_count: 0,
-      current_action_player: 0,
+      current: 0,
       round: 0,
       players: [
         {
@@ -784,7 +784,7 @@ exports.room_refresh = function() {
       XZTIMER: 15,
       smallblind: 1,
       bigblind: 2,
-      current_action_player: 0,
+      current: 0,
       round: 0,
       players: [
         {
@@ -815,7 +815,7 @@ exports.room_refresh = function() {
       XZTIMER: 15,
       smallblind: 1,
       bigblind: 2,
-      current_action_player: 0,
+      current: 0,
       round: 0,
       players: [
         {

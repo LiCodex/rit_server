@@ -569,9 +569,13 @@ exports.room_quit = async function(message) {
 };
 
 exports.room_add_time = async function(message) {
-  var room = rooms["test"];
-  var chair_id = chair_id;
-  var player = room["players"].filter(player => player[chair_id] == chair_id)[0];
+  var chair_id = message.chair_id;
+  var uid = message.uid;
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  var player = room["players"].filter(
+    player => player["chair_id"] == chair_id
+  )[0];
+  var user = User.findOne({ _id: uid });
   if (player["hand_state"] == "fold") {
     return {
       success: false,
@@ -581,10 +585,14 @@ exports.room_add_time = async function(message) {
   if (room["current_action_player"] != chair_id) {
     return { success: false, message: "not current player" };
   }
-
-  if (player["money_in_the_bank"] < room["smallblind"]) {
-    return { success: false, message: "do not have enough in the bank" };
+  if (user.diamond < 10) {
+    return { success: false, message: "do not have enough diamonds" };
   }
+
+  await User.findOne({ _id: uid }, function(err, user) {
+    user.diamond -= 10;
+    user.save();
+  });
 
   room["XZTIMER"] += 15;
   room["current_player_timer"] =
@@ -594,7 +602,7 @@ exports.room_add_time = async function(message) {
   response["c"] = "room";
   var data = {};
   data["chair_id"] = chair_id;
-  response["data"] = player;
+  // response["data"] = player;
   console.log("add timer");
   console.log(response);
   broadcast_in_room(room["_id"], response, "");

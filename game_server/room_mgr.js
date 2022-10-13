@@ -325,11 +325,6 @@ function game_actions(room_id) {
     actions.push({ op: "check" });
   }
 
-  // console.log("money on the table");
-  // console.log(pcur["money_on_the_table"]);
-  // console.log("call amount");
-  // console.log(call_amount);
-
   if (call_amount > 0) {
     if (call_amount >= pcur["money_on_the_table"]) {
       actions.push({ op: "all_in", amount: pcur["money_on_the_table"] });
@@ -360,6 +355,7 @@ function game_actions(room_id) {
   var response = {};
   response["m"] = "current_player_count_down";
   response["c"] = "room";
+  response["current"] = room["current"];
   broadcast_in_room(room_id, response, "");
   broadcast_userupdate_onlyme(room_id, room["current"]);
   var players_left = room["players"].filter(

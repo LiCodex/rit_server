@@ -20,7 +20,7 @@ var rooms = [
     max_buy_in: 400,
     players_count: 0,
     last_bet_time: new Date(),
-    XZTIMER: 15,
+    XZTIMER: 20,
     smallblind: 1,
     bigblind: 2,
     current: 0,
@@ -41,7 +41,7 @@ var rooms = [
     max_buy_in: 400,
     players_count: 2,
     last_bet_time: null,
-    XZTIMER: 15,
+    XZTIMER: 20,
     smallblind: 1,
     bigblind: 2,
     total_players_count: 0,
@@ -76,7 +76,7 @@ var rooms = [
     max_buy_in: 400,
     players_count: 2,
     last_bet_time: null,
-    XZTIMER: 15,
+    XZTIMER: 20,
     smallblind: 1,
     bigblind: 2,
     current: 0,
@@ -110,7 +110,7 @@ var rooms = [
     max_buy_in: 400,
     players_count: 2,
     last_bet_time: null,
-    XZTIMER: 15,
+    XZTIMER: 20,
     smallblind: 1,
     bigblind: 2,
     current: 0,
@@ -282,7 +282,6 @@ function has_all_in(players) {
 
 function game_actions(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
-  // room["XZTIMER"] = 15;
   room["last_bet_time"] = new Date();
   // console.log("in game actions last bet time");
   // console.log(room["last_bet_time"]);
@@ -598,7 +597,7 @@ exports.room_add_time = async function (message) {
     user.save();
   });
 
-  room["XZTIMER"] += 15;
+  room["XZTIMER"] += 20;
   room["current_player_timer"] =
     room["XZTIMER"] - (new Date() - room["last_bet_time"]) / 1000;
   var response = {};
@@ -612,7 +611,7 @@ exports.room_add_time = async function (message) {
   broadcast_in_room(room["_id"], response, chair_id);
   console.log("in timer");
   console.log(room);
-  return { success: true, message: "15 seconds have been added" };
+  return { success: true, message: "20 seconds have been added" };
 };
 
 exports.room_sit = async function (message) {
@@ -740,7 +739,7 @@ exports.room_refresh = function () {
       max_buy_in: 400,
       players_count: 0,
       last_bet_time: new Date(),
-      XZTIMER: 15,
+      XZTIMER: 20,
       smallblind: 1,
       bigblind: 2,
       total_players_count: 0,
@@ -757,7 +756,7 @@ exports.room_refresh = function () {
       max_buy_in: 400,
       players_count: 2,
       last_bet_time: new Date(),
-      XZTIMER: 15,
+      XZTIMER: 20,
       smallblind: 1,
       bigblind: 2,
       total_players_count: 0,
@@ -789,7 +788,7 @@ exports.room_refresh = function () {
       max_buy_in: 400,
       players_count: 2,
       last_bet_time: new Date(),
-      XZTIMER: 15,
+      XZTIMER: 20,
       smallblind: 1,
       bigblind: 2,
       current: 0,
@@ -820,7 +819,7 @@ exports.room_refresh = function () {
       max_buy_in: 400,
       players_count: 2,
       last_bet_time: new Date(),
-      XZTIMER: 15,
+      XZTIMER: 20,
       smallblind: 1,
       bigblind: 2,
       current: 0,

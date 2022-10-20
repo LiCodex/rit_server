@@ -756,7 +756,7 @@ exports.room_refresh = function () {
       max_buy_in: 400,
       players_count: 2,
       last_bet_time: new Date(),
-      XZTIMER: 20,
+      XZTIMER: 17,
       smallblind: 1,
       bigblind: 2,
       total_players_count: 0,

@@ -706,6 +706,21 @@ exports.room_standup = async function (message) {
   return { success: true, player: room["players"] };
 };
 
+
+exports.room_exit = async function (message) {
+  var uid = message.uid;
+  var room = rooms.filter(room => room["name"] == "test")[0];
+
+  var player = room["players"].filter(player => player["uid"] == uid)[0];
+  if (player == undefined) {
+    return { success: false, message: "user is not on the table" };
+  }
+
+  player["game_state"] = "exit";
+  //table to bank
+  return { success: true, message: "user exits from the room" };
+};
+
 function bank_to_table(player, amount) {
   // var res = false;
   if (player["money_in_the_bank"] < amount) {
@@ -1610,31 +1625,6 @@ exports.room_load_context = async function (message) {
   return { success: true, room: room };
 };
 
-exports.exit_room = function (user_id) {
-  var location = user_location[user_id];
-  if (location == null) {
-    return;
-  }
-
-  var room_id = location.room_id;
-  var seat_index = location.seat_index;
-  var room = rooms[room_id];
-  delete user_location[user_id];
-  if (room == null || seat_index == null) {
-    return;
-  }
-
-  var seat = room.seats[seat_index];
-  seat.user_id = 0;
-  seat.name = "";
-
-  var num_of_players = 0;
-  for (var i = 0; i < rooms.length; i++) {
-    if (room.seats[i].user_id > 0) {
-      num_of_players++;
-    }
-  }
-};
 
 function game_betting(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
@@ -2067,6 +2057,7 @@ function reset_room(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   console.log("before reset");
   console.log(room);
+  players_exit(room);
   reset_players(room);
   room["community_cards"] = [];
   room["deck"] = [];
@@ -2084,6 +2075,27 @@ function reset_room(room_id) {
   console.log("reset_room");
   console.log(room);
 }
+
+function players_exit(room) {
+  for (let i = 0; i < room["players"].length; i++) {
+    if (room["players"][i]["game_state"] == "exit") {
+      player = room["players"][i];
+      if (player["money_on_the_table"] > 0) {
+        User.findOne({ _id: uid }, function (err, user) {
+          user.coins += player["money_on_the_table"];
+          user.save();
+        });  
+      }
+      room["players"] = room["players"].filter(player => player["uid"] != uid);
+      room["players_count"]--;
+      Room.findOne({ name: "test" }, function (err, room) {
+        room.players_count -= 1;
+        room.save();
+      });
+    }
+  }
+}
+  
 
 function contribute_pot(room_id, amount, contributor) {
   var room = rooms.filter(room => room["name"] == "test")[0];

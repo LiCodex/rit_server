@@ -7,135 +7,8 @@ const HandEvaluator = require("./hand_evaluator");
 const ObjectID = require("mongodb").ObjectID;
 const jwt = require("jsonwebtoken");
 const user_mgr = require("./user_mgr");
+const cache = require('./cache');
 
-var rooms = [
-  {
-    _id: "608f829787c9b44b2c186f16",
-    community_cards: [],
-    name: "test",
-    pots: [],
-    deck: [],
-    seat_count: 8,
-    min_buy_in: 50,
-    max_buy_in: 400,
-    players_count: 0,
-    last_bet_time: new Date(),
-    XZTIMER: 20,
-    smallblind: 1,
-    bigblind: 2,
-    current: 0,
-    round: 0,
-    players: [],
-    all_players: [],
-    action_declare_list: [],
-    total_players_count: 0,
-    ctx_seq: 0,
-    state: "none"
-  },
-  {
-    _id: "6119cbab01f8ca1b5e7ed509",
-    name: "test_medium1",
-    deck: [],
-    seat_count: 8,
-    min_buy_in: 50,
-    max_buy_in: 400,
-    players_count: 2,
-    last_bet_time: null,
-    XZTIMER: 20,
-    smallblind: 1,
-    bigblind: 2,
-    total_players_count: 0,
-    current: 0,
-    round: 0,
-    duaration: 90,
-    players: [
-      {
-        uid: "61196590e0f26367a6ea43d4",
-        hand_state: "default",
-        game_state: "playing",
-        chair_id: 0,
-        money_on_the_table: 400
-      },
-      {
-        uid: "61196878e0f26367a6ea43d5",
-        hand_state: "default",
-        game_state: "sit_out",
-        chair_id: 1,
-        money_on_the_table: 100
-      }
-    ],
-    all_players: [],
-    action_declare_list: []
-  },
-  {
-    _id: "6119cbd101f8ca1b5e7ed50a",
-    name: "test_medium2",
-    deck: [],
-    seat_count: 8,
-    min_buy_in: 50,
-    max_buy_in: 400,
-    players_count: 2,
-    last_bet_time: null,
-    XZTIMER: 20,
-    smallblind: 1,
-    bigblind: 2,
-    current: 0,
-    round: 0,
-    duaration: 90,
-    players: [
-      {
-        uid: "61196590e0f26367a6ea43d4",
-        hand_state: "default",
-        game_state: "playing",
-        chair_id: 0,
-        money_on_the_table: 400
-      },
-      {
-        uid: "61196878e0f26367a6ea43d5",
-        hand_state: "default",
-        game_state: "sit_out",
-        chair_id: 1,
-        money_on_the_table: 100
-      }
-    ],
-    all_players: [],
-    action_declare_list: []
-  },
-  {
-    _id: "6119cbdb01f8ca1b5e7ed50b",
-    name: "test_medium3",
-    deck: [],
-    seat_count: 8,
-    min_buy_in: 50,
-    max_buy_in: 400,
-    players_count: 2,
-    last_bet_time: null,
-    XZTIMER: 20,
-    smallblind: 1,
-    bigblind: 2,
-    current: 0,
-    round: 0,
-    duaration: 90,
-    players: [
-      {
-        uid: "61196590e0f26367a6ea43d4",
-        hand_state: "default",
-        game_state: "playing",
-        chair_id: 0,
-        money_on_the_table: 400
-      },
-      {
-        uid: "61196878e0f26367a6ea43d5",
-        hand_state: "default",
-        game_state: "sit_out",
-        chair_id: 1,
-        money_on_the_table: 100
-      }
-    ],
-    all_players: [],
-    action_declare_list: []
-  }
-];
 var creating_rooms = {};
 var user_location = {};
 var total_rooms = 0;
@@ -164,8 +37,9 @@ function active_player_count(players) {
 }
 
 async function check_start(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  // console.log("check start")
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
+
   var active_players = 0;
   for (var i = 0; i < room["players"].length; i++) {
     if (
@@ -196,8 +70,8 @@ async function check_start(room_id) {
 }
 
 function delay_action(room_id) {
-  // console.log("delay action");
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   game_betting(room_id);
   setTimeout(function () {
     // console.log("in timeout");
@@ -208,7 +82,8 @@ function delay_action(room_id) {
 }
 
 function is_all_fold(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   var active_player = room["players"].filter(
     player => player["game_state"] != "sit_out"
   );
@@ -226,18 +101,16 @@ function is_all_fold(room_id) {
 }
 
 function game_all_fold(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  // console.log("game all fold");
-  // console.log(room["players"]);
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   room["direct_settlement"] = true;
-  // room["game_state"] = "game_result";
   game_result(room_id);
 }
 
 function action_declared(room_id) {
   console.log("in action declared");
-  var room = rooms.filter(room => room["name"] == "test")[0];
-  // var active_players = room["players"].filter(player => player["state"] != "sit_out" && player["state"] != "fold");
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   for (var i = 0; i < room["players"].length; i++) {
     if (room["action_declare_list"] == null) {
       console.log("in action declared1");
@@ -281,10 +154,9 @@ function has_all_in(players) {
 }
 
 function game_actions(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   room["last_bet_time"] = new Date();
-  // console.log("in game actions last bet time");
-  // console.log(room["last_bet_time"]);
   room["ctx_seq"] = room["ctx_seq"] ? 1 : room["ctx_seq"] + 1;
   room["timer"] = room["XZTIMER"] - (new Date() - room["last_bet_time"]) / 1000;
 
@@ -331,10 +203,6 @@ function game_actions(room_id) {
       actions.push({ op: "call", amount: pcur["call_amount"] });
     }
   }
-  // var pot = 0;
-  // for (var i = 0; i < room["betting_list"].length; i++) {
-  //   pot += room["betting_list"][i]["betting_amount"];
-  // }
 
   var pot = get_total_pot(room_id);
 
@@ -388,7 +256,8 @@ function max_betting(betting_list) {
 }
 
 function delay_game_start(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   if (room["last_started_at"] == null) {
     room["last_started_at"] = new Date();
     return;
@@ -401,7 +270,8 @@ function delay_game_start(room_id) {
 }
 
 function game_start(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   console.log("in game start");
   console.log(room);
   if (room["round"] == 0) {
@@ -476,7 +346,8 @@ function game_start(room_id) {
 }
 
 function game_flop(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
 
   if (room["deal_rest"] == true) {
     return;
@@ -497,7 +368,8 @@ function game_flop(room_id) {
 }
 
 function rnd_button(room_id) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   for (var i = 0; i < room["players"].length; i++) {
     if (room["players"][i]["game_state"] == "playing") {
       return room["players"][i]["chair_id"];
@@ -511,9 +383,8 @@ exports.room_join = async function (message) {
   var room_id = message.room_id;
   var o_id = new ObjectID(room_id);
   var uid = message.uid;
+  var rooms = cache.get_rooms();
   var room = rooms.filter(room => room["_id"] == room_id)[0];
-  // console.log("room");
-  // console.log(room);
 
   console.log("user_id");
   console.log(uid);
@@ -532,7 +403,8 @@ exports.room_join = async function (message) {
 };
 
 exports.room_quit = async function (message) {
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   var uid = message.uid;
   console.log("room players");
   console.log(room["players"]);
@@ -571,7 +443,8 @@ exports.room_quit = async function (message) {
 exports.room_add_time = async function (message) {
   var chair_id = message.chair_id;
   var uid = message.uid;
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
   var player = room["players"].filter(
     player => player["chair_id"] == chair_id
   )[0];
@@ -617,7 +490,8 @@ exports.room_add_time = async function (message) {
 exports.room_sit = async function (message) {
   var uid = message.uid;
   var chair_id = message.chair_id;
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
 
   if (chair_id > room["seat_count"]) {
     return { success: false, message: "the chair_id exceeds room chair_count" };
@@ -678,7 +552,8 @@ async function user_coins_helper(uid) {
 
 exports.room_standup = async function (message) {
   var uid = message.uid;
-  var room = rooms.filter(room => room["name"] == "test")[0];
+  var rooms = cache.get_rooms();
+  var room = rooms.filter(room => room["_id"] == room_id)[0];
 
   var player = room["players"].filter(player => player["uid"] == uid)[0];
   if (player == undefined) {

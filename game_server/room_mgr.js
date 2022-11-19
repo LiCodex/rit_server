@@ -192,6 +192,22 @@ async function check_start(room_id) {
       delay_action(room_id);
     }
     room["state"] = "start";
+  } else {
+    set_waiting(room_id);
+    var response = {};
+    response["m"] = "set_waiting";
+    response["c"] = "room";
+    var data = {};
+    response["data"] = room["players"];
+    broadcast_in_room(room["_id"], response);
+  }
+}
+
+function set_waiting(room_id) {
+  var room = rooms.filter(room => room["name"] == "test")[0];
+  room["state"] = "waiting";
+  for (let i = 0; i < room["players"].length; i++) {
+    room["players"][i]["game_state"] = "waiting";
   }
 }
 
@@ -684,9 +700,7 @@ exports.room_standup = async function (message) {
   if (player == undefined) {
     return { success: false, message: "user is not on the table" };
   }
-  // if (room["state"] != "default") {
-  //   return { success: false, message: "Cannot stand up" };
-  // }
+
   //needs to read from the db
   if (player["money_on_the_table"] > 0) {
     User.findOne({ _id: uid }, function (err, user) {
@@ -1629,7 +1643,7 @@ exports.room_load_context = async function (message) {
 function game_betting(room_id) {
   var room = rooms.filter(room => room["name"] == "test")[0];
   var all_fold = is_all_fold(room_id);
-  console.log("all fold in game betgting");
+  console.log("all fold in game betting");
   console.log(all_fold);
   console.log(room);
   // only one player exists and
@@ -1641,8 +1655,6 @@ function game_betting(room_id) {
   var all_in = has_all_in(room["players"]);
   console.log("is action declared");
   console.log(is_action_declared);
-  console.log("all in");
-  // console.log(all_in);
   console.log(room);
   if (
     is_action_declared == true &&
@@ -2062,7 +2074,7 @@ function reset_room(room_id) {
   room["community_cards"] = [];
   room["deck"] = [];
   room["timer"] = -1;
-  room["state"] = "start";
+  room["state"] = "default";
   room["smallblind_id"] = null;
   room["bigblind_id"] = null;
   room["pots"] = [];

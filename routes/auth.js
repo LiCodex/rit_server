@@ -6,16 +6,20 @@ const jwt = require("jsonwebtoken");
 
 /* Signup Route */
 router.post("/auth/signup", async (req, res) => {
-  if (!req.body.phone || !req.body.password) {
+  if (!req.body.phone) {
     console.log(req.body);
-    res.json({ success: false, message: "Please enter phone or password" });
+    res.json({ success: false, message: "Please enter phone number" });
+  }
+  else if (!req.body.password) {
+    res.json({ success: false, message: "Please enter password" });
+  } else if (!req.body.sms_code) {
+    res.json({ success: false, message: "Please enter sms code" });
   } else {
     try {
       let newUser = new User();
-      //newUser.name = req.body.name;
       newUser.phone = req.body.phone;
       newUser.password = req.body.password;
-      newUser.coins = req.body.coins;
+      newUser.coins = 0;
       await newUser.save();
       let token = jwt.sign(newUser.toJSON(), process.env.SECRET, {
         expiresIn: 604800 // 1 week
@@ -122,11 +126,14 @@ router.post("/auth/messaging_code", async (req, res) => {
   const authToken = process.env.authToken;
   try {
     const client = require('twilio')(accountSid, authToken);
+    const sms = Math.floor(100000 + Math.random() * 900000);
     client.messages.create({
-      body: '888668',
+      body: sms,
       to: '+1' + req.body.phone,  // Text this number
-      from: '+14012373657' // From a valid Twilio number
-    }).then((message) => console.log(message.sid));
+      from: '+16294008154' // From a valid Twilio number
+    }).then((message) => {
+      console.log(message.sid);
+    });
 
     res.json({ success: true });
   }
@@ -145,8 +152,8 @@ router.post("/auth/forgetpassword", async (req, res) => {
   } else {
     try {
       // if cannot find the user return error
-      var query = {'phone': req.body.phone};
-      var update = { $set: { password: req.body.password }};
+      var query = { 'phone': req.body.phone };
+      var update = { $set: { password: req.body.password } };
       var options = {};
       User.updateOne(query, update, options);
 
@@ -157,6 +164,37 @@ router.post("/auth/forgetpassword", async (req, res) => {
       res.json({
         success: true,
         message: "Successfully updated password"
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
+  }
+});
+
+
+router.get("/auth/request_sms", async (req, res) => {
+  if (!req.body.phone) {
+    console.log(req.body);
+    res.json({ success: false, message: "Please enter phone number" });
+  }
+  else {
+    try {
+      let newUser = new User();
+      newUser.phone = req.body.phone;
+      newUser.password = req.body.password;
+      newUser.coins = 0;
+      await newUser.save();
+      let token = jwt.sign(newUser.toJSON(), process.env.SECRET, {
+        expiresIn: 604800 // 1 week
+      });
+
+      res.json({
+        success: true,
+        token: token,
+        message: "Successfully created a new user"
       });
     } catch (err) {
       res.status(500).json({
